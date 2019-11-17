@@ -10,4 +10,9 @@ public class Constants {
     // Entre 100 y 199 para profesor
 
     // Entre 200 y 299 para alumno
+    public static final int responder = 200;
+
+    // Entre 300 y 399 para sistema
+    public static final int enviaPregunta = 300;
+    public static final int enviaResultadoAlumno = 301;
 }

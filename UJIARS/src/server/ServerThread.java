@@ -54,7 +54,7 @@ public class ServerThread extends Thread {
                     registrar();
                     break;
                 case (3): // este seria un alumno que va a entrar en una sala
-                    //coger el numero de la sala
+
 
                 default:
                     break;
