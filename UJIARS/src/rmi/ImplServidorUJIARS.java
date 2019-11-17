@@ -10,7 +10,7 @@ public class ImplServidorUJIARS {
         try{
             arrancarRegistro(1099);
             ImplServidorInicio exportedObj = new ImplServidorInicio();
-            String registryURL = "rmi://localhost:1099/patata";
+            String registryURL = "rmi://localhost:1099/UJIARS";
             Naming.rebind(registryURL, exportedObj);
             System.out.println("Callback Server Ready.");
         }catch (Exception re) {
