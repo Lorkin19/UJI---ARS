@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class MainServer {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         ServerSocket ss;
         System.out.println("Inicilizando servidor...");
 
@@ -18,10 +18,10 @@ public class MainServer {
                 Socket clientSocket;
                 clientSocket = ss.accept();
                 System.out.println("Nueva conexión");
-                ((ServerThread) new ServerThread(clientSocket, idSession)).start();
+                new ServerThread(clientSocket, idSession).start();
                 idSession++;
             }
-        }catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
