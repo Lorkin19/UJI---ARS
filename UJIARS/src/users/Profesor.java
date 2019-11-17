@@ -1,5 +1,5 @@
 package users;
 
-public class Teacher {
+public class Profesor {
     private IProyector proyector;
 }

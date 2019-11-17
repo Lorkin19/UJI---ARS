@@ -2,11 +2,11 @@ package rmi;
 
 import common.IntServidorSala;
 import common.Sala;
-import users.Student;
+import users.Sesion;
+import users.Alumno;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
 
 public class ImplServidorSala extends UnicastRemoteObject implements IntServidorSala {
     Sala miSala;
@@ -22,6 +22,6 @@ public class ImplServidorSala extends UnicastRemoteObject implements IntServidor
     }
 
     @Override
-    public void addStudent(Student student) throws RemoteException {
+    public void addStudent(Alumno alumno) throws RemoteException {
     }
 }

@@ -3,9 +3,9 @@ package users;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Student extends UnicastRemoteObject implements IAlumno {
+public class Alumno extends UnicastRemoteObject implements IAlumno {
 
-    protected Student() throws RemoteException {
+    protected Alumno() throws RemoteException {
         super();
     }
 
