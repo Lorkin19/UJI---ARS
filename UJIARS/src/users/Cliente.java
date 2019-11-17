@@ -1,10 +1,6 @@
 package users;
 
-import java.awt.datatransfer.DataFlavor;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-public abstract class Cliente {
+public abstract class Cliente implements IAlumno {
     private String password;
 
     public void startClient() //Método para iniciar el cliente
