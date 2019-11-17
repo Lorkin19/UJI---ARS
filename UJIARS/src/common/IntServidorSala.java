@@ -8,6 +8,6 @@ import java.rmi.RemoteException;
 
 public interface IntServidorSala extends Remote {
 
-    public void nuevaSala(Sesion miSesion) throws RemoteException;
-    public void addStudent(Alumno student) throws RemoteException;
+    void nuevaSala(Sesion miSesion) throws RemoteException;
+    void addStudent(Alumno student) throws RemoteException;
 }

@@ -6,4 +6,5 @@ import java.rmi.RemoteException;
 public interface IAlumno extends Remote {
     void unirseASala(int codSala) throws RemoteException;
     void responderPregunta(String respuesta) throws RemoteException;
+    String getNombre() throws RemoteException;
 }
