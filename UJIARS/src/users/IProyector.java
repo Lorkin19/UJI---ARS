@@ -1,6 +1,6 @@
 package users;
 
-import server.Pregunta;
+import sockets.server.Pregunta;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

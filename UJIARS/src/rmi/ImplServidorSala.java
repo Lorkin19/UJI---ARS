@@ -1,28 +1,24 @@
 package rmi;
 
 import common.IntServidorSala;
-import common.Sala;
 import users.IAlumno;
 import users.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Set;
 
 public class ImplServidorSala extends UnicastRemoteObject implements IntServidorSala {
-    private Sala miSala;
+    private Sesion sesion;
+    private Set<IAlumno> alumnos;
 
-    ImplServidorSala() throws RemoteException {
+    public ImplServidorSala(Sesion sesion) throws RemoteException {
         super();
-        this.miSala=null;
-    }
-
-    @Override
-    public void nuevaSala(Sesion miSesion) throws RemoteException {
-        miSala = new Sala(miSesion);
+        this.sesion = sesion;
     }
 
     @Override
     public void addAlumno(IAlumno alumno) throws RemoteException {
-        miSala.addAlumno(alumno);
+        alumnos.add(alumno);
     }
 }

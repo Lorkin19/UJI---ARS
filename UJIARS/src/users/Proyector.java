@@ -1,13 +1,13 @@
 package users;
 
-import server.Pregunta;
+import sockets.server.Pregunta;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class Proyector extends UnicastRemoteObject implements IProyector {
 
-    protected Proyector() throws RemoteException {
+    public Proyector() throws RemoteException {
         super();
     }
 

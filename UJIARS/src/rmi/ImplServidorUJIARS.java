@@ -7,13 +7,13 @@ import java.rmi.registry.Registry;
 
 public class ImplServidorUJIARS {
     public static void main(String[] args) {
-        try{
+        try {
             arrancarRegistro(1099);
             ImplServidorInicio exportedObj = new ImplServidorInicio();
             String registryURL = "rmi://localhost:1099/UJIARS";
             Naming.rebind(registryURL, exportedObj);
             System.out.println("Callback Server Ready.");
-        }catch (Exception re) {
+        } catch (Exception re) {
             System.out.println("Exception in Server.main: " + re);
         }
     }
