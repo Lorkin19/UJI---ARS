@@ -1,7 +1,9 @@
 package rmi;
 
-import common.IntServidorInicio;
-import common.IntServidorSala;
+import common.IAlumnoSala;
+import common.IServidorInicio;
+import common.IServidorSala;
+import users.IAlumno;
 import users.Profesor;
 import users.Sesion;
 
@@ -10,14 +12,14 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImplServidorInicio extends UnicastRemoteObject implements IntServidorInicio {
+public class ServidorInicio extends UnicastRemoteObject implements IServidorInicio {
 
     private Map<String, Profesor> profesores;
-    private Map<Integer,IntServidorSala> salas;
+    private Map<Integer, IAlumnoSala> salas;
 
-    ImplServidorInicio() throws RemoteException{
+    ServidorInicio() throws RemoteException {
         super();
-        //coger los datos de los profesores de la bbdd y guardarlos en un set
+        // TODO Coger los datos de los profesores de la BBDD y guardarlos en un set
         salas = new HashMap<>(); // Temporal, puede que no sea asi
     }
 
@@ -27,7 +29,7 @@ public class ImplServidorInicio extends UnicastRemoteObject implements IntServid
      * @param usuario nombre del profesor
      * @param password password del profesor
      * @return el profesor si la contrasena coincide con el usuario, null si no coincide
-     * @throws RemoteException
+     * @throws RemoteException si algo peta
      */
     @Override
     public Profesor iniciaProfesor(String usuario, String password) throws RemoteException {
@@ -43,7 +45,7 @@ public class ImplServidorInicio extends UnicastRemoteObject implements IntServid
      * @param usuario nombre de usuario del profesor
      * @param password password
      * @return si se ha podido anyadir
-     * @throws RemoteException
+     * @throws RemoteException si algo peta
      */
     @Override
     public synchronized boolean registraProfesor(String usuario, String password) throws RemoteException {
@@ -53,7 +55,7 @@ public class ImplServidorInicio extends UnicastRemoteObject implements IntServid
             return false;
         }
 
-        Profesor p = new Profesor(usuario, password);
+        Profesor p = new Profesor(usuario, password, this);
         profesores.put(usuario, p);
         return true;
     }
@@ -66,12 +68,13 @@ public class ImplServidorInicio extends UnicastRemoteObject implements IntServid
      * @throws RemoteException
      */
     @Override
-    public IntServidorSala entrarSala(int codigoSala) throws RemoteException {
+    public IAlumnoSala entrarSala(int codigoSala) throws RemoteException {
         return salas.get(codigoSala);
     }
 
     @Override
     public void nuevaSala(Sesion miSesion) throws RemoteException {
-
+        // TODO Convertir sesion en sala, si el codigo lo genera el servidor --> return codSala
+        // Si es el profesor el que genera el codigo, cambiar el parametro a uno de tipo Sala
     }
 }
