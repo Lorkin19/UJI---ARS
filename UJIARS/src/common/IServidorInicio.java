@@ -1,6 +1,5 @@
 package common;
 
-import users.IAlumno;
 import users.Profesor;
 import users.Sesion;
 

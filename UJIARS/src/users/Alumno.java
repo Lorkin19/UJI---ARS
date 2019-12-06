@@ -1,5 +1,6 @@
 package users;
 
+import common.IAlumno;
 import common.IAlumnoSala;
 import common.IServidorInicio;
 

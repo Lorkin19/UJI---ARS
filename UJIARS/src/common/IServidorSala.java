@@ -1,7 +1,5 @@
 package common;
 
-import users.IAlumno;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

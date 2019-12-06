@@ -1,5 +1,7 @@
 package users;
 
+import common.IAlumno;
+
 public abstract class Cliente implements IAlumno {
     private String password;
 

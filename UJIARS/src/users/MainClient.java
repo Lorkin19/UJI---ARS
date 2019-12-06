@@ -1,5 +1,7 @@
 package users;
 
+import common.IProfesor;
+import common.IProyector;
 import common.IServidorInicio;
 
 import java.io.IOException;
@@ -14,8 +16,8 @@ public class MainClient {
     private IServidorInicio servidorInicio = null;
     Scanner sc = new Scanner(System.in);
     private Alumno alumno = null;
-    private Profesor profesor = null;
-    private Proyector proyector = null;
+    private IProfesor profesor = null;
+    private IProyector proyector = null;
 
     public static void main(String[] args) throws IOException
     {
@@ -90,12 +92,18 @@ public class MainClient {
                             }
                             // el Profesor pretende registrarse
                             if  (accion == 2){
-                                if (servidorInicio.registraProfesor(usuario, contrasenya)){
-                                    profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
-                                    System.out.println("Registrado correctamente");
-                                } else{
-                                    System.out.println("El nombre de usuario ya existe");
+                                try {
+                                    if (servidorInicio.registraProfesor(usuario, contrasenya)){
+                                        profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
+                                        System.out.println("Registrado correctamente");
+                                    } else{
+                                        System.out.println("El nombre de usuario ya existe");
+                                    }
+                                } catch (Exception e){
+                                    System.out.println("Error en el registro");
+                                    e.printStackTrace();
                                 }
+
                             }
                         }
 

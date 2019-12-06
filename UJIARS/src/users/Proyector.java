@@ -1,5 +1,7 @@
 package users;
 
+import common.IProyector;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 

@@ -1,7 +1,5 @@
 package common;
 
-import users.IAlumno;
-import users.IProyector;
 import users.Sesion;
 
 import java.rmi.RemoteException;

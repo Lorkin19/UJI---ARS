@@ -2,8 +2,6 @@ package rmi;
 
 import common.IAlumnoSala;
 import common.IServidorInicio;
-import common.IServidorSala;
-import users.IAlumno;
 import users.Profesor;
 import users.Sesion;
 
@@ -49,14 +47,18 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      * @throws RemoteException si algo peta
      */
     @Override
-    public synchronized boolean registraProfesor(String usuario, String password) throws RemoteException {
+    public boolean registraProfesor(String usuario, String password) throws RemoteException {
         // Si el profesor esta registrado no deja registrarse
-        if (profesores.get(usuario) != null){
+        System.out.println("comprobando profesor " + usuario);
+        if (profesores.containsKey(usuario)){
             System.out.println("Usuario ya registrado");
             return false;
         }
+        System.out.println("Profesor no registrado");
         Profesor p = new Profesor(usuario, password, this);
+        System.out.println("Profesor creado");
         profesores.put(usuario, p);
+        System.out.println("Profesor anyadido");
         return true;
     }
 
