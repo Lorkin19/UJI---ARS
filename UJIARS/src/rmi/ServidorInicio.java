@@ -18,8 +18,9 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     ServidorInicio() throws RemoteException {
         super();
         // TODO Coger los datos de los profesores de la BBDD y guardarlos en un set
+        profesores = new HashMap<>(); // Temporal hasta que pongamos  la BBDD
+
         salas = new HashMap<>(); // Temporal, puede que no sea asi
-        profesores = new HashMap<>(); //Temporal
     }
 
     /**
@@ -32,9 +33,20 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public Profesor iniciaProfesor(String usuario, String password) throws RemoteException {
+        // Comprobar el el profesor exista
+        if (!profesores.containsKey(usuario)) {
+            System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
+            return null;
+        }
+
+        // Comprobar que la contrasenya coincida con la dada
         Profesor p = profesores.get(usuario);
-        if (p.getPassword().equals(password))
+        if (p.getPassword().equals(password)) {
             return p;
+        }
+
+        // La contrasenya no coincide
+        System.out.println("Contrasenya incorrecta");
         return null;
     }
 
@@ -49,12 +61,12 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     @Override
     public boolean registraProfesor(String usuario, String password) throws RemoteException {
         // Si el profesor esta registrado no deja registrarse
-        System.out.println("comprobando profesor " + usuario);
-        if (profesores.containsKey(usuario)){
-            System.out.println("Usuario ya registrado");
+        System.out.println("Comprobando profesor " + usuario);
+        if (profesores.containsKey(usuario)) {
             return false;
         }
-        System.out.println("Profesor no registrado");
+
+        System.out.println("El nombre de usuario esta disponible");
         Profesor p = new Profesor(usuario, password, this);
         System.out.println("Profesor creado");
         profesores.put(usuario, p);
@@ -70,9 +82,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public boolean compruebaSala(int codigoSala) throws RemoteException {
-        if (salas.get(codigoSala)!=null)
-            return true;
-        return false;
+        return salas.get(codigoSala) != null;
     }
 
     /**
