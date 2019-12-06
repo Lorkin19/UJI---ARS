@@ -21,6 +21,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         super();
         // TODO Coger los datos de los profesores de la BBDD y guardarlos en un set
         salas = new HashMap<>(); // Temporal, puede que no sea asi
+        profesores = new HashMap<>(); //Temporal
     }
 
     /**
@@ -49,15 +50,27 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public synchronized boolean registraProfesor(String usuario, String password) throws RemoteException {
-        // Siel profesor esta registrado no deja registrarse
-        if (profesores.containsKey(usuario)) {
+        // Si el profesor esta registrado no deja registrarse
+        if (profesores.get(usuario) != null){
             System.out.println("Usuario ya registrado");
             return false;
         }
-
         Profesor p = new Profesor(usuario, password, this);
         profesores.put(usuario, p);
         return true;
+    }
+
+    /**
+     * Comprueba que la sala existe antes de pedir el nombre del alumno.
+     * @param codigoSala Codigo de la sala a la que pretende unirse.
+     * @return true si la sala existe, false si no existe.
+     * @throws RemoteException si falla la conexion.
+     */
+    @Override
+    public boolean compruebaSala(int codigoSala) throws RemoteException {
+        if (salas.get(codigoSala)!=null)
+            return true;
+        return false;
     }
 
     /**
@@ -65,7 +78,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      *
      * @param codigoSala codigo de la sala donde estara la partida
      * @return la sala, null si no existe
-     * @throws RemoteException
+     * @throws RemoteException si algo peta
      */
     @Override
     public IAlumnoSala entrarSala(int codigoSala) throws RemoteException {
