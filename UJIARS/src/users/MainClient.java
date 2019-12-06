@@ -33,13 +33,19 @@ public class MainClient {
         getServerFromUrl(registryURL);
 
         // Preguntamos si es alumno o profesor
-        System.out.println("Eres alumno o profesor?\n(1 --> alumno)\n(2 --> profesor)");
-        int respuesta = sc.nextInt();
-        if (respuesta == 1) {
-            iniciaSesionAlumno();
-        } else if (respuesta == 2) {
-            esProfesor();
+        boolean incorrecto=true;
+        while (incorrecto){
+            System.out.println("Eres alumno o profesor?\n(1 --> alumno)\n(2 --> profesor)");
+            int respuesta = sc.nextInt();
+            if (respuesta == 1) {
+                incorrecto=false;
+                iniciaSesionAlumno();
+            } else if (respuesta == 2) {
+                incorrecto=false;
+                esProfesor();
+            }
         }
+
 
         // Ya tenemos la sesion iniciada
         if (profesor == null) {

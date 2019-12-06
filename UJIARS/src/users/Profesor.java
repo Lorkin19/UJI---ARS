@@ -13,14 +13,12 @@ import java.util.List;
 public class Profesor extends UnicastRemoteObject implements IProfesor {
     private String usuario;
     private String password;
-    private IServidorInicio servidor;
     private IServidorSala sala;
     private List<Sesion> misSesiones;
 
-    public Profesor(String usuario, String password, IServidorInicio servidor) throws RemoteException {
+    public Profesor(String usuario, String password) throws RemoteException {
         this.usuario = usuario;
         this.password = password;
-        this.servidor = servidor;
         misSesiones = new ArrayList<>();
     }
 
@@ -63,7 +61,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
     @Override
-    public void crearPartida(Sesion sesion) throws RemoteException {
+    public void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException {
         // TODO ¿Como hacemos lo del codigo de la sala?
         // TODO ¿Lo pone el profesor? ¿El sistema automaticamente genera uno aleatorio?
         servidor.nuevaSala(sesion);

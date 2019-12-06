@@ -1,6 +1,7 @@
 package rmi;
 
 import common.IAlumnoSala;
+import common.IProfesor;
 import common.IServidorInicio;
 import users.Profesor;
 import users.Sesion;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public class ServidorInicio extends UnicastRemoteObject implements IServidorInicio {
 
-    private Map<String, Profesor> profesores;
+    private Map<String, IProfesor> profesores;
     private Map<Integer, IAlumnoSala> salas;
 
     ServidorInicio() throws RemoteException {
@@ -32,7 +33,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      * @throws RemoteException si algo peta
      */
     @Override
-    public Profesor iniciaProfesor(String usuario, String password) throws RemoteException {
+    public IProfesor iniciaProfesor(String usuario, String password) throws RemoteException {
         // Comprobar el el profesor exista
         if (!profesores.containsKey(usuario)) {
             System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
@@ -40,7 +41,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         }
 
         // Comprobar que la contrasenya coincida con la dada
-        Profesor p = profesores.get(usuario);
+        IProfesor p = profesores.get(usuario);
         if (p.getPassword().equals(password)) {
             return p;
         }
@@ -67,7 +68,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         }
 
         System.out.println("El nombre de usuario esta disponible");
-        Profesor p = new Profesor(usuario, password, this);
+        IProfesor p = new Profesor(usuario, password);
         System.out.println("Profesor creado");
         profesores.put(usuario, p);
         System.out.println("Profesor anyadido");
