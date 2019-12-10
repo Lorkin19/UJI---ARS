@@ -36,8 +36,8 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
         // TODO Falta mirar el tiempo disponible para contestar
         System.out.println("Enunciado de la pregunta: " + pregunta.getEnunciado());
         System.out.println("Respuesta 0: " + pregunta.getRespuestaCorrecta());
-        for (int i = 1; i < pregunta.getRespuestasIncorrectas().size(); i++) {
-            System.out.println("Respuesta " + i + ": " + pregunta.getRespuestasIncorrectas().get(i));
+        for (int i = 1; i < pregunta.getRespuestas().size(); i++) {
+            System.out.println("Respuesta " + i + ": " + pregunta.getRespuestas().get(i));
         }
         // TODO ¿Como hacer que el alumno seleccione una pregunta? Supongo que con JavaFX se hara facilmente
         // De momento, pongo que automaticamente contesta la respuesta correcta (Provisional)

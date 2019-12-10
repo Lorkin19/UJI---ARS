@@ -5,7 +5,7 @@ import java.util.List;
 public class Pregunta {
     private String enunciado;
     private String respuestaCorrecta;
-    private List<String> respuestasIncorrectas;
+    private List<String> respuestas;
     private double tiempo; // Tiempo de la pregunta
     private int puntos; // Puntos que da la pregunta por acertar
 
@@ -20,8 +20,8 @@ public class Pregunta {
         return respuestaCorrecta;
     }
 
-    public List<String> getRespuestasIncorrectas() {
-        return respuestasIncorrectas;
+    public List<String> getRespuestas() {
+        return respuestas;
     }
 
     public double getTiempo() {
@@ -36,7 +36,7 @@ public class Pregunta {
         this.respuestaCorrecta = respuestaCorrecta;
     }
 
-    public void setRespuestasIncorrectas(List<String> respuestasIncorrectas) {
-        this.respuestasIncorrectas = respuestasIncorrectas;
+    public void setRespuestas(List<String> respuestas) {
+        this.respuestas = respuestas;
     }
 }

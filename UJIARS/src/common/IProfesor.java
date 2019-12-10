@@ -18,4 +18,8 @@ public interface IProfesor extends Remote {
     void pasarDePregunta() throws RemoteException;
 
     String getPassword()throws RemoteException;
+
+    void verResultadosPartida() throws RemoteException;
+
+    void finalizarPartida() throws RemoteException;
 }

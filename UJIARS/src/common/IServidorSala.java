@@ -10,4 +10,6 @@ public interface IServidorSala extends Remote{
     void empezarPartida() throws RemoteException;
 
     void pasarDePregunta() throws RemoteException;
+
+    void verResultadosPartida() throws RemoteException;
 }

@@ -1,25 +1,31 @@
 package common;
 
+import users.Pregunta;
 import users.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoSala {
     private int codSala;
     private Map<String, IAlumno> alumnos;
     private Sesion miSesion;
     private int numPreguntaActual;
+    private Pregunta preguntaActual;
     private IProyector proyector; // TODO ¿Como pasarselo a la sala?
-    // Guardar los datos de las respuestas
+    private Map<String, Integer> resultadosPregunta;  // Guardar los datos de las respuestas de la pregunta actual
+    // TODO Cambiar resultadosPregunta a List para guardar todos los datos de la preguntas y sus respuestas y mostrarlo al final (estadisticas, pregunta mas acertada, pregunta mas fallada...)
+    private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos
+
 
     public Sala(Sesion miSesion, int codSala) throws RemoteException {
         super();
         this.miSesion = miSesion;
-        alumnos = new HashMap<>();
         this.codSala = codSala;
+        alumnos = new HashMap<>();
+        resultadosPregunta = new HashMap<>();
+        resultadosAlumnos = new HashMap<>();
     }
 
     /**
@@ -35,6 +41,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
             return false;
         }
         alumnos.put(alumno.getNombre(), alumno);
+        resultadosAlumnos.put(alumno.getNombre(), 0);
         return true;
     }
 
@@ -48,8 +55,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
     @Override
     public void alumnoResponde(String nombreAlumno, String respuesta) throws RemoteException {
         IAlumno alumno = alumnos.get(nombreAlumno);
-        boolean acierto = miSesion.getListaPreguntas().get(numPreguntaActual).getRespuestaCorrecta().equals(respuesta);
+        boolean acierto = preguntaActual.getRespuestaCorrecta().equals(respuesta);
+        actualizaResultados(respuesta);
         alumno.verResultadoPregunta(acierto);
+    }
+
+    private void actualizaResultados(String respuesta) {
+        resultadosPregunta.put(respuesta, resultadosPregunta.get(respuesta) + 1);
     }
 
     /**
@@ -59,17 +71,61 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
     @Override
     public void empezarPartida() throws RemoteException {
         numPreguntaActual = 0;
-        notificaAlumnos();
-        notificaProyector();
+        enviarPregunta();
     }
 
 
+    /**
+     * Baraja las opciones
+     * Resetea los resultadosPregunta
+     * Envia la pregunta a los alumnos y al proyector
+     *
+     * @throws RemoteException si algo peta
+     */
+    private void enviarPregunta() throws RemoteException {
+        barajarPreguntaActual();
+
+        // Resetear los resultadosPregunta
+        resetResultados();
+
+        // Enviar la pregunta a los alumnos y al proyector
+        notificaAlumnos();
+        notificaProyector();
+
+        // TODO Falta esperar los 15 segundos (o el tiempo que sea para esa pregunta)
+
+        // Visualizar los resultadosPregunta de la pregunta en el proyector
+        proyector.verResultados(resultadosPregunta);
+    }
+
+    private void resetResultados() {
+        for (String pregunta : resultadosPregunta.keySet()) {
+            resultadosPregunta.put(pregunta, 0);
+        }
+    }
+
+    /**
+     * El profesor ha indicado que quiere pasar de de pregunta
+     * Se barajan las posibles respuestas de la pregunta
+     * Se envia la pregunta YA BARAJADA a los alumnos y al profesor
+     *
+     * @throws RemoteException si algo peta
+     */
 
     @Override
     public void pasarDePregunta() throws RemoteException {
+        // Para guardarse una referencia a la pregunta actual de la sesion
         numPreguntaActual++;
-        notificaAlumnos();
-        notificaProyector();
+        preguntaActual = miSesion.getListaPreguntas().get(numPreguntaActual);
+
+        enviarPregunta();
+    }
+
+    /**
+     * Usado para reorganizar las respuestas de la pregunta
+     */
+    private void barajarPreguntaActual() {
+        Collections.shuffle(preguntaActual.getRespuestas());
     }
 
     /**
@@ -79,7 +135,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
      */
     private void notificaAlumnos() throws RemoteException {
         for (IAlumno alumno : alumnos.values()) {
-            alumno.responderPregunta(miSesion.getListaPreguntas().get(numPreguntaActual));
+            alumno.responderPregunta(preguntaActual);
         }
     }
 
@@ -89,6 +145,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
      * @throws RemoteException si algo peta
      */
     private void notificaProyector() throws RemoteException{
-        proyector.verPregunta(miSesion.getListaPreguntas().get(numPreguntaActual));
+        proyector.verPregunta(preguntaActual);
     }
+
+    @Override
+    public void verResultadosPartida() throws RemoteException {
+        // TODO Enviar al proyector los datos de los alumnos con mas respuestas acertadas
+    }
+
+
 }

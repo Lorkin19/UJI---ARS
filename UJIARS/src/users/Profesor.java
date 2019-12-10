@@ -56,7 +56,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         Pregunta p = new Pregunta();
         p.setEnunciado("");
         p.setRespuestaCorrecta("");
-        p.setRespuestasIncorrectas(Arrays.asList("", "", ""));
+        p.setRespuestas(Arrays.asList("", "", ""));
         return p;
     }
 
@@ -88,4 +88,16 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     public void pasarDePregunta() throws RemoteException {
         sala.pasarDePregunta();
     }
+
+    @Override
+    public void verResultadosPartida() throws RemoteException {
+        sala.verResultadosPartida();
+    }
+
+    @Override
+    public void finalizarPartida() throws RemoteException {
+        sala = null;
+    }
+
+
 }

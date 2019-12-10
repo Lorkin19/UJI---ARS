@@ -4,7 +4,6 @@ import common.IProfesor;
 import common.IProyector;
 import common.IServidorInicio;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,7 +18,7 @@ public class MainClient {
     private IProfesor profesor = null;
     private IProyector proyector = null;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         MainClient cliente = new MainClient();
         System.out.println("Iniciando cliente\n");
         cliente.ejecuta();
@@ -38,10 +37,10 @@ public class MainClient {
             System.out.println("Eres alumno o profesor?\n(1 --> alumno)\n(2 --> profesor)");
             int respuesta = sc.nextInt();
             if (respuesta == 1) {
-                incorrecto=false;
+                incorrecto = false;
                 iniciaSesionAlumno();
             } else if (respuesta == 2) {
-                incorrecto=false;
+                incorrecto = false;
                 esProfesor();
             }
         }

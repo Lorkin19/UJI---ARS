@@ -5,9 +5,7 @@ import common.IAlumno;
 public abstract class Cliente implements IAlumno {
     private String password;
 
-    public void startClient() //Método para iniciar el cliente
-    {
-
+    public void startClient() { //Método para iniciar el cliente
     }
 
     public String getPassword() {
