@@ -3,6 +3,7 @@ package rmi;
 import common.IAlumnoSala;
 import common.IProfesor;
 import common.IServidorInicio;
+import common.IServidorSala;
 import users.Profesor;
 import users.Sesion;
 
@@ -99,8 +100,10 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public void nuevaSala(Sesion miSesion) throws RemoteException {
+    public IServidorSala nuevaSala(Sesion miSesion) throws RemoteException {
         // TODO Convertir sesion en sala, si el codigo lo genera el servidor --> return codSala
         // Si es el profesor el que genera el codigo, cambiar el parametro a uno de tipo Sala
+
+        return null;
     }
 }

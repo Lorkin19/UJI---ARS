@@ -56,7 +56,8 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
     public void alumnoResponde(String nombreAlumno, String respuesta) throws RemoteException {
         IAlumno alumno = alumnos.get(nombreAlumno);
         boolean acierto = preguntaActual.getRespuestaCorrecta().equals(respuesta);
-        actualizaResultados(respuesta);
+        if (acierto)
+            actualizaResultados(respuesta);
         alumno.verResultadoPregunta(acierto);
     }
 
