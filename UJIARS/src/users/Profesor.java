@@ -63,8 +63,8 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     @Override
     public void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException {
         // TODO ¿Como hacemos lo del codigo de la sala?
-        // TODO ¿Lo pone el profesor? ¿El sistema automaticamente genera uno aleatorio?
-        servidor.nuevaSala(sesion);
+        // TODO ¿Lo pone el profesor? ¿El sistema automaticamente genera uno aleatorio? <--
+        sala = servidor.nuevaSala(sesion);
     }
 
     /**

@@ -28,6 +28,8 @@ public class Pregunta {
         return tiempo;
     }
 
+    public int getPuntos(){ return puntos; }
+
     public void setEnunciado(String enunciado) {
         this.enunciado = enunciado;
     }
