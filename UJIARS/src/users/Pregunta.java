@@ -41,4 +41,12 @@ public class Pregunta {
     public void setRespuestas(List<String> respuestas) {
         this.respuestas = respuestas;
     }
+
+    public void setTiempo(double tiempo){
+        this.tiempo = tiempo;
+    }
+
+    public void setPuntos(int puntos){
+        this.puntos = puntos;
+    }
 }
