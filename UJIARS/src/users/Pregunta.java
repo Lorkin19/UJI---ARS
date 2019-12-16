@@ -6,8 +6,8 @@ public class Pregunta {
     private String enunciado;
     private String respuestaCorrecta;
     private List<String> respuestas;
-    private double tiempo; // Tiempo de la pregunta
-    private int puntos; // Puntos que da la pregunta por acertar
+    protected double tiempo = 15;  // Tiempo de la pregunta (segundos)
+    protected int puntos = 1;  // Puntos que da la pregunta por acertar (1 por defecto)
 
     public Pregunta() {
     }
