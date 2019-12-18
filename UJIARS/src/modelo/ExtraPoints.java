@@ -1,4 +1,4 @@
-package users;
+package modelo;
 
 public class ExtraPoints extends Pregunta {
     private Pregunta p;

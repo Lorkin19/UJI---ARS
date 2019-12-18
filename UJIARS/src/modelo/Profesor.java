@@ -1,8 +1,10 @@
-package users;
+package modelo;
 
 import common.IProfesor;
 import common.IServidorInicio;
 import common.IServidorSala;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,12 +16,12 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     private String usuario;
     private String password;
     private IServidorSala sala;
-    private List<Sesion> misSesiones;
+    private ObservableList<Sesion> misSesiones;
 
     public Profesor(String usuario, String password) throws RemoteException {
         this.usuario = usuario;
         this.password = password;
-        misSesiones = new ArrayList<>();
+        misSesiones = FXCollections.observableArrayList();
     }
 
     public Profesor() throws RemoteException {}
@@ -41,7 +43,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
     public void setMisSesiones(List<Sesion> misSesiones){
-        this.misSesiones = misSesiones;
+        this.misSesiones = FXCollections.observableArrayList(misSesiones);
     }
 
     /**

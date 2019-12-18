@@ -1,7 +1,7 @@
 package common;
 
-import users.Pregunta;
-import users.Sesion;
+import modelo.Pregunta;
+import modelo.Sesion;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -38,22 +38,22 @@ public class Main extends Application {
         landingPage.setLocation(Main.class.getResource("inicio/landingPage.fxml"));
 
         // Ajustamos parametros de la ventana inicial.
-        primaryStage.initStyle(StageStyle.UTILITY);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("UJI ARS");
+        this.primaryStage.initStyle(StageStyle.UTILITY);
+        this.primaryStage.setResizable(false);
+        this.primaryStage.setTitle("UJI ARS");
 
         // Cargamos la escena.
         Scene landingScene = new Scene(landingPage.load());
 
         // Anyadimos la escena a la ventana de inicio.
-        primaryStage.setScene(landingScene);
+        this.primaryStage.setScene(landingScene);
 
         // Pasamos la referencia del main al controlador.
         LandingPageController landingController = landingPage.getController();
         landingController.setMain(this);
 
         // Mostramos la ventana.
-        primaryStage.show();
+        this.primaryStage.show();
     }
 
 
@@ -116,14 +116,20 @@ public class Main extends Application {
             FXMLLoader profesorLoader = new FXMLLoader();
             profesorLoader.setLocation(getClass().getResource("profesor/homeProfesor.fxml"));
 
+            Stage profesorStage = new Stage();
             // Cambiamos el titulo de la ventana.
-            primaryStage.setTitle("UJI ARS - Profesor");
+            profesorStage.setTitle("UJI ARS - Profesor");
+            profesorStage.setResizable(true);
+            profesorStage.initStyle(StageStyle.DECORATED);
 
             Scene profesor = new Scene(profesorLoader.load());
-            primaryStage.setScene(profesor);
+            profesorStage.setScene(profesor);
 
             HomeProfesorController controller = profesorLoader.getController();
             controller.setMain(this);
+
+            primaryStage.hide();
+            profesorStage.show();
 
         } catch (IOException e){
             String mensaje = "Error al ejecutar la ventana del profesor.";

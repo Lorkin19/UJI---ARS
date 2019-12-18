@@ -1,4 +1,4 @@
-package users;
+package modelo;
 
 public class ExtraTime extends Pregunta {
     private Pregunta p;

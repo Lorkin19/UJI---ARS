@@ -4,8 +4,8 @@ import common.IAlumnoSala;
 import common.IProfesor;
 import common.IServidorInicio;
 import common.IServidorSala;
-import users.Profesor;
-import users.Sesion;
+import modelo.Profesor;
+import modelo.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

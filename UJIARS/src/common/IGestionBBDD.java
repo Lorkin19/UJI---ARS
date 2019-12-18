@@ -1,13 +1,12 @@
 package common;
 
-import users.Pregunta;
-import users.Profesor;
-import users.Sesion;
+import modelo.Pregunta;
+import modelo.Profesor;
+import modelo.Sesion;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Map;
 
 public interface IGestionBBDD extends Remote {
     boolean registraProfesor(String usuario, String password) throws RemoteException;

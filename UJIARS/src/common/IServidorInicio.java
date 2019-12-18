@@ -1,7 +1,6 @@
 package common;
 
-import users.Profesor;
-import users.Sesion;
+import modelo.Sesion;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

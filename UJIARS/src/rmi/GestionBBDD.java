@@ -1,9 +1,9 @@
 package rmi;
 
 import common.IGestionBBDD;
-import users.Pregunta;
-import users.Profesor;
-import users.Sesion;
+import modelo.Pregunta;
+import modelo.Profesor;
+import modelo.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

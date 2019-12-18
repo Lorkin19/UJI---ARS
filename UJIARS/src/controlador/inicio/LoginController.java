@@ -29,6 +29,7 @@ public class LoginController implements IController {
         if (profesor == null){
             main.error("Usuario o clave incorrecta.");
         } else {
+            prevController.cierraInicio();
             main.ejecutaProfesor(profesor);
         }
     }

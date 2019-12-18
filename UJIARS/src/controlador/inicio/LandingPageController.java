@@ -76,4 +76,5 @@ public class LandingPageController implements IController {
     public void cierraRegistro() {
         stageRegistro.close();
     }
+    public void cierraInicio() { stageInicio.close();}
 }

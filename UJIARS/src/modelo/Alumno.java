@@ -1,4 +1,4 @@
-package users;
+package modelo;
 
 import common.IAlumno;
 import common.IAlumnoSala;
