@@ -18,4 +18,16 @@ public class Sesion {
     public void addPregunta(Pregunta pregunta) {
         listaPreguntas.add(pregunta);
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setListaPreguntas(List<Pregunta> listaPreguntas) {
+        this.listaPreguntas = listaPreguntas;
+    }
 }

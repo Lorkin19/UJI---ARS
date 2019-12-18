@@ -2,6 +2,8 @@ package rmi;
 
 import common.IGestionBBDD;
 import users.Pregunta;
+import users.Profesor;
+import users.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -67,6 +69,8 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @return  (true) si existe, (false) si no existe o los datos son erroneos.
      * @throws RemoteException Si hay un error en la conexion remota.
      */
+    //todo crear un paquete validador y clase correspondiente
+
     @Override
     public boolean compruebaProfesor(String usuario, String password) throws RemoteException {
         try {
@@ -82,7 +86,6 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             return false;
         }
     }
-
 
     /**
      * Se registran las preguntas creadas por el profesor sobre un cuestionario de nombre x.
@@ -158,55 +161,47 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos
      */
     @Override
-    public Map<String, List<Pregunta>> getProfessorCuestionarios(String usuario) {
+    public List<Sesion> getSesionesProfesor(String usuario) {
+        List<Sesion> misSesiones = new ArrayList<>();
         Map<String, List<Pregunta>> result = new HashMap<>();
         try {
+            getPreguntasProfesor(result, usuario);
+            toSesion(misSesiones, result);
+        } catch (SQLException e) {
+            System.out.println("Ha ocurrido un error al obtener los cuestionarios del profesor");
+        }
+
+        return misSesiones;
+    }
+
+    /**
+     * Metodo que permite obtener un profesor a partir de un usuario
+     * @param usuario el nombre de usuario dado para obtener el profesor de la base de datos
+     * @return el profesor obtenido de la bbdd o null en el caso de que no se encuentre el profesor
+     * @throws RemoteException En el caso de que algo falle.
+     */
+    @Override
+    public Profesor getProfesor(String usuario) throws RemoteException {
+        try {
             Connection connection = conecta();
-            String sentence = "SELECT * FROM Preguntas WHERE usuario = ? GROUP BY nombreCuestionario";
+            String sentence = "SELECT * from Profesor WHERE usuario = ?";
             PreparedStatement st = connection.prepareStatement(sentence);
 
             st.setString(1, usuario);
 
             ResultSet rs = st.executeQuery();
-            Pregunta p = new Pregunta();
+            Profesor p = new Profesor();
 
-            String cuestionario;
-            int idPregunta;
-            String respuestaCorrecta = "";
-            List<String> respuestas = new ArrayList<>();
-            List<Pregunta> listPreguntas;
+            p.setUsuario(rs.getString("usuario"));
+            p.setPassword(rs.getString("password"));
+            p.setMisSesiones(getSesionesProfesor(usuario));
 
-            sentence = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
-            st = connection.prepareStatement(sentence);
+            return p;
 
-            while (rs.next()) {
-                idPregunta = rs.getInt("idPregunta");
-                cuestionario = rs.getString("nombreCuestionario");
-
-
-                st.setInt(1, idPregunta);
-                ResultSet rs2 = st.executeQuery();
-
-                respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
-
-                p.setEnunciado(rs.getString("enunciado"));
-                p.setRespuestaCorrecta(respuestaCorrecta);
-                p.setRespuestas(respuestas);
-                p.setTiempo(rs.getDouble("tiempo"));
-                p.setPuntos(rs.getInt("puntos"));
-
-                result.computeIfAbsent(cuestionario, k -> new ArrayList<>());
-                listPreguntas = result.get(cuestionario);
-                listPreguntas.add(p);
-                result.put(cuestionario, listPreguntas);
-            }
-
-
-        } catch (SQLException e) {
-            System.out.println("Ha ocurrido un error al obtener los cuestionarios del profesor");
+        }catch (SQLException e){
+            System.out.println("El profesor no existe.");
+            return null;
         }
-
-        return result;
     }
 
     /**
@@ -252,6 +247,68 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
             return -1;
+        }
+    }
+
+    /**
+     * Se convierte del mapa obtenido del metodo getPreguntasProfesor a un listado de las sesiones del profesor.
+     * @param misSesiones Listado al cual se quieren anyadir el resultado de obtener el mapa de sesiones y preguntas
+     * @param result Mapa que contiene el nombre de las sesiones y las preguntas correspondientes a cada sesion
+     */
+    private void toSesion(List<Sesion> misSesiones, Map<String, List<Pregunta>> result) {
+        for (String sesion : result.keySet()){
+            Sesion s = new Sesion(sesion);
+            s.setListaPreguntas(result.get(sesion));
+
+            misSesiones.add(s);
+        }
+    }
+
+    /**
+     * Obtiene el listado de preguntas separadas por el nombre de la sesion a la que pertenecen.
+     * @param result Mapa donde se guarda el nombre  de la sesion y las preguntas correspondientes.
+     * @param usuario Nombre del profesor del cual se quieren obtener las preguntas.
+     * @throws SQLException En el caso de que haya algun error.
+     */
+    private void getPreguntasProfesor(Map<String, List<Pregunta>> result, String usuario) throws SQLException {
+        Connection connection = conecta();
+        String sentence = "SELECT * FROM Preguntas WHERE usuario = ? GROUP BY nombreCuestionario";
+        PreparedStatement st = connection.prepareStatement(sentence);
+
+        st.setString(1, usuario);
+
+        ResultSet rs = st.executeQuery();
+        Pregunta p = new Pregunta();
+
+        String cuestionario;
+        int idPregunta;
+        String respuestaCorrecta = "";
+        List<String> respuestas = new ArrayList<>();
+        List<Pregunta> listPreguntas;
+
+        sentence = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
+        st = connection.prepareStatement(sentence);
+
+        while (rs.next()) {
+            idPregunta = rs.getInt("idPregunta");
+            cuestionario = rs.getString("nombreCuestionario");
+
+
+            st.setInt(1, idPregunta);
+            ResultSet rs2 = st.executeQuery();
+
+            respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
+
+            p.setEnunciado(rs.getString("enunciado"));
+            p.setRespuestaCorrecta(respuestaCorrecta);
+            p.setRespuestas(respuestas);
+            p.setTiempo(rs.getDouble("tiempo"));
+            p.setPuntos(rs.getInt("puntos"));
+
+            result.computeIfAbsent(cuestionario, k -> new ArrayList<>());
+            listPreguntas = result.get(cuestionario);
+            listPreguntas.add(p);
+            result.put(cuestionario, listPreguntas);
         }
     }
 }

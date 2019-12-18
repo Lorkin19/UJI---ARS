@@ -22,8 +22,26 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         misSesiones = new ArrayList<>();
     }
 
+    public Profesor() throws RemoteException {}
+
     public String getPassword() {
         return password;
+    }
+
+    public String getUsuario(){ return usuario; }
+
+    public List<Sesion> getMisSesiones(){ return misSesiones; }
+
+    public void setUsuario(String usuario){
+        this.usuario = usuario;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setMisSesiones(List<Sesion> misSesiones){
+        this.misSesiones = misSesiones;
     }
 
     /**
