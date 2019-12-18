@@ -4,8 +4,10 @@ import controlador.IController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import vista.Main;
 
 import java.io.IOException;
@@ -13,34 +15,41 @@ import java.io.IOException;
 public class LandingPageController implements IController {
 
     private Main main;
-    private Stage stageRegistro;
-    private Stage stageInicio;
+    private Stage stageSesion;
+    private Stage myStage;
 
     @Override
     public void setMain(Main main) {
         this.main=main;
     }
+    @Override
+    public void setMyStage(Stage stage) {
+        this.stageSesion = stage;
+    }
 
     /**
      * Se prepara la ventana de inicio de sesion.
      */
+    @FXML
     public void iniciaSesion() {
         try {
             FXMLLoader inicioLoader = new FXMLLoader();
             inicioLoader.setLocation(getClass().getResource("../../vista/inicio/iniciaSesion.fxml"));
 
-            stageInicio = new Stage();
-            stageInicio.setTitle("Inicia Sesión");
-            stageInicio.initStyle(StageStyle.UTILITY);
+            stageSesion = new Stage();
+            stageSesion.setTitle("Inicia Sesión");
+            stageSesion.initStyle(StageStyle.UTILITY);
+            stageSesion.initOwner(myStage);
 
             Scene scene = new Scene(inicioLoader.load());
-            stageInicio.setScene(scene);
-            stageInicio.setResizable(false);
+            stageSesion.setScene(scene);
+            stageSesion.setResizable(false);
 
             LoginController controller = inicioLoader.getController();
             controller.setMain(this.main);
+            controller.setPrevController(this);
 
-            stageInicio.show();
+            stageSesion.showAndWait();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -55,26 +64,26 @@ public class LandingPageController implements IController {
             FXMLLoader registroLoader = new FXMLLoader();
             registroLoader.setLocation(getClass().getResource("../../vista/inicio/registra.fxml"));
 
-            stageRegistro = new Stage();
-            stageRegistro.setTitle("Registrate");
-            stageRegistro.initStyle(StageStyle.UTILITY);
+            stageSesion = new Stage();
+            stageSesion.setTitle("Registrate");
+            stageSesion.initStyle(StageStyle.UTILITY);
+            stageSesion.initOwner(myStage);
 
             Scene scene = new Scene(registroLoader.load());
-            stageRegistro.setScene(scene);
-            stageRegistro.setResizable(false);
+            stageSesion.setScene(scene);
+            stageSesion.initModality(Modality.WINDOW_MODAL);
+            stageSesion.initOwner(this.myStage);
+            stageSesion.setResizable(false);
 
             RegistraController controller = registroLoader.getController();
             controller.setMain(this.main);
             controller.setPrevController(this);
 
-            stageRegistro.show();
+            stageSesion.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void cierraRegistro() {
-        stageRegistro.close();
-    }
-    public void cierraInicio() { stageInicio.close();}
+    public void cierraInicio() { stageSesion.close();}
 }

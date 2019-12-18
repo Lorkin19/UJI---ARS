@@ -21,6 +21,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         this.usuario = usuario;
         this.password = password;
         misSesiones = FXCollections.observableArrayList();
+        misSesiones.add(new Sesion("Prueba"));
     }
 
     public Profesor() throws RemoteException {}
@@ -31,7 +32,9 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
 
     public String getUsuario(){ return usuario; }
 
-    public List<Sesion> getMisSesiones(){ return misSesiones; }
+    public ObservableList<Sesion> getMisSesiones() {
+        return this.misSesiones;
+    }
 
     public void setUsuario(String usuario){
         this.usuario = usuario;
@@ -44,6 +47,9 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     public void setMisSesiones(List<Sesion> misSesiones){
         this.misSesiones = FXCollections.observableArrayList(misSesiones);
     }
+
+
+
 
     /**
      * Usado para crear una sesion

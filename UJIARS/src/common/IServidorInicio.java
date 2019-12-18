@@ -7,7 +7,9 @@ import java.rmi.RemoteException;
 
 public interface IServidorInicio extends Remote {
 
-    IProfesor iniciaProfesor(String usuario, String password) throws RemoteException;
+    boolean iniciaProfesor(String usuario, String password) throws RemoteException;
+
+    boolean profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException;
 
     boolean registraProfesor(String usuario, String password) throws RemoteException;
 

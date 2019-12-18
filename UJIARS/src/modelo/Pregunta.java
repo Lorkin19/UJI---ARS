@@ -1,9 +1,12 @@
 package modelo;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.List;
 
 public class Pregunta {
-    private String enunciado;
+    private StringProperty enunciado;
     private String respuestaCorrecta;
     private List<String> respuestas;
     protected double tiempo = 15;  // Tiempo de la pregunta (segundos)
@@ -12,7 +15,7 @@ public class Pregunta {
     public Pregunta() {
     }
 
-    public String getEnunciado() {
+    public StringProperty getEnunciado() {
         return enunciado;
     }
 
@@ -31,7 +34,7 @@ public class Pregunta {
     public int getPuntos(){ return puntos; }
 
     public void setEnunciado(String enunciado) {
-        this.enunciado = enunciado;
+        this.enunciado = new SimpleStringProperty(enunciado);
     }
 
     public void setRespuestaCorrecta(String respuestaCorrecta) {
