@@ -16,6 +16,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     private Map<String, IProfesor> profesores;
     private Map<Integer, IAlumnoSala> salas;
+    private GestionBBDD conexionBBDD;
 
     ServidorInicio() throws RemoteException {
         super();
@@ -23,6 +24,8 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         profesores = new HashMap<>(); // Temporal hasta que pongamos  la BBDD
 
         salas = new HashMap<>(); // Temporal, puede que no sea asi
+
+        conexionBBDD = new GestionBBDD();
     }
 
     /**
@@ -35,6 +38,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public IProfesor iniciaProfesor(String usuario, String password) throws RemoteException {
+        /* v1.0
         // Comprobar el el profesor exista
         if (!profesores.containsKey(usuario)) {
             System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
@@ -50,6 +54,15 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         // La contrasenya no coincide
         System.out.println("Contrasenya incorrecta");
         return null;
+        */
+        //V2.0
+        if (conexionBBDD.compruebaProfesor(usuario, password)){
+            Profesor profesor = new Profesor(usuario, password);
+            profesores.put(usuario, (IProfesor) profesor);
+            //TODO cargar en la instancia del profesor todo lo que tiene.
+            return (IProfesor) profesor;
+        }
+        return null;
     }
 
     /**
@@ -63,6 +76,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     @Override
     public boolean registraProfesor(String usuario, String password) throws RemoteException {
         // Si el profesor esta registrado no deja registrarse
+        /* V1.0
         System.out.println("Comprobando profesor " + usuario);
         if (profesores.containsKey(usuario)) {
             return false;
@@ -74,6 +88,9 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         profesores.put(usuario, p);
         System.out.println("Profesor anyadido");
         return true;
+        */
+        //V2.0
+        return conexionBBDD.registraProfesor(usuario,password);
     }
 
     /**

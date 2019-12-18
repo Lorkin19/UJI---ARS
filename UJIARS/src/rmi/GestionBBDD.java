@@ -25,7 +25,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     private Connection conecta() {
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection conexion = DriverManager.getConnection("jdbc:sqlite:C:dbPrueba.db");
+            Connection conexion = DriverManager.getConnection("jdbc:sqlite:UJIARS\\UJIARSdb.db");
             return conexion;
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -42,7 +42,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException Si hay un error en la conexion remota
      */
     @Override
-    public void registraProfesor(String usuario, String password) throws RemoteException {
+    public boolean registraProfesor(String usuario, String password) throws RemoteException {
         try {
             Connection conexion = conecta();
             String sentencia = "INSERT INTO profesor VALUES (?,?)";
@@ -51,10 +51,38 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             st.setString(2, password);
             st.executeUpdate();
             System.out.println("Profesor creado correctamente");
+            return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("El profesor ya existe");
+            return false;
         }
     }
+
+    /**
+     * Comprueba que exista un usuario en el sistema con usuario y password indicados.
+     *
+     * @param usuario   nombre de usuario.
+     * @param password  password del usuario.
+     * @return  (true) si existe, (false) si no existe o los datos son erroneos.
+     * @throws RemoteException Si hay un error en la conexion remota.
+     */
+    @Override
+    public boolean compruebaProfesor(String usuario, String password) throws RemoteException {
+        try {
+            Connection conexion = conecta();
+            String sentencia = "SELECT COUNT(*) as existe FROM profesor WHERE usuario=? and password=?";
+            PreparedStatement st = conexion.prepareStatement(sentencia);
+            st.setString(1,usuario);
+            st.setString(2,password);
+            ResultSet rs = st.executeQuery();
+            return (rs.getInt("existe") == 1);
+
+        } catch (Exception e){
+            return false;
+        }
+    }
+
 
     /**
      * Se registran las preguntas creadas por el profesor sobre un cuestionario de nombre x.

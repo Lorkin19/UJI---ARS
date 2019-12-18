@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="180.0" prefWidth="300.0" style="-fx-background-color: #F5821F;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.inicio.LoginController">
+   <children>
+      <Label layoutX="14.0" layoutY="36.0" text="Usuario:" textFill="WHITE" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="30.0">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="80.0" text="Contraseña:" textFill="WHITE" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="75.0">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="user" layoutX="127.0" layoutY="34.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0" />
+      <PasswordField fx:id="password" layoutX="131.0" layoutY="2.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+      <Button layoutX="124.0" layoutY="121.0" mnemonicParsing="false" onMouseClicked="#iniciaSesion" style="-fx-background-color: #ffffff;" text="Inicia sesión" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>
