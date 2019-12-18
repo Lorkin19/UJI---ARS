@@ -9,4 +9,6 @@ import java.util.Map;
 public interface IProyector extends Remote {
     void verPregunta(Pregunta pregunta) throws RemoteException;
     void verResultados(Map<String, Integer> pregunta) throws RemoteException;
+
+    void start() throws RemoteException;
 }

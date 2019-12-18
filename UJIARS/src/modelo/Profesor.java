@@ -2,20 +2,19 @@ package modelo;
 
 import common.IProfesor;
 import common.IServidorInicio;
-import common.IServidorSala;
+import common.IProfesorSala;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Profesor extends UnicastRemoteObject implements IProfesor {
     private String usuario;
     private String password;
-    private IServidorSala sala;
+    private IProfesorSala sala;
     private ObservableList<Sesion> misSesiones;
 
     public Profesor(String usuario, String password) throws RemoteException {
@@ -52,7 +51,6 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      * Las sesiones tienen inicialmente un numero fijo de preguntas (Provisional)
      *
      * @param numPreguntas numero de preguntas de la sesion a crear
-     * @return la sesion ya creada
      */
     @Override
     public void crearSesion(int numPreguntas) {
@@ -62,6 +60,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
             s.addPregunta(crearPregunta());
         }
         misSesiones.add(s);
+        // TODO añadir la sesion a la BBDD tambien
     }
 
     /**
@@ -75,15 +74,14 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         // Datos de las respuestas
         Pregunta p = new Pregunta();
         p.setEnunciado("");
-        p.setRespuestaCorrecta("");
-        p.setRespuestas(Arrays.asList("", "", ""));
+        String respuestaCorrecta = "";
+        p.setRespuestaCorrecta(respuestaCorrecta);
+        p.setRespuestas(Arrays.asList("", "", "", respuestaCorrecta));
         return p;
     }
 
     @Override
     public void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException {
-        // TODO ¿Como hacemos lo del codigo de la sala?
-        // TODO ¿Lo pone el profesor? ¿El sistema automaticamente genera uno aleatorio? <--
         sala = servidor.nuevaSala(sesion);
     }
 
@@ -115,9 +113,9 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
     @Override
-    public void finalizarPartida() throws RemoteException {
+    public void finalizarPartida(IServidorInicio servidor) throws RemoteException {
+        servidor.finalizarPartida(sala.getCodSala());
         sala = null;
     }
-
 
 }

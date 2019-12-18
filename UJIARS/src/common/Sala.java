@@ -1,19 +1,20 @@
 package common;
 
 import modelo.Pregunta;
+import modelo.Proyector;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoSala {
+public class Sala extends UnicastRemoteObject implements IServidorSala {
     private int codSala;
     private Map<String, IAlumno> alumnos;
     private Sesion miSesion;
     private int numPreguntaActual;
     private Pregunta preguntaActual;
-    private IProyector proyector; // TODO ¿Como pasarselo a la sala?
+    private IProyector proyector;
     private Map<String, Integer> resultadosPregunta;  // Guardar los datos de las respuestas de la pregunta actual
     // TODO Cambiar resultadosPregunta a List para guardar todos los datos de la preguntas y sus respuestas y mostrarlo al final (estadisticas, pregunta mas acertada, pregunta mas fallada...)
     private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos
@@ -26,7 +27,15 @@ public class Sala extends UnicastRemoteObject implements IServidorSala, IAlumnoS
         alumnos = new HashMap<>();
         resultadosPregunta = new HashMap<>();
         resultadosAlumnos = new HashMap<>();
+        proyector = new Proyector();
+        proyector.start();
     }
+
+    @Override
+    public int getCodSala() throws RemoteException{
+        return codSala;
+    }
+
 
     /**
      * Un alumno entra a la sala. Si el nombre del alumno ya esta en la sala, no le deja unirse (Solo si los alumnos no tienen que registrarse)

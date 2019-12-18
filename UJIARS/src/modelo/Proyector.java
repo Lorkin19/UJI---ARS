@@ -24,6 +24,11 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
     }
 
     @Override
+    public void start() throws RemoteException {
+
+    }
+    
+    @Override
     public void verResultados(Map<String, Integer> resultados) throws RemoteException { // TODO Cambiarlo para pasarle tambien los resultados de la pregunta
         for (String respuesta : resultados.keySet()) {
             System.out.print(respuesta);
@@ -31,4 +36,6 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
             System.out.println(resultados.get(respuesta));
         }
     }
+
+
 }

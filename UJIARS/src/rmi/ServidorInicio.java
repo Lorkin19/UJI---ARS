@@ -1,9 +1,6 @@
 package rmi;
 
-import common.IAlumnoSala;
-import common.IProfesor;
-import common.IServidorInicio;
-import common.IServidorSala;
+import common.*;
 import modelo.Profesor;
 import modelo.Sesion;
 
@@ -11,17 +8,17 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class ServidorInicio extends UnicastRemoteObject implements IServidorInicio {
 
-    private Map<String, IProfesor> profesores;
-    private Map<Integer, IAlumnoSala> salas;
+    private Map<String, IProfesor> profesoresConectados;
+    private Map<Integer, IServidorSala> salas;
     private GestionBBDD conexionBBDD;
 
     ServidorInicio() throws RemoteException {
         super();
-        // TODO Coger los datos de los profesores de la BBDD y guardarlos en un set
-        profesores = new HashMap<>(); // Temporal hasta que pongamos  la BBDD
+        profesoresConectados = new HashMap<>(); // Temporal hasta que pongamos la BBDD
 
         salas = new HashMap<>(); // Temporal, puede que no sea asi
 
@@ -38,29 +35,35 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public IProfesor iniciaProfesor(String usuario, String password) throws RemoteException {
-        /* v1.0
-        // Comprobar el el profesor exista
-        if (!profesores.containsKey(usuario)) {
-            System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
-            return null;
-        }
+//        // v1.0
+//        // Comprobar el el profesor exista
+//        if (!profesores.containsKey(usuario)) {
+//            System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
+//            return null;
+//        }
+//
+//        // Comprobar que la contrasenya coincida con la dada
+//        IProfesor p = profesores.get(usuario);
+//        if (p.getPassword().equals(password)) {
+//            return p;
+//        }
+//
+//        // La contrasenya no coincide
+//        System.out.println("Contrasenya incorrecta");
+//        return null;
 
-        // Comprobar que la contrasenya coincida con la dada
-        IProfesor p = profesores.get(usuario);
-        if (p.getPassword().equals(password)) {
-            return p;
-        }
 
-        // La contrasenya no coincide
-        System.out.println("Contrasenya incorrecta");
-        return null;
-        */
-        //V2.0
-        if (conexionBBDD.compruebaProfesor(usuario, password)){
-            Profesor profesor = new Profesor(usuario, password);
-            profesores.put(usuario, (IProfesor) profesor);
-            //TODO cargar en la instancia del profesor todo lo que tiene.
-            return (IProfesor) profesor;
+        // v2.0
+        // Comprobar si el profesor existe
+        if (conexionBBDD.compruebaProfesor(usuario, password)) {
+            IProfesor profesor = new Profesor(usuario, password);
+
+            // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
+            if (!profesoresConectados.containsKey(usuario)) {
+                // TODO cargar en la instancia del profesor todo lo que tiene.
+                profesoresConectados.put(usuario, profesor);
+                return profesor;
+            }
         }
         return null;
     }
@@ -75,26 +78,27 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public boolean registraProfesor(String usuario, String password) throws RemoteException {
-        // Si el profesor esta registrado no deja registrarse
-        /* V1.0
-        System.out.println("Comprobando profesor " + usuario);
-        if (profesores.containsKey(usuario)) {
-            return false;
-        }
-
-        System.out.println("El nombre de usuario esta disponible");
-        IProfesor p = new Profesor(usuario, password);
-        System.out.println("Profesor creado");
-        profesores.put(usuario, p);
-        System.out.println("Profesor anyadido");
-        return true;
-        */
-        //V2.0
-        return conexionBBDD.registraProfesor(usuario,password);
+//        // Si el profesor esta registrado no deja registrarse
+//        // v1.0
+//        System.out.println("Comprobando profesor " + usuario);
+//        if (profesores.containsKey(usuario)) {
+//            return false;
+//        }
+//
+//        System.out.println("El nombre de usuario esta disponible");
+//        IProfesor p = new Profesor(usuario, password);
+//        System.out.println("Profesor creado");
+//        profesores.put(usuario, p);
+//        System.out.println("Profesor anyadido");
+//        return true;
+//
+        // v2.0
+        return conexionBBDD.registraProfesor(usuario, password);
     }
 
     /**
      * Comprueba que la sala existe antes de pedir el nombre del alumno.
+     *
      * @param codigoSala Codigo de la sala a la que pretende unirse.
      * @return true si la sala existe, false si no existe.
      * @throws RemoteException si falla la conexion.
@@ -105,9 +109,9 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     /**
-     * en el servidor de inicio, entrar a la sala
+     * Entrar a la sala
      *
-     * @param codigoSala codigo de la sala donde estara la partida
+     * @param codigoSala codigo de la sala de la partida
      * @return la sala, null si no existe
      * @throws RemoteException si algo peta
      */
@@ -117,10 +121,29 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public IServidorSala nuevaSala(Sesion miSesion) throws RemoteException {
-        // TODO Convertir sesion en sala, si el codigo lo genera el servidor --> return codSala
-        // Si es el profesor el que genera el codigo, cambiar el parametro a uno de tipo Sala
+    public IProfesorSala nuevaSala(Sesion miSesion) throws RemoteException {
+        int codSala = generateCodSala();
+        IServidorSala sala = new Sala(miSesion, codSala);
+        salas.put(codSala, sala);
+        return sala;
+    }
 
-        return null;
+    private int generateCodSala() {
+        int codSala = (int) (Math.random() * 1000000);
+        while (salas.containsKey(codSala)) {
+            codSala = (int) (Math.random() * 1000000);
+        }
+        return codSala;
+    }
+
+    @Override
+    public void cerrarSesionProfesor(String nombreProfesor) throws RemoteException {
+        profesoresConectados.remove(nombreProfesor);
+        System.out.println("Profesor " + nombreProfesor + " ha cerrado su sesion.");
+    }
+
+    @Override
+    public void finalizarPartida(int codSala) throws RemoteException {
+
     }
 }
