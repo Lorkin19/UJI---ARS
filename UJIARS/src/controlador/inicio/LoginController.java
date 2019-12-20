@@ -4,6 +4,8 @@ import common.IProfesor;
 import controlador.IController;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import modelo.Profesor;
 import vista.Main;
 
 import java.awt.event.ActionEvent;
@@ -14,18 +16,24 @@ public class LoginController implements IController {
     public TextField user;
     public PasswordField password;
     private Main main;
+    private Stage myStage;
 
     @Override
     public void setMain(Main main) {
         this.main=main;
     }
 
-    private void setPrevController(LandingPageController prevController){
+    @Override
+    public void setMyStage(Stage myStage) {
+        this.myStage=myStage;
+    }
+
+    public void setPrevController(LandingPageController prevController){
         this.prevController = prevController;
     }
 
     public void iniciaSesion() {
-        IProfesor profesor = main.iniciaSesion(user.getText(), password.getText());
+        Profesor profesor = main.iniciaSesion(user.getText(), password.getText());
         if (profesor == null){
             main.error("Usuario o clave incorrecta.");
         } else {

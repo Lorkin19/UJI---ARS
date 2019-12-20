@@ -84,7 +84,7 @@ public class MainClient {
     private void registraProfesor(String usuario, String contrasenya) {
         try {
             if (servidorInicio.registraProfesor(usuario, contrasenya)) {
-                profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
+                //profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
                 System.out.println("Registrado correctamente");
             } else {
                 System.out.println("El nombre de usuario ya existe");
@@ -96,7 +96,7 @@ public class MainClient {
     }
 
     private void iniciaSesionProfesor(String usuario, String contrasenya) throws RemoteException {
-        profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
+        //profesor = servidorInicio.iniciaProfesor(usuario, contrasenya);
 
         if (profesor == null) {
             System.out.println("Nombre de usuario o contrasenya incorrectos");

@@ -102,7 +102,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             String sentencia = "INSERT INTO pregunta VALUES (?, ?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
-            st.setString(1, pregunta.getEnunciado());
+            st.setString(1, pregunta.getEnunciado().toString());
             st.setDouble(2, pregunta.getTiempo());
             st.setInt(3, pregunta.getPuntos());
             st.setString(4, nombreConjunto);

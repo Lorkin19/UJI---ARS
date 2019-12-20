@@ -1,5 +1,6 @@
 package common;
 
+import javafx.collections.ObservableList;
 import modelo.Pregunta;
 import modelo.Sesion;
 
@@ -22,4 +23,5 @@ public interface IProfesor extends Remote {
     void verResultadosPartida() throws RemoteException;
 
     void finalizarPartida(IServidorInicio servidor) throws RemoteException;
+
 }

@@ -3,14 +3,17 @@ package vista;
 import common.IProfesor;
 import common.IServidorInicio;
 import controlador.inicio.LandingPageController;
+import controlador.profesor.CreaCuestionarioContoller;
 import controlador.profesor.HomeProfesorController;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Profesor;
+import modelo.Sesion;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -21,7 +24,9 @@ import java.rmi.RemoteException;
 public class Main extends Application {
 
     private IServidorInicio servidorInicio = null;
+    private Profesor profesor = null;
     private Stage primaryStage;
+    private Stage profesorStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -51,6 +56,7 @@ public class Main extends Application {
         // Pasamos la referencia del main al controlador.
         LandingPageController landingController = landingPage.getController();
         landingController.setMain(this);
+        landingController.setMyStage(this.primaryStage);
 
         // Mostramos la ventana.
         this.primaryStage.show();
@@ -84,9 +90,14 @@ public class Main extends Application {
     }
 
 
-    public IProfesor iniciaSesion(String usuario, String password){
+    public Profesor iniciaSesion(String usuario, String password){
         try {
-            return servidorInicio.iniciaProfesor(usuario, password);
+            if (servidorInicio.iniciaProfesor(usuario, password)) {
+                profesor = new Profesor(usuario, password);
+                servidorInicio.profesorIniciaSesion(usuario, (IProfesor) profesor);
+                return  profesor;
+            }
+            return null;
         } catch (RemoteException re){
             error("Fallo en la conexión con la base de datos.\nIntentalo mas tarde");
             return null;
@@ -110,23 +121,26 @@ public class Main extends Application {
     /**
      * Ejecuta la interfaz del profesor.
      */
-    public void ejecutaProfesor(IProfesor intProfesor) {
+    public void ejecutaProfesor(Profesor profesor) {
         try {
+            this.profesor = profesor;
+
             // Creamos el loader del profesor
             FXMLLoader profesorLoader = new FXMLLoader();
             profesorLoader.setLocation(getClass().getResource("profesor/homeProfesor.fxml"));
 
-            Stage profesorStage = new Stage();
+            profesorStage = new Stage();
             // Cambiamos el titulo de la ventana.
             profesorStage.setTitle("UJI ARS - Profesor");
             profesorStage.setResizable(true);
             profesorStage.initStyle(StageStyle.DECORATED);
 
-            Scene profesor = new Scene(profesorLoader.load());
-            profesorStage.setScene(profesor);
+            Scene profesorScene = new Scene(profesorLoader.load());
+            profesorStage.setScene(profesorScene);
 
             HomeProfesorController controller = profesorLoader.getController();
             controller.setMain(this);
+            controller.setProfesor(profesor);
 
             primaryStage.hide();
             profesorStage.show();
@@ -135,6 +149,51 @@ public class Main extends Application {
             String mensaje = "Error al ejecutar la ventana del profesor.";
             System.out.println(mensaje);
             error(mensaje);
+        }
+
+    }
+
+    public void creaCuestionario(){
+        try {
+            FXMLLoader creaCuestionarioLoader = new FXMLLoader();
+            creaCuestionarioLoader.setLocation(getClass().getResource("profesor/creaCuestionario.fxml"));
+
+            Stage stageCreaCuestionario = new Stage();
+            stageCreaCuestionario.setTitle("Crear cuestionario");
+            stageCreaCuestionario.initModality(Modality.WINDOW_MODAL);
+            stageCreaCuestionario.initOwner(profesorStage);
+            stageCreaCuestionario.initStyle(StageStyle.UTILITY);
+
+            Scene scene = new Scene(creaCuestionarioLoader.load());
+            stageCreaCuestionario.setScene(scene);
+            stageCreaCuestionario.setResizable(false);
+
+            CreaCuestionarioContoller controller = creaCuestionarioLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(stageCreaCuestionario);
+
+            stageCreaCuestionario.showAndWait();
+        } catch (IOException e) {
+            error("No se ha podido crear el cuestionario.");
+        }
+    }
+
+    public void addCuestionario(String nombreCuestionario, Stage ventana) {
+        profesor.getMisSesiones().add(new Sesion(nombreCuestionario));
+        ventana.close();
+    }
+
+    public void borraCuestionario(String cuestionario) {
+
+    }
+
+    public void cierraSesion() {
+        try {
+            servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
+            profesorStage.close();
+            primaryStage.show();
+        } catch (RemoteException e) {
+            error("Error al cerrar sesion");
         }
 
     }

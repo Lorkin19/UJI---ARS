@@ -4,6 +4,8 @@ import common.IProfesor;
 import controlador.IController;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import modelo.Profesor;
 import vista.Main;
 
 public class RegistraController implements IController {
@@ -14,11 +16,17 @@ public class RegistraController implements IController {
     public TextField user;
     public PasswordField pass1;
     public PasswordField pass2;
+    private Stage myStage;
 
     @Override
     public void setMain(Main main) {
         this.main=main;
     }
+    @Override
+    public void setMyStage(Stage myStage) {
+        this.myStage=myStage;
+    }
+
 
     public void setPrevController(LandingPageController prevController){
         this.prevController = prevController;
@@ -36,8 +44,8 @@ public class RegistraController implements IController {
         }
         else {
             if (main.registraProfesor(user.getText(),pass1.getText())){
-                prevController.cierraRegistro();
-                IProfesor profesor = main.iniciaSesion(user.getText(), pass1.getText());
+                prevController.cierraInicio();
+                Profesor profesor = main.iniciaSesion(user.getText(), pass1.getText());
                 main.ejecutaProfesor(profesor);
             }
             else{

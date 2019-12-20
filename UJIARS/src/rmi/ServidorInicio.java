@@ -1,12 +1,14 @@
 package rmi;
 
 import common.*;
+import javafx.beans.property.StringProperty;
 import modelo.Profesor;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -34,38 +36,20 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      * @throws RemoteException si algo peta
      */
     @Override
-    public IProfesor iniciaProfesor(String usuario, String password) throws RemoteException {
-//        // v1.0
-//        // Comprobar el el profesor exista
-//        if (!profesores.containsKey(usuario)) {
-//            System.out.println("El nombre de usuario no existe");  // TODO Cambiar a "Nombre de usuario o contrasenya incorrecto" (Razones de seguridad)
-//            return null;
-//        }
-//
-//        // Comprobar que la contrasenya coincida con la dada
-//        IProfesor p = profesores.get(usuario);
-//        if (p.getPassword().equals(password)) {
-//            return p;
-//        }
-//
-//        // La contrasenya no coincide
-//        System.out.println("Contrasenya incorrecta");
-//        return null;
+    public boolean iniciaProfesor(String usuario, String password) throws RemoteException {
+        return conexionBBDD.compruebaProfesor(usuario, password);
+    }
 
+    @Override
+    public boolean profesorIniciaSesion(String usuario, IProfesor profesor){
+        // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
+        if (!profesoresConectados.containsKey(usuario)) {
+            // TODO cargar en la instancia del profesor todo lo que tiene.
 
-        // v2.0
-        // Comprobar si el profesor existe
-        if (conexionBBDD.compruebaProfesor(usuario, password)) {
-            IProfesor profesor = new Profesor(usuario, password);
-
-            // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
-            if (!profesoresConectados.containsKey(usuario)) {
-                // TODO cargar en la instancia del profesor todo lo que tiene.
-                profesoresConectados.put(usuario, profesor);
-                return profesor;
-            }
+            profesoresConectados.put(usuario, profesor);
+            return true;
         }
-        return null;
+        return false;
     }
 
     /**
