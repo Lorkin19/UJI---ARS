@@ -128,6 +128,13 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         return sala;
     }
 
+
+    /**
+     * Usado para generar un codigo para la sala
+     * Solo generara codigos que actualmente no esten usandose
+     *
+     * @return codigo de la sala
+     */
     private int generateCodSala() {
         int codSala = (int) (Math.random() * 1000000);
         while (salas.containsKey(codSala)) {
@@ -144,6 +151,6 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     @Override
     public void finalizarPartida(int codSala) throws RemoteException {
-
+        salas.remove(codSala);
     }
 }
