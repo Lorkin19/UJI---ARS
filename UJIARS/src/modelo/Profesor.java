@@ -16,12 +16,16 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     private String password;
     private IProfesorSala sala;
     private ObservableList<Sesion> misSesiones;
+    private FactorySesion factorySesion;
+    private FactoryPregunta factoryPregunta;
 
     public Profesor(String usuario, String password) throws RemoteException {
         this.usuario = usuario;
         this.password = password;
         misSesiones = FXCollections.observableArrayList();
         misSesiones.add(new Sesion("Prueba"));
+        factorySesion = FactorySesion.getInstance();
+        factoryPregunta = FactoryPregunta.getInstance();
     }
 
     public Profesor() throws RemoteException {}
@@ -49,8 +53,6 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
 
-
-
     /**
      * Usado para crear una sesion
      * Las preguntas solo se pueden crear cuando creas una sesion (Provisional)
@@ -66,6 +68,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
             s.addPregunta(crearPregunta());
         }
         misSesiones.add(s);
+        // TODO usar FactorySesion
         // TODO añadir la sesion a la BBDD tambien
     }
 
@@ -76,14 +79,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      */
     @Override
     public Pregunta crearPregunta() {
-        // Datos del enunciado
-        // Datos de las respuestas
-        Pregunta p = new Pregunta();
-        p.setEnunciado("");
-        String respuestaCorrecta = "";
-        p.setRespuestaCorrecta(respuestaCorrecta);
-        p.setRespuestas(Arrays.asList("", "", "", respuestaCorrecta));
-        return p;
+        return factoryPregunta.crearPregunta();
     }
 
     @Override
