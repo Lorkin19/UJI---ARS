@@ -23,7 +23,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         this.usuario = usuario;
         this.password = password;
         misSesiones = FXCollections.observableArrayList();
-        misSesiones.add(new Sesion("Prueba"));
+        misSesiones.add(new Sesion("Prueba"));  // TODO Borrar, usasdo como prueba
         factorySesion = FactorySesion.getInstance();
         factoryPregunta = FactoryPregunta.getInstance();
     }
@@ -63,12 +63,8 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     @Override
     public void crearSesion(int numPreguntas) {
         String nombre = ""; // TODO Se sacara de JavaFX supongo
-        Sesion s = new Sesion(nombre);
-        for (int i = 0; i < numPreguntas; i++) {
-            s.addPregunta(crearPregunta());
-        }
+        Sesion s = factorySesion.crearSesion(nombre, numPreguntas, factoryPregunta);
         misSesiones.add(s);
-        // TODO usar FactorySesion
         // TODO añadir la sesion a la BBDD tambien
     }
 
@@ -78,10 +74,18 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      * @return la pregunta ya creada
      */
     @Override
-    public Pregunta crearPregunta() {
+    public Pregunta crearPregunta() throws RemoteException {
         return factoryPregunta.crearPregunta();
     }
 
+
+    /**
+     * Usado para crear la sala que alojara la partida
+     *
+     * @param sesion sesion que se utilizara para la partida
+     * @param servidor servidor que se encargara de crear la partida
+     * @throws RemoteException si algo peta
+     */
     @Override
     public void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException {
         sala = servidor.nuevaSala(sesion);
@@ -109,11 +113,25 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         sala.pasarDePregunta();
     }
 
+
+    /**
+     * Usado por el profesor para indicarle a la sala que quiere ver los resultados de la partida una vez se han contestado todas las preguntas
+     *
+     * @throws RemoteException si algo peta
+     */
     @Override
     public void verResultadosPartida() throws RemoteException {
         sala.verResultadosPartida();
     }
 
+
+    /**
+     * Usado por el profesor para indicar al servidor que la partida ha finalizado
+     * Una vez llamado a este metodo, la sala y la partida se borran
+     *
+     * @param servidor servidor encargado de finalizar la partida
+     * @throws RemoteException si algo peta
+     */
     @Override
     public void finalizarPartida(IServidorInicio servidor) throws RemoteException {
         servidor.finalizarPartida(sala.getCodSala());
