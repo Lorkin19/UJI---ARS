@@ -69,8 +69,6 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @return  (true) si existe, (false) si no existe o los datos son erroneos.
      * @throws RemoteException Si hay un error en la conexion remota.
      */
-    //todo crear un paquete validador y clase correspondiente
-
     @Override
     public boolean compruebaProfesor(String usuario, String password) throws RemoteException {
         try {
@@ -84,6 +82,26 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
         } catch (Exception e){
             return false;
+        }
+    }
+
+    /**
+     * Dar de baja un profesor de la base de datos.
+     * @param usuario Usuario del profesor a dar de baja.
+     * @throws RemoteException En caso de que se produzca algun error en la conexion con la base de datos.
+     */
+    @Override
+    public void darDeBajaProgesor(String usuario) throws RemoteException {
+        try {
+            Connection connection = conecta();
+            String sentence = "UPDATE Profesor SET baja = ? WHERE usuario = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setBoolean(1, true);
+            st.setString(2, usuario);
+            st.executeQuery();
+        }catch (SQLException e){
+            System.out.println("El profesor con usuario '" + usuario + "' no existe.");
         }
     }
 
@@ -156,7 +174,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     /**
      * Se obtienen los cuestionarios creador por un profesor dado.
      *
-     * @param usuario El nombre de usuario del profesor del cual se quieren obtener sus cuestionarios
+     * @param usuario El nombre de usuario del pro fesor del cual se quieren obtener sus cuestionarios
      * @return Un mapa en el que se encuentran el nombre del cuestionario y el listado de preguntas asociadas al mismo.
      * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos
      */
@@ -201,6 +219,57 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
         }catch (SQLException e){
             System.out.println("El profesor no existe.");
             return null;
+        }
+    }
+
+    /**
+     * Permite editar una pregunta ya registrada.
+     * @param pregunta Los datos de la pregunta modificada.
+     * @param usuarioProf El usuario al que pertenece la pregunta.
+     * @param nombreCuestionario El cuestionario al que pertenece la pregunta.
+     * @throws RemoteException En el caso de que haya algun error en la conexion.
+     */
+    @Override
+    public void editaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+        try{
+            Connection connection = conecta();
+            String sentence = "UPDATE Pregunta SET enunciado = ?, tiempo = ?, puntos = ? WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setString(1, pregunta.getEnunciado().toString());
+            st.setDouble(2, pregunta.getTiempo());
+            st.setInt(3, pregunta.getPuntos());
+            st.setString(4, usuarioProf);
+            st.setString(5, nombreCuestionario);
+            st.setString(6, pregunta.getEnunciado().toString());
+
+            st.executeQuery();
+        }catch (SQLException e){
+            System.out.println("La pregunta no fue encontrada.");
+        }
+    }
+
+    /**
+     * Permite eliminar una pregunta registrada.
+     * @param pregunta Pregunta que quiere eliminar.
+     * @param usuarioProf Usuario al que pertenece la pregunta.
+     * @param nombreCuestionario Cuestionario al que pertenece la pregunta.
+     * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos.
+     */
+    @Override
+    public void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+        try{
+            Connection connection = conecta();
+            String sentence = "DELETE FROM Pregunta WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setString(1, usuarioProf);
+            st.setString(2, nombreCuestionario);
+            st.setString(3, pregunta.getEnunciado().toString());
+
+            st.executeQuery();
+        }catch (SQLException e){
+            System.out.println("La pregunta no fue encontrada.");
         }
     }
 
