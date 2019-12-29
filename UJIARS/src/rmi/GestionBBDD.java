@@ -27,8 +27,8 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     private Connection conecta() {
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection conexion = DriverManager.getConnection("jdbc:sqlite:UJIARS\\UJIARSdb.db");
-            return conexion;
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:UJIARS\\UJIARSdb.db");
+            return connection;
 
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error en la conexión de la base de datos");
@@ -46,13 +46,15 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     @Override
     public boolean registraProfesor(String usuario, String password) throws RemoteException {
         try {
-            Connection conexion = conecta();
-            String sentencia = "INSERT INTO profesor VALUES (?,?)";
-            PreparedStatement st = conexion.prepareStatement(sentencia);
+            Connection connection = conecta();
+            String sentencia = "INSERT INTO profesor VALUES (?,?,?)";
+            PreparedStatement st = connection.prepareStatement(sentencia);
             st.setString(1, usuario);
             st.setString(2, password);
+            st.setString(3,"false");
             st.executeUpdate();
             System.out.println("Profesor creado correctamente");
+            connection.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,21 +71,41 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @return  (true) si existe, (false) si no existe o los datos son erroneos.
      * @throws RemoteException Si hay un error en la conexion remota.
      */
-    //todo crear un paquete validador y clase correspondiente
-
     @Override
     public boolean compruebaProfesor(String usuario, String password) throws RemoteException {
         try {
-            Connection conexion = conecta();
+            Connection connection = conecta();
             String sentencia = "SELECT COUNT(*) as existe FROM profesor WHERE usuario=? and password=?";
-            PreparedStatement st = conexion.prepareStatement(sentencia);
+            PreparedStatement st = connection.prepareStatement(sentencia);
             st.setString(1,usuario);
             st.setString(2,password);
             ResultSet rs = st.executeQuery();
-            return (rs.getInt("existe") == 1);
-
+            boolean existe = rs.getInt("existe") == 1;
+            rs.close();
+            connection.close();
+            return (existe);
         } catch (Exception e){
             return false;
+        }
+    }
+
+    /**
+     * Dar de baja un profesor de la base de datos.
+     * @param usuario Usuario del profesor a dar de baja.
+     * @throws RemoteException En caso de que se produzca algun error en la conexion con la base de datos.
+     */
+    @Override
+    public void darDeBajaProgesor(String usuario) throws RemoteException {
+        try {
+            Connection connection = conecta();
+            String sentence = "UPDATE Profesor SET baja = ? WHERE usuario = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setBoolean(1, true);
+            st.setString(2, usuario);
+            st.executeQuery();
+        }catch (SQLException e){
+            System.out.println("El profesor con usuario '" + usuario + "' no existe.");
         }
     }
 
@@ -113,6 +135,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
             int idPregunta = getLastIdPregunta();
             registraRespuestas(pregunta.getRespuestaCorrecta(), pregunta.getRespuestas(), idPregunta);
+            connection.close();
         } catch (SQLException e) {
             System.out.println("A fatal error has ocurred --> registraPreguntas");
         }
@@ -148,6 +171,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
                 st.executeUpdate();
                 System.out.println("Respuesta registrada correctamente.");
             }
+            connection.close();
         } catch (SQLException e) {
             System.out.println("A fatal error has ocurred --> registraRespuestas");
         }
@@ -156,7 +180,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     /**
      * Se obtienen los cuestionarios creador por un profesor dado.
      *
-     * @param usuario El nombre de usuario del profesor del cual se quieren obtener sus cuestionarios
+     * @param usuario El nombre de usuario del pro fesor del cual se quieren obtener sus cuestionarios
      * @return Un mapa en el que se encuentran el nombre del cuestionario y el listado de preguntas asociadas al mismo.
      * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos
      */
@@ -196,11 +220,65 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             p.setPassword(rs.getString("password"));
             p.setMisSesiones(getSesionesProfesor(usuario));
 
+            connection.close();
             return p;
 
         }catch (SQLException e){
             System.out.println("El profesor no existe.");
             return null;
+        }
+    }
+
+    /**
+     * Permite editar una pregunta ya registrada.
+     * @param pregunta Los datos de la pregunta modificada.
+     * @param usuarioProf El usuario al que pertenece la pregunta.
+     * @param nombreCuestionario El cuestionario al que pertenece la pregunta.
+     * @throws RemoteException En el caso de que haya algun error en la conexion.
+     */
+    @Override
+    public void editaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+        try{
+            Connection connection = conecta();
+            String sentence = "UPDATE Pregunta SET enunciado = ?, tiempo = ?, puntos = ? WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setString(1, pregunta.getEnunciado().toString());
+            st.setDouble(2, pregunta.getTiempo());
+            st.setInt(3, pregunta.getPuntos());
+            st.setString(4, usuarioProf);
+            st.setString(5, nombreCuestionario);
+            st.setString(6, pregunta.getEnunciado().toString());
+
+            st.executeQuery();
+            connection.close();
+        }catch (SQLException e){
+            System.out.println("La pregunta no fue encontrada.");
+        }
+    }
+
+    /**
+     * Permite eliminar una pregunta registrada.
+     * @param pregunta Pregunta que quiere eliminar.
+     * @param usuarioProf Usuario al que pertenece la pregunta.
+     * @param nombreCuestionario Cuestionario al que pertenece la pregunta.
+     * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos.
+     */
+    @Override
+    public void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+        try{
+            Connection connection = conecta();
+            String sentence = "DELETE FROM Pregunta WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setString(1, usuarioProf);
+            st.setString(2, nombreCuestionario);
+            st.setString(3, pregunta.getEnunciado().toString());
+
+            st.executeQuery();
+            connection.close();
+        }catch (SQLException e){
+            System.out.println("La pregunta no fue encontrada.");
         }
     }
 
@@ -243,6 +321,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             ResultSet rs = st.executeQuery();
             int idPregunta = rs.getInt("idPregunta");
 
+            connection.close();
             return idPregunta;
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
@@ -310,5 +389,6 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             listPreguntas.add(p);
             result.put(cuestionario, listPreguntas);
         }
+        connection.close();
     }
 }

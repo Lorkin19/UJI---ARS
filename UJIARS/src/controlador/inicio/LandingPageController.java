@@ -24,7 +24,7 @@ public class LandingPageController implements IController {
     }
     @Override
     public void setMyStage(Stage stage) {
-        this.stageSesion = stage;
+        this.myStage = stage;
     }
 
     /**
@@ -38,6 +38,7 @@ public class LandingPageController implements IController {
 
             stageSesion = new Stage();
             stageSesion.setTitle("Inicia Sesión");
+            stageSesion.initModality(Modality.WINDOW_MODAL);
             stageSesion.initStyle(StageStyle.UTILITY);
             stageSesion.initOwner(myStage);
 
@@ -66,6 +67,7 @@ public class LandingPageController implements IController {
 
             stageSesion = new Stage();
             stageSesion.setTitle("Registrate");
+            stageSesion.initModality(Modality.WINDOW_MODAL);
             stageSesion.initStyle(StageStyle.UTILITY);
             stageSesion.initOwner(myStage);
 

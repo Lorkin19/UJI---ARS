@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import modelo.Profesor;
 import vista.Main;
 
-import java.awt.event.ActionEvent;
-
 public class LoginController implements IController {
 
     public LandingPageController prevController;

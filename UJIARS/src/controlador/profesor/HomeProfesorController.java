@@ -2,13 +2,16 @@ package controlador.profesor;
 
 import common.IProfesor;
 import controlador.IController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -21,20 +24,19 @@ import java.io.IOException;
 
 public class HomeProfesorController implements IController {
 
+    public Button editar;
+    public Button borrar;
+
     private Main main;
     private Profesor profesor;
+    private Sesion sesionSeleccionada;
+    private Stage stageCreaCuestionario;
 
     @FXML
     public TableView<Sesion> tablaCuestionarios;
     @FXML
     public TableColumn<Sesion, String> columnaCuestionario;
 
-    @FXML
-    public TableView<Pregunta> tablaPreguntas;
-    @FXML
-    public TableColumn<Pregunta, String> columnaPreguntas;
-    @FXML
-    public TableColumn<Pregunta, String> columnaRespuestas;
     private Stage myStage;
 
     @Override
@@ -50,7 +52,6 @@ public class HomeProfesorController implements IController {
     public void setProfesor(Profesor profesor) {
         this.profesor=profesor;
         tablaCuestionarios.setItems(profesor.getMisSesiones());
-        tablaPreguntas.setItems(null);
     }
 
     /**
@@ -59,12 +60,19 @@ public class HomeProfesorController implements IController {
      */
     @FXML
     public void initialize() {
+        // Botones de edicion y borrado de cuestionario desactivados
+        editar.setDisable(true);
+        borrar.setDisable(true);
         // Inicializa las tablas.
         columnaCuestionario.setCellValueFactory(cellData -> cellData.getValue().getNombre());
-        muestraPreguntas(null);
-        columnaRespuestas.setCellValueFactory(null);
         tablaCuestionarios.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> muestraPreguntas(newValue));
+                (observable, oldValue, newValue) -> seleccion(newValue));
+    }
+
+    private void seleccion(Sesion sesion){
+        this.sesionSeleccionada = sesion;
+        editar.setDisable(false);
+        borrar.setDisable(false);
     }
 
     /**
@@ -72,21 +80,30 @@ public class HomeProfesorController implements IController {
      */
     @FXML
     private void creaCuestionario(){
-        main.creaCuestionario();
+        try {
+            FXMLLoader creaCuestionarioLoader = new FXMLLoader();
+            creaCuestionarioLoader.setLocation(getClass().getResource("../../vista/profesor/creaCuestionario.fxml"));
+
+            stageCreaCuestionario = new Stage();
+            stageCreaCuestionario.setTitle("Crear cuestionario");
+            stageCreaCuestionario.initModality(Modality.WINDOW_MODAL);
+            stageCreaCuestionario.initOwner(this.myStage);
+            stageCreaCuestionario.initStyle(StageStyle.UTILITY);
+
+            Scene scene = new Scene(creaCuestionarioLoader.load());
+            stageCreaCuestionario.setScene(scene);
+            stageCreaCuestionario.setResizable(false);
+
+            CreaCuestionarioContoller controller = creaCuestionarioLoader.getController();
+            controller.setMain(this.main);
+            controller.setPrevController(this);
+
+            stageCreaCuestionario.showAndWait();
+        } catch (IOException e) {
+            main.error("No se ha podido crear el cuestionario.");
+        }
     }
 
-    /**
-     * Muestra las preguntas del cuestionario seleccionado en la tabla de preguntas.
-     *
-     * @param cuestionario  El cuestionario que se ha seleccionado en la tabla.
-     */
-    @FXML
-    private void muestraPreguntas(Sesion cuestionario){
-        if (cuestionario == null) {
-            columnaPreguntas.setCellValueFactory(null);
-        } else
-            columnaPreguntas.setCellValueFactory(cellData -> cellData.getValue().getEnunciado());
-    }
 
     public void borraCuestionario() {
         String cuestionario = tablaCuestionarios.getSelectionModel().selectedItemProperty().toString();
@@ -95,5 +112,13 @@ public class HomeProfesorController implements IController {
 
     public void cerrarSesion() {
         main.cierraSesion();
+    }
+
+    public void editaCuestionario(ActionEvent actionEvent) {
+
+    }
+
+    public void cierraCreaCuestionario() {
+        stageCreaCuestionario.close();
     }
 }

@@ -26,7 +26,7 @@ public class Main extends Application {
     private IServidorInicio servidorInicio = null;
     private Profesor profesor = null;
     private Stage primaryStage;
-    private Stage profesorStage;
+    private Scene landingScene;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -48,7 +48,7 @@ public class Main extends Application {
         this.primaryStage.setTitle("UJI ARS");
 
         // Cargamos la escena.
-        Scene landingScene = new Scene(landingPage.load());
+        landingScene = new Scene(landingPage.load());
 
         // Anyadimos la escena a la ventana de inicio.
         this.primaryStage.setScene(landingScene);
@@ -123,27 +123,26 @@ public class Main extends Application {
      */
     public void ejecutaProfesor(Profesor profesor) {
         try {
+
             this.profesor = profesor;
 
             // Creamos el loader del profesor
             FXMLLoader profesorLoader = new FXMLLoader();
             profesorLoader.setLocation(getClass().getResource("profesor/homeProfesor.fxml"));
 
-            profesorStage = new Stage();
-            // Cambiamos el titulo de la ventana.
-            profesorStage.setTitle("UJI ARS - Profesor");
-            profesorStage.setResizable(true);
-            profesorStage.initStyle(StageStyle.DECORATED);
+
+            primaryStage.setTitle("UJI ARS - Profesor");
+            primaryStage.setResizable(true);
+            //primaryStage.initStyle(StageStyle.DECORATED);
 
             Scene profesorScene = new Scene(profesorLoader.load());
-            profesorStage.setScene(profesorScene);
+            primaryStage.setScene(profesorScene);
 
             HomeProfesorController controller = profesorLoader.getController();
             controller.setMain(this);
+            controller.setMyStage(primaryStage);
             controller.setProfesor(profesor);
 
-            primaryStage.hide();
-            profesorStage.show();
 
         } catch (IOException e){
             String mensaje = "Error al ejecutar la ventana del profesor.";
@@ -153,34 +152,8 @@ public class Main extends Application {
 
     }
 
-    public void creaCuestionario(){
-        try {
-            FXMLLoader creaCuestionarioLoader = new FXMLLoader();
-            creaCuestionarioLoader.setLocation(getClass().getResource("profesor/creaCuestionario.fxml"));
-
-            Stage stageCreaCuestionario = new Stage();
-            stageCreaCuestionario.setTitle("Crear cuestionario");
-            stageCreaCuestionario.initModality(Modality.WINDOW_MODAL);
-            stageCreaCuestionario.initOwner(profesorStage);
-            stageCreaCuestionario.initStyle(StageStyle.UTILITY);
-
-            Scene scene = new Scene(creaCuestionarioLoader.load());
-            stageCreaCuestionario.setScene(scene);
-            stageCreaCuestionario.setResizable(false);
-
-            CreaCuestionarioContoller controller = creaCuestionarioLoader.getController();
-            controller.setMain(this);
-            controller.setMyStage(stageCreaCuestionario);
-
-            stageCreaCuestionario.showAndWait();
-        } catch (IOException e) {
-            error("No se ha podido crear el cuestionario.");
-        }
-    }
-
-    public void addCuestionario(String nombreCuestionario, Stage ventana) {
+    public void addCuestionario(String nombreCuestionario) {
         profesor.getMisSesiones().add(new Sesion(nombreCuestionario));
-        ventana.close();
     }
 
     public void borraCuestionario(String cuestionario) {
@@ -190,11 +163,10 @@ public class Main extends Application {
     public void cierraSesion() {
         try {
             servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
-            profesorStage.close();
-            primaryStage.show();
         } catch (RemoteException e) {
             error("Error al cerrar sesion");
         }
 
+        primaryStage.setScene(landingScene);
     }
 }
