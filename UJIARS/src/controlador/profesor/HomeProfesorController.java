@@ -80,28 +80,7 @@ public class HomeProfesorController implements IController {
      */
     @FXML
     private void creaCuestionario(){
-        try {
-            FXMLLoader creaCuestionarioLoader = new FXMLLoader();
-            creaCuestionarioLoader.setLocation(getClass().getResource("../../vista/profesor/creaCuestionario.fxml"));
-
-            stageCreaCuestionario = new Stage();
-            stageCreaCuestionario.setTitle("Crear cuestionario");
-            stageCreaCuestionario.initModality(Modality.WINDOW_MODAL);
-            stageCreaCuestionario.initOwner(this.myStage);
-            stageCreaCuestionario.initStyle(StageStyle.UTILITY);
-
-            Scene scene = new Scene(creaCuestionarioLoader.load());
-            stageCreaCuestionario.setScene(scene);
-            stageCreaCuestionario.setResizable(false);
-
-            CreaCuestionarioContoller controller = creaCuestionarioLoader.getController();
-            controller.setMain(this.main);
-            controller.setPrevController(this);
-
-            stageCreaCuestionario.showAndWait();
-        } catch (IOException e) {
-            main.error("No se ha podido crear el cuestionario.");
-        }
+        main.profesorCreaCuestionario();
     }
 
 

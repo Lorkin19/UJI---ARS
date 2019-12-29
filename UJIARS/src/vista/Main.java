@@ -27,6 +27,7 @@ public class Main extends Application {
     private Profesor profesor = null;
     private Stage primaryStage;
     private Scene landingScene;
+    private Scene profesorScene;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -135,7 +136,7 @@ public class Main extends Application {
             primaryStage.setResizable(true);
             //primaryStage.initStyle(StageStyle.DECORATED);
 
-            Scene profesorScene = new Scene(profesorLoader.load());
+            profesorScene = new Scene(profesorLoader.load());
             primaryStage.setScene(profesorScene);
 
             HomeProfesorController controller = profesorLoader.getController();
@@ -152,6 +153,26 @@ public class Main extends Application {
 
     }
 
+    public void profesorCreaCuestionario(){
+        try {
+            FXMLLoader creaCuestionarioLoader = new FXMLLoader();
+            creaCuestionarioLoader.setLocation(getClass().getResource("profesor/creaCuestionario.fxml"));
+
+            primaryStage.setTitle("UJI ARS - Profesor - Crear cuestionario");
+            primaryStage.setResizable(true);
+
+            Scene scene = new Scene(creaCuestionarioLoader.load());
+            primaryStage.setScene(scene);
+
+            CreaCuestionarioContoller controller = creaCuestionarioLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(primaryStage);
+
+        } catch (IOException e) {
+            error("No se ha podido crear el cuestionario.");
+        }
+    }
+
     public void addCuestionario(String nombreCuestionario) {
         profesor.getMisSesiones().add(new Sesion(nombreCuestionario));
     }
@@ -163,10 +184,13 @@ public class Main extends Application {
     public void cierraSesion() {
         try {
             servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
+            primaryStage.setScene(landingScene);
         } catch (RemoteException e) {
             error("Error al cerrar sesion");
         }
+    }
 
-        primaryStage.setScene(landingScene);
+    public void profesorHome() {
+        primaryStage.setScene(profesorScene);
     }
 }

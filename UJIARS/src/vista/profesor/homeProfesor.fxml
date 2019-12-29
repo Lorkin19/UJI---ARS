@@ -40,7 +40,7 @@
             <Button fx:id="nuevoCuestionario" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#creaCuestionario" onMouseClicked="#creaCuestionario" stylesheets="@../style/MyTheme.css" text="Crear nuevo cuestionario" />
          </buttons>
       </ButtonBar>
-      <Label alignment="CENTER" layoutX="22.0" layoutY="549.0" text="UJI-ARS" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="11.799999999999955">
+      <Label alignment="CENTER" layoutX="22.0" layoutY="549.0" text="UJI-ARS" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="20.0">
          <font>
             <Font name="Lobster" size="30.0" />
          </font>
