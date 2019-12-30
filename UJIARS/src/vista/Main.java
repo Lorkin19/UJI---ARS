@@ -44,7 +44,7 @@ public class Main extends Application {
         landingPage.setLocation(Main.class.getResource("inicio/landingPage.fxml"));
 
         // Ajustamos parametros de la ventana inicial.
-        this.primaryStage.initStyle(StageStyle.UTILITY);
+        this.primaryStage.initStyle(StageStyle.DECORATED);
         this.primaryStage.setResizable(false);
         this.primaryStage.setTitle("UJI ARS");
 
@@ -185,12 +185,13 @@ public class Main extends Application {
         try {
             servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
             primaryStage.setScene(landingScene);
+            primaryStage.setResizable(false);
         } catch (RemoteException e) {
             error("Error al cerrar sesion");
         }
     }
 
-    public void profesorHome() {
-        primaryStage.setScene(profesorScene);
+    public void ejecutaProfesorActual() {
+        ejecutaProfesor(profesor);
     }
 }

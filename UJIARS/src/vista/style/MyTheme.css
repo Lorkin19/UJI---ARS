@@ -16,6 +16,13 @@
     -fx-opacity: 1;
 }
 
+.label-respuestas {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
 .label-bright {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -67,8 +74,22 @@ Estilos de tabla:
      -fx-opacity: 1;
  }
 
-.table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: -fx-focus-color;
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-font-size: 18pt;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color:  #F5821F;
+    -fx-opacity: 0.4;
+    -fx-background-radius: 10;
+}
+
+.table-view:focused .table-row-cell:focused:selected {
+    -fx-background-color:  #F5821F;
+    -fx-opacity: 0.9;
+    -fx-background-radius: 10;
+
 }
 
 .text-field {

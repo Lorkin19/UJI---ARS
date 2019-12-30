@@ -81,6 +81,8 @@ public class HomeProfesorController implements IController {
     @FXML
     private void creaCuestionario(){
         main.profesorCreaCuestionario();
+        editar.setDisable(true);
+        borrar.setDisable(true);
     }
 
 

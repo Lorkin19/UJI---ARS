@@ -46,6 +46,6 @@ public class CreaCuestionarioContoller implements IController {
     }
 
     public void cancelar() {
-        main.profesorHome();
+        main.ejecutaProfesorActual();
     }
 }

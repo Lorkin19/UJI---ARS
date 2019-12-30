@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5821F;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.profesor.HomeProfesorController">
    <children>
-      <TableView fx:id="tablaCuestionarios" prefHeight="598.4" prefWidth="311.2" stylesheets="@../style/MyTheme.css" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <TableView fx:id="tablaCuestionarios" prefHeight="598.4" prefWidth="311.2" stylesheets="@../style/MyTheme.css" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="columnaCuestionario" prefWidth="75.0" text="Mis cuestionarios" />
         </columns>
@@ -37,7 +37,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="nuevoCuestionario" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#creaCuestionario" onMouseClicked="#creaCuestionario" stylesheets="@../style/MyTheme.css" text="Crear nuevo cuestionario" />
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#creaCuestionario" onMouseClicked="#creaCuestionario" stylesheets="@../style/MyTheme.css" text="Crear nuevo cuestionario" />
          </buttons>
       </ButtonBar>
       <Label alignment="CENTER" layoutX="22.0" layoutY="549.0" text="UJI-ARS" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="20.0">
