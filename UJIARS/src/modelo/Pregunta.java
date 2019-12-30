@@ -7,8 +7,7 @@ import java.util.List;
 
 public class Pregunta {
     private StringProperty enunciado;
-    private String respuestaCorrecta;
-    private List<String> respuestas;
+    private List<Respuesta> respuestas;
     protected double tiempo = 15;  // Tiempo de la pregunta (segundos)
     protected int puntos = 1;  // Puntos que da la pregunta por acertar (1 por defecto)
 
@@ -19,11 +18,7 @@ public class Pregunta {
         return enunciado;
     }
 
-    public String getRespuestaCorrecta() {
-        return respuestaCorrecta;
-    }
-
-    public List<String> getRespuestas() {
+    public List<Respuesta> getRespuestas() {
         return respuestas;
     }
 
@@ -37,11 +32,7 @@ public class Pregunta {
         this.enunciado = new SimpleStringProperty(enunciado);
     }
 
-    public void setRespuestaCorrecta(String respuestaCorrecta) {
-        this.respuestaCorrecta = respuestaCorrecta;
-    }
-
-    public void setRespuestas(List<String> respuestas) {
+    public void setRespuestas(List<Respuesta> respuestas) {
         this.respuestas = respuestas;
     }
 

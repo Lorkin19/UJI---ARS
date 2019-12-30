@@ -3,6 +3,7 @@ package rmi;
 import common.IGestionBBDD;
 import modelo.Pregunta;
 import modelo.Profesor;
+import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
@@ -134,7 +135,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             System.out.println("Pregunta guardada correctamente.");
 
             int idPregunta = getLastIdPregunta();
-            registraRespuestas(pregunta.getRespuestaCorrecta(), pregunta.getRespuestas(), idPregunta);
+            registraRespuestas(pregunta.getRespuestas(), idPregunta);
             connection.close();
         } catch (SQLException e) {
             System.out.println("A fatal error has ocurred --> registraPreguntas");
@@ -144,29 +145,21 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     /**
      * Registra las diferentes opciones de respuesta a una pregunta
      *
-     * @param respuestaCorrecta La opcion correcta como respuesta a la pregunta
-     * @param respuestas        Listado de opciones incorrectas
+     * @param respuestas        Listado de opciones
      * @param idPregunta        Identificador de la pregunta a la cual corresponden las opciones
      * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
-    public void registraRespuestas(String respuestaCorrecta, List<String> respuestas, int idPregunta) throws RemoteException {
+    public void registraRespuestas(List<Respuesta> respuestas, int idPregunta) throws RemoteException {
         try {
             Connection connection = conecta();
             String sentencia = "INSERT INTO Respuesta VALUES (?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
-            st.setInt(1, idPregunta);
-            st.setString(2, respuestaCorrecta);
-            st.setBoolean(3, true);
-
-            st.executeUpdate();
-            System.out.println("Respuesta correcta registrada correctamente.");
-
-            for (String respuesta : respuestas) {
+            for (Respuesta respuesta : respuestas) {
                 st.setInt(1, idPregunta);
-                st.setString(2, respuesta);
-                st.setBoolean(3, false);
+                st.setString(2, respuesta.getRespuesta());
+                st.setBoolean(3, respuesta.isCorrecta());
 
                 st.executeUpdate();
                 System.out.println("Respuesta registrada correctamente.");
@@ -284,27 +277,29 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
     /**
      * Obtener las respuestas de una pregunta dada
-     * @param respuestaCorrecta Respuesta correcta de la pregunta
      * @param respuestas Resto de respuestas incorrectas de la pregunta
      * @param rs2 Resultado de la ejecucion de la sentencia SQL
      * @return Respuesta correcta que se asigna a la pregunta
      * @throws SQLException En el caso de que haya algun error en la obtencion de los parametros a partir del resultado
      * de la sentencia SQL
      */
-    private String getRespuestas(String respuestaCorrecta, List<String> respuestas, ResultSet rs2) throws SQLException {
+    private void getRespuestas(List<Respuesta> respuestas, ResultSet rs2) throws SQLException {
         String respuesta;
         boolean correcta;
         while (rs2.next()) {
             respuesta = rs2.getString("opcion");
             correcta = rs2.getBoolean("correcta");
 
+            respuestas.add(new Respuesta(respuesta, correcta));
+            /*
             if (correcta) {
                 respuestaCorrecta = respuesta;
             } else {
                 respuestas.add(respuesta);
             }
+            */
         }
-        return respuestaCorrecta;
+        //return respuestaCorrecta;
     }
 
     /**
@@ -361,8 +356,8 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
         String cuestionario;
         int idPregunta;
-        String respuestaCorrecta = "";
-        List<String> respuestas = new ArrayList<>();
+        //String respuestaCorrecta = "";
+        List<Respuesta> respuestas = new ArrayList<>();
         List<Pregunta> listPreguntas;
 
         sentence = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
@@ -376,10 +371,10 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             st.setInt(1, idPregunta);
             ResultSet rs2 = st.executeQuery();
 
-            respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
+            //respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
+            getRespuestas(respuestas,rs2);
 
             p.setEnunciado(rs.getString("enunciado"));
-            p.setRespuestaCorrecta(respuestaCorrecta);
             p.setRespuestas(respuestas);
             p.setTiempo(rs.getDouble("tiempo"));
             p.setPuntos(rs.getInt("puntos"));

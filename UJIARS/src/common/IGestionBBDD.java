@@ -2,6 +2,7 @@ package common;
 
 import modelo.Pregunta;
 import modelo.Profesor;
+import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.rmi.Remote;
@@ -17,7 +18,7 @@ public interface IGestionBBDD extends Remote {
 
     void registraPreguntas(Pregunta pregunta, String nombreConjunto, String usuarioProf) throws RemoteException;
 
-    void registraRespuestas(String respuestaCorrecta, List<String> respuestas, int idPregunta) throws RemoteException;
+    void registraRespuestas(List<Respuesta> respuestas, int idPregunta) throws RemoteException;
 
     List<Sesion> getSesionesProfesor(String usuario) throws RemoteException;
 

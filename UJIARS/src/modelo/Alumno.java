@@ -40,7 +40,7 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
         }
         // TODO ¿Como hacer que el alumno seleccione una pregunta? Supongo que con JavaFX se hara facilmente
         // De momento, pongo que automaticamente contesta la respuesta correcta (Provisional)
-        sala.alumnoResponde(nombre, pregunta.getRespuestaCorrecta());
+        //sala.alumnoResponde(nombre, pregunta.getRespuestaCorrecta());
     }
 
     @Override

@@ -73,8 +73,6 @@ public class LandingPageController implements IController {
 
             Scene scene = new Scene(registroLoader.load());
             stageSesion.setScene(scene);
-            stageSesion.initModality(Modality.WINDOW_MODAL);
-            stageSesion.initOwner(this.myStage);
             stageSesion.setResizable(false);
 
             RegistraController controller = registroLoader.getController();

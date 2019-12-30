@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Pregunta;
 import modelo.Profesor;
 import modelo.Sesion;
 
@@ -193,5 +194,9 @@ public class Main extends Application {
 
     public void ejecutaProfesorActual() {
         ejecutaProfesor(profesor);
+    }
+
+    public void anyadePregunta(Pregunta pregunta) {
+
     }
 }
