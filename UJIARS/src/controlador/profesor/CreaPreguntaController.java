@@ -48,6 +48,10 @@ public class CreaPreguntaController implements IController {
         this.myStage = myStage;
     }
 
+    public void setPrevController(CreaCuestionarioContoller prevContoller) {
+        this.prevController = prevContoller;
+    }
+
     private CreaCuestionarioContoller prevController;
 
     public void crearPregunta() {
@@ -63,10 +67,9 @@ public class CreaPreguntaController implements IController {
         respuestas.add(cRespuesta);
         respuestas.add(dRespuesta);
         pregunta.setRespuestas(respuestas);
-        main.anyadePregunta(pregunta);
+        prevController.anyadePregunta(pregunta);
+        myStage.close();
     }
 
-    public void setPrevController(CreaCuestionarioContoller prevContoller) {
-        this.prevController = prevContoller;
-    }
+
 }

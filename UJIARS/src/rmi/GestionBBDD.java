@@ -1,6 +1,7 @@
 package rmi;
 
 import common.IGestionBBDD;
+import javafx.collections.FXCollections;
 import modelo.Pregunta;
 import modelo.Profesor;
 import modelo.Respuesta;
@@ -332,7 +333,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     private void toSesion(List<Sesion> misSesiones, Map<String, List<Pregunta>> result) {
         for (String sesion : result.keySet()){
             Sesion s = new Sesion(sesion);
-            s.setListaPreguntas(result.get(sesion));
+            s.setListaPreguntas(FXCollections.observableArrayList(result.get(sesion)));
 
             misSesiones.add(s);
         }

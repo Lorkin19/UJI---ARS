@@ -6,6 +6,7 @@ import controlador.inicio.LandingPageController;
 import controlador.profesor.CreaCuestionarioContoller;
 import controlador.profesor.HomeProfesorController;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -174,8 +175,12 @@ public class Main extends Application {
         }
     }
 
-    public void addCuestionario(String nombreCuestionario) {
-        profesor.getMisSesiones().add(new Sesion(nombreCuestionario));
+    public void addCuestionario(String nombreCuestionario, ObservableList<Pregunta> preguntas) {
+        Sesion sesion = new Sesion(nombreCuestionario);
+        sesion.setListaPreguntas(preguntas);
+        profesor.getMisSesiones().add(sesion);
+        // TODO almacenar los datos del nuevo cuestionario (sesion) en la base de datos.
+        ejecutaProfesor(profesor);
     }
 
     public void borraCuestionario(String cuestionario) {
@@ -196,7 +201,4 @@ public class Main extends Application {
         ejecutaProfesor(profesor);
     }
 
-    public void anyadePregunta(Pregunta pregunta) {
-
-    }
 }

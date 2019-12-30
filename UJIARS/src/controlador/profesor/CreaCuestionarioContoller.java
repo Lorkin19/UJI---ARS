@@ -1,6 +1,8 @@
 package controlador.profesor;
 
 import controlador.IController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,6 +27,7 @@ public class CreaCuestionarioContoller implements IController {
     private Main main;
     private Stage myStage;
     private Pregunta preguntaSeleccionada;
+    private ObservableList<Pregunta> preguntas;
 
     @FXML
     public TextField nombreCuestionario;
@@ -43,8 +46,10 @@ public class CreaCuestionarioContoller implements IController {
     @FXML
     public void initialize() {
         edita.setDisable(true);
-        crear.setDisable(true);
+        //crear.setDisable(true);
+        preguntas = FXCollections.observableArrayList();
         // Inicializa las tablas.
+        tablaPreguntas.setItems(preguntas);
         columnaPreguntas.setCellValueFactory(cellData -> cellData.getValue().getEnunciado());
         tablaPreguntas.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> seleccion(newValue));
@@ -57,7 +62,11 @@ public class CreaCuestionarioContoller implements IController {
 
 
     public void addCuestionario() {
-        main.addCuestionario(nombreCuestionario.getText());
+        if (preguntas.size() == 0 || nombreCuestionario.getText() == null){
+            main.error("Todo cuestionario debe tener nombre y un mínimo de 1 pregunta.");
+        } else {
+            main.addCuestionario(nombreCuestionario.getText(), preguntas);
+        }
     }
 
     public void cerrarSesion() {
@@ -81,6 +90,7 @@ public class CreaCuestionarioContoller implements IController {
 
             CreaPreguntaController controller = registroLoader.getController();
             controller.setMain(this.main);
+            controller.setMyStage(modalCrearPregunta);
             controller.setPrevController(this);
 
             modalCrearPregunta.showAndWait();
@@ -94,5 +104,9 @@ public class CreaCuestionarioContoller implements IController {
 
     public void cancelar() {
         main.ejecutaProfesorActual();
+    }
+
+    public void anyadePregunta(Pregunta pregunta) {
+        preguntas.add(pregunta);
     }
 }

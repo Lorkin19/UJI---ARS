@@ -34,7 +34,7 @@ public class Sesion {
         this.nombre.setValue(nombre);
     }
 
-    public void setListaPreguntas(List<Pregunta> listaPreguntas) {
-        this.listaPreguntas = FXCollections.observableArrayList(listaPreguntas);
+    public void setListaPreguntas(ObservableList<Pregunta> listaPreguntas) {
+        this.listaPreguntas = listaPreguntas;
     }
 }
