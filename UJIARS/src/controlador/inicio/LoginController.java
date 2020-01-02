@@ -1,6 +1,5 @@
 package controlador.inicio;
 
-import common.IProfesor;
 import controlador.IController;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -30,6 +29,11 @@ public class LoginController implements IController {
         this.prevController = prevController;
     }
 
+    /**
+     * Recoge los datos de inicio de sesión y trata de iniciar la sesion.
+     * En caso de que los datos introducidos sean incorrectos, muestra
+     * una ventana de error.
+     */
     public void iniciaSesion() {
         Profesor profesor = main.iniciaSesion(user.getText(), password.getText());
         if (profesor == null){

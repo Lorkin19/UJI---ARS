@@ -70,6 +70,7 @@ public class Main extends Application {
         launch(args);
     }
 
+
     /**
      * Metodo que muestra un pop-up de error
      * @param mensaje   Mensaje de error a mostrar
@@ -83,6 +84,14 @@ public class Main extends Application {
         dialogoAlerta.showAndWait();
     }
 
+    /**
+     * Gestiona el registro del profesor en el servidor.
+     *
+     * @param usuario   nombre de usuario del profesor a registrar.
+     * @param password  contrasenya del profesor a registrar.
+     * @return  (false) si el nombre de usuario ya existe,
+     *          (true)  si el profesor se ha registrado correctamente.
+     */
     public boolean registraProfesor(String usuario, String password){
         try {
             return servidorInicio.registraProfesor(usuario, password);
@@ -93,6 +102,15 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Inicia la sesion del profesor comprobando usuario y contrasenya. En caso de que
+     * se inicie sesion correctamente, se crea un nuevo profesor con todos sus datos.
+     *
+     * @param usuario   nombre de usuario del profesor que inicia sesion
+     * @param password  contrasenya del profesor que inicia sesion
+     * @return  (profesor)  en caso de que el profesor se haya logeado correctamente.
+     *          (null)      en caso de error en el inicio de sesion.
+     */
     public Profesor iniciaSesion(String usuario, String password){
         try {
             if (servidorInicio.iniciaProfesor(usuario, password)) {
@@ -155,6 +173,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Ejecuta la interfaz de creacion de nuevo cuestionario
+     */
     public void profesorCreaCuestionario(){
         try {
             FXMLLoader creaCuestionarioLoader = new FXMLLoader();
@@ -175,18 +196,35 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Gestiona la creacion de un nuevo cuestionario.
+     * @param nombreCuestionario    nombre del cuestionario.
+     * @param preguntas             Lista de preguntas del cuestionario.
+     */
     public void addCuestionario(String nombreCuestionario, ObservableList<Pregunta> preguntas) {
         Sesion sesion = new Sesion(nombreCuestionario);
         sesion.setListaPreguntas(preguntas);
         profesor.getMisSesiones().add(sesion);
         // TODO almacenar los datos del nuevo cuestionario (sesion) en la base de datos.
+        try {
+            servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
+        } catch (RemoteException e) {
+            error("Ha ocurrido un error al crear el cuestionario.\nVuelve a intentarlo mas tarde.");
+        }
         ejecutaProfesor(profesor);
     }
 
+    /**
+     * Gestiona el borrado de un cuestionario.
+     * @param cuestionario  nombre del cuestionario a borrar.
+     */
     public void borraCuestionario(String cuestionario) {
-
+        // TODO borrar el cuestionario tanto de la lista del profesor como de la base de datos
     }
 
+    /**
+     * Gestiona el logout de un profesor.
+     */
     public void cierraSesion() {
         try {
             servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
@@ -197,6 +235,12 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Ejecuta la ventana inicial del profesor que actualmente esta logeado.
+     * Se utiliza para poder ejecutar directamente la ventana home del profesor
+     * a la hora de cancelar la creacion de un nuevo cuestionario o cuando se
+     * finaliza una sala.
+     */
     public void ejecutaProfesorActual() {
         ejecutaProfesor(profesor);
     }

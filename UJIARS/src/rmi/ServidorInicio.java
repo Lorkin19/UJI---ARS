@@ -45,7 +45,8 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
         if (!profesoresConectados.containsKey(usuario)) {
             // TODO cargar en la instancia del profesor todo lo que tiene.
-
+            List<Sesion> sesionesProfesor = conexionBBDD.getSesionesProfesor(usuario);
+            profesor.cargarSesiones(sesionesProfesor);
             profesoresConectados.put(usuario, profesor);
             return true;
         }
@@ -136,5 +137,10 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     @Override
     public void finalizarPartida(int codSala) throws RemoteException {
         salas.remove(codSala);
+    }
+
+    @Override
+    public void profesorCreaCuestionario(String usuario, Sesion sesion) {
+
     }
 }

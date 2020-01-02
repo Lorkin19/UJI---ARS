@@ -32,6 +32,15 @@ public class RegistraController implements IController {
         this.prevController = prevController;
     }
 
+
+    /**
+     * Recoge los datos de registro de un profesor, comprobando que los campos siguen
+     * los valores establecidos, y en caso de no cumplir dichos valores, salta una
+     * ventana de error.
+     *
+     * Si el usuario no existia anteriormente, lo crea. En caso de que si que exista,
+     * se informa al usuario con una ventana de error.
+     */
     public void registro() {
         if (user.getText().equals("") || user.getText().length() > 20
                 || pass1.getText().equals("") || pass1.getText().length() > 20

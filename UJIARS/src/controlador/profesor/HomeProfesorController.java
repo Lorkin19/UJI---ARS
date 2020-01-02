@@ -1,26 +1,16 @@
 package controlador.profesor;
 
-import common.IProfesor;
 import controlador.IController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import modelo.Pregunta;
 import modelo.Profesor;
 import modelo.Sesion;
 import vista.Main;
 
-import java.io.IOException;
 
 public class HomeProfesorController implements IController {
 
@@ -30,7 +20,6 @@ public class HomeProfesorController implements IController {
     private Main main;
     private Profesor profesor;
     private Sesion sesionSeleccionada;
-    private Stage stageCreaCuestionario;
 
     @FXML
     public TableView<Sesion> tablaCuestionarios;
@@ -69,6 +58,12 @@ public class HomeProfesorController implements IController {
                 (observable, oldValue, newValue) -> seleccion(newValue));
     }
 
+    /**
+     * Configura los botones para activarlos y guarda la sesion seleccionada
+     * para futuras comprobaciones.
+     *
+     * @param sesion Sesion seleccionada en la tabla de cuestionarios del profesor.
+     */
     private void seleccion(Sesion sesion){
         this.sesionSeleccionada = sesion;
         editar.setDisable(false);
@@ -86,20 +81,32 @@ public class HomeProfesorController implements IController {
     }
 
 
+    /**
+     * borra el cuestionario seleccionada.
+     */
     public void borraCuestionario() {
         String cuestionario = tablaCuestionarios.getSelectionModel().selectedItemProperty().toString();
         main.borraCuestionario(cuestionario);
     }
 
+    /**
+     * Gestiona el cierre de sesion del profesor.
+     */
     public void cerrarSesion() {
         main.cierraSesion();
     }
 
-    public void editaCuestionario(ActionEvent actionEvent) {
-
+    /**
+     * Edita el cuestionario seleccionado.
+     */
+    public void editaCuestionario() {
+        // TODO gestionar la edicion de cuestionarios.
     }
 
-    public void cierraCreaCuestionario() {
-        stageCreaCuestionario.close();
+    /**
+     * Ejecuta el cuestionario seleccionado.
+     */
+    public void ejecutaCuestionario() {
+        // TODO gestionar la ejecucion de cuestionarios.
     }
 }

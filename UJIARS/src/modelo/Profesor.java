@@ -23,7 +23,6 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         this.usuario = usuario;
         this.password = password;
         misSesiones = FXCollections.observableArrayList();
-        misSesiones.add(new Sesion("Prueba"));  // TODO Borrar, usasdo como prueba
         factorySesion = FactorySesion.getInstance();
         factoryPregunta = FactoryPregunta.getInstance();
     }
@@ -136,6 +135,11 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     public void finalizarPartida(IServidorInicio servidor) throws RemoteException {
         servidor.finalizarPartida(sala.getCodSala());
         sala = null;
+    }
+
+    @Override
+    public void cargarSesiones(List<Sesion> sesionesProfesor) {
+        misSesiones.addAll(sesionesProfesor);
     }
 
 }

@@ -22,4 +22,6 @@ public interface IServidorInicio extends Remote {
     void cerrarSesionProfesor(String nombreProfesor) throws RemoteException;
 
     void finalizarPartida(int codSala) throws RemoteException;
+
+    void profesorCreaCuestionario(String usuario, Sesion sesion) throws RemoteException;
 }

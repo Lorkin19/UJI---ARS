@@ -25,25 +25,26 @@
          </font>
       </Label>
       <Button layoutX="827.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#cerrarSesion" stylesheets="@../style/MyTheme.css" text="Cerrar sesión" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="10.0" />
-      <ButtonBar buttonMinWidth="225.0" layoutX="269.0" layoutY="553.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
-         <buttons>
-          <Button fx:id="editar" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editaCuestionario" stylesheets="@../style/MyTheme.css" text="Editar cuestionario">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="borrar" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" mnemonicParsing="false" onAction="#borraCuestionario" stylesheets="@../style/MyTheme.css" text="Borrar cuestionario">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#creaCuestionario" onMouseClicked="#creaCuestionario" stylesheets="@../style/MyTheme.css" text="Crear nuevo cuestionario" />
-         </buttons>
-      </ButtonBar>
       <Label alignment="CENTER" layoutX="22.0" layoutY="549.0" text="UJI-ARS" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="20.0">
          <font>
             <Font name="Lobster" size="30.0" />
          </font>
       </Label>
+      <Button layoutX="347.0" layoutY="552.0" mnemonicParsing="false" onAction="#ejecutaCuestionario" prefHeight="31.0" stylesheets="@../style/MyTheme.css" text="Ejecutar" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="450.0" />
+      <ButtonBar buttonMinWidth="120.0" layoutX="458.0" layoutY="552.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+         <buttons>
+          <Button fx:id="editar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editaCuestionario" stylesheets="@../style/MyTheme.css" text="Editar">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="borrar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#borraCuestionario" stylesheets="@../style/MyTheme.css" text="Eliminar">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#creaCuestionario" onMouseClicked="#creaCuestionario" stylesheets="@../style/MyTheme.css" text="Nuevo" />
+         </buttons>
+      </ButtonBar>
    </children>
 </AnchorPane>

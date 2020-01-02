@@ -43,6 +43,12 @@ public class CreaCuestionarioContoller implements IController {
     }
 
 
+    /**
+     * Se ejecuta automaticamente al iniciar la vista de creacion de cuestionario.
+     *
+     * Se establecen los botones correspondientes como deshabilitados y se prepara
+     * la vista de la tabla de las preguntas.
+     */
     @FXML
     public void initialize() {
         edita.setDisable(true);
@@ -55,24 +61,40 @@ public class CreaCuestionarioContoller implements IController {
                 (observable, oldValue, newValue) -> seleccion(newValue));
     }
 
+    /**
+     * Guarda la pregunta que se ha seleccionado en la tabla y habilita los botones de
+     * edicion y borrado de pregunta.
+     * @param pregunta  Pregunta seleccionada de la tabla de preguntas del cuestionario.
+     */
     private void seleccion(Pregunta pregunta) {
         this.preguntaSeleccionada = pregunta;
         edita.setDisable(false);
     }
 
 
+    /**
+     * Comprueba que el cuestionario tiene nombre y que tiene al menos 1 pregunta.
+     * Si cumple las condiciones, crea el cuestionario. En caso contrario, lanza una
+     * ventana de error indicando las condiciones de creacion de cuestionarios.
+     */
     public void addCuestionario() {
-        if (preguntas.size() == 0 || nombreCuestionario.getText() == null){
+        if (preguntas.size() == 0 || nombreCuestionario.getText().equals("")){
             main.error("Todo cuestionario debe tener nombre y un mínimo de 1 pregunta.");
         } else {
             main.addCuestionario(nombreCuestionario.getText(), preguntas);
         }
     }
 
+    /**
+     * Gestiona el logout de un profesor
+     */
     public void cerrarSesion() {
         main.cierraSesion();
     }
 
+    /**
+     * Lanza la ventana de gestion de una pregunta.
+     */
     public void nuevaPregunta() {
         try {
             FXMLLoader registroLoader = new FXMLLoader();
@@ -99,13 +121,26 @@ public class CreaCuestionarioContoller implements IController {
         }
     }
 
+
+    /**
+     * Lanza la ventana de edicion de una pregunta
+     */
     public void editaPregunta() {
     }
 
+    /**
+     * Cancela la creacion de un nuevo cuestionario y vuelve a la vista
+     * principal del profesor.
+     */
     public void cancelar() {
         main.ejecutaProfesorActual();
     }
 
+    /**
+     * Anyade una nueva pregunta a la lista provisional de preguntas
+     * del nuevo cuestionario.
+     * @param pregunta  Pregunta que se anyade.
+     */
     public void anyadePregunta(Pregunta pregunta) {
         preguntas.add(pregunta);
     }

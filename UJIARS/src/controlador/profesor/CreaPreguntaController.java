@@ -54,6 +54,14 @@ public class CreaPreguntaController implements IController {
 
     private CreaCuestionarioContoller prevController;
 
+
+    /**
+     * Recoge los datos de la pregunta junto con sus respuestas.
+     *
+     * Una pregunta puede no tener enunciado y sus respuestas pueden no tener texto.
+     *
+     * Se aceptan tanto varias como ninguna respuesta correcta.
+     */
     public void crearPregunta() {
         Pregunta pregunta = new Pregunta();
         pregunta.setEnunciado(enunciado.getText());

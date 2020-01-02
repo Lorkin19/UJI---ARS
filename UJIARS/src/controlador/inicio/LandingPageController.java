@@ -85,5 +85,8 @@ public class LandingPageController implements IController {
         }
     }
 
+    /**
+     * Cierra la ventana de registro o inicio de sesion (Dependiendo de cual este abierta).
+     */
     public void cierraInicio() { stageSesion.close();}
 }

@@ -6,6 +6,7 @@ import modelo.Sesion;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface IProfesor extends Remote {
     void crearSesion(int numPreguntas) throws RemoteException;
@@ -24,4 +25,5 @@ public interface IProfesor extends Remote {
 
     void finalizarPartida(IServidorInicio servidor) throws RemoteException;
 
+    void cargarSesiones(List<Sesion> sesionesProfesor);
 }

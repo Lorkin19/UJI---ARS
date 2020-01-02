@@ -115,27 +115,29 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * Se registran las preguntas creadas por el profesor sobre un cuestionario de nombre x.
      *
      * @param pregunta       La pregunta que se quiere registrar
-     * @param nombreConjunto El nombre del cuestionario al que pertenece
+     * @param nombreCuestionario El nombre del cuestionario al que pertenece
      * @param usuarioProf    El usuario del profesor al que le corresponden las preguntas
      * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
-    public void registraPreguntas(Pregunta pregunta, String nombreConjunto, String usuarioProf) throws RemoteException {
+    public void registraPreguntas(Pregunta pregunta, String nombreCuestionario, String usuarioProf) throws RemoteException {
         try {
             Connection connection = conecta();
-            String sentencia = "INSERT INTO pregunta VALUES (?, ?, ?, ?, ?)";
+            String sentencia = "INSERT INTO pregunta VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
-            st.setString(1, pregunta.getEnunciado().toString());
-            st.setDouble(2, pregunta.getTiempo());
-            st.setInt(3, pregunta.getPuntos());
-            st.setString(4, nombreConjunto);
-            st.setString(5, usuarioProf);
+            int idPregunta = getNextIdPregunta();
+
+            st.setInt(1, idPregunta);
+            st.setString(2, pregunta.getEnunciado().toString());
+            st.setDouble(3, pregunta.getTiempo());
+            st.setString(4, nombreCuestionario);
+            st.setInt(5, pregunta.getPuntos());
+            st.setString(6, usuarioProf);
 
             st.executeUpdate();
             System.out.println("Pregunta guardada correctamente.");
 
-            int idPregunta = getLastIdPregunta();
             registraRespuestas(pregunta.getRespuestas(), idPregunta);
             connection.close();
         } catch (SQLException e) {
@@ -154,13 +156,16 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     public void registraRespuestas(List<Respuesta> respuestas, int idPregunta) throws RemoteException {
         try {
             Connection connection = conecta();
-            String sentencia = "INSERT INTO Respuesta VALUES (?, ?, ?)";
+            String sentencia = "INSERT INTO Respuesta VALUES (?, ?, ?,?)";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
+            int idRespuesta;
             for (Respuesta respuesta : respuestas) {
-                st.setInt(1, idPregunta);
-                st.setString(2, respuesta.getRespuesta());
-                st.setBoolean(3, respuesta.isCorrecta());
+                idRespuesta = getNextIdRespuesta()+1;
+                st.setInt(1, idRespuesta);
+                st.setInt(2, idPregunta);
+                st.setString(3, respuesta.getRespuesta());
+                st.setBoolean(4, respuesta.isCorrecta());
 
                 st.executeUpdate();
                 System.out.println("Respuesta registrada correctamente.");
@@ -306,9 +311,9 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     /**
      * Obtener el ultimo id de las preguntas que hay en la base de datos.
      *
-     * @return el id de la ultima pregunta anyadida
+     * @return el id de la ultima pregunta anyadida +1
      */
-    private int getLastIdPregunta() {
+    private int getNextIdPregunta() {
         try {
             Connection connection = conecta();
             String sentencia = "SELECT TOP 1 idPregunta FROM Preguntas ORDER BY idPregunta DESC";
@@ -316,9 +321,33 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
             ResultSet rs = st.executeQuery();
             int idPregunta = rs.getInt("idPregunta");
+            rs.close();
 
             connection.close();
-            return idPregunta;
+            return idPregunta+1;
+        } catch (SQLException e) {
+            System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
+            return -1;
+        }
+    }
+
+    /**
+     * Obtener el ultimo id de las respuestas que hay en la base de datos.
+     *
+     * @return el id de la ultima respuesta anyadida +1
+     */
+    private int getNextIdRespuesta() {
+        try {
+            Connection connection = conecta();
+            String sentencia = "SELECT TOP 1 idRespuesta FROM Respuesta ORDER BY idRespuesta DESC";
+            PreparedStatement st = connection.prepareStatement(sentencia);
+
+            ResultSet rs = st.executeQuery();
+            int idRespuesta = rs.getInt("idRespuesta");
+            rs.close();
+
+            connection.close();
+            return idRespuesta+1;
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
             return -1;
