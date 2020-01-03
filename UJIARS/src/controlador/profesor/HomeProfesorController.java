@@ -1,6 +1,8 @@
 package controlador.profesor;
 
 import controlador.IController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +12,8 @@ import javafx.stage.Stage;
 import modelo.Profesor;
 import modelo.Sesion;
 import vista.Main;
+
+import java.rmi.RemoteException;
 
 
 public class HomeProfesorController implements IController {
@@ -40,7 +44,9 @@ public class HomeProfesorController implements IController {
 
     public void setProfesor(Profesor profesor) {
         this.profesor=profesor;
-        tablaCuestionarios.setItems(profesor.getMisSesiones());
+        if (!profesor.getMisSesiones().isEmpty()){
+            tablaCuestionarios.setItems(profesor.getMisSesiones());
+        }
     }
 
     /**
@@ -53,6 +59,7 @@ public class HomeProfesorController implements IController {
         editar.setDisable(true);
         borrar.setDisable(true);
         // Inicializa las tablas.
+
         columnaCuestionario.setCellValueFactory(cellData -> cellData.getValue().getNombre());
         tablaCuestionarios.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> seleccion(newValue));

@@ -25,10 +25,10 @@
             <Font name="Arial Bold" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="user" layoutX="200.0" layoutY="28.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0" />
-      <PasswordField fx:id="pass1" layoutX="190.0" layoutY="73.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
-      <PasswordField fx:id="pass2" layoutX="190.0" layoutY="118.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0" />
-      <Button layoutX="164.0" layoutY="169.0" mnemonicParsing="false" onMouseClicked="#registro" style="-fx-background-color: #ffffff;" stylesheets="@../style/MyTheme.css" text="Regístrate" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
+      <TextField fx:id="user" layoutX="200.0" layoutY="28.0" onAction="#registro" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0" />
+      <PasswordField fx:id="pass1" layoutX="190.0" layoutY="73.0" onAction="#registro" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+      <PasswordField fx:id="pass2" layoutX="190.0" layoutY="118.0" onAction="#registro" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0" />
+      <Button layoutX="164.0" layoutY="169.0" mnemonicParsing="false" onAction="#registro" style="-fx-background-color: #ffffff;" stylesheets="@../style/MyTheme.css" text="Regístrate" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

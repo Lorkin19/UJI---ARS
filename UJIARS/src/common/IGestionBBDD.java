@@ -9,22 +9,22 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public interface IGestionBBDD extends Remote {
-    boolean registraProfesor(String usuario, String password) throws RemoteException;
+public interface IGestionBBDD {
+    boolean registraProfesor(String usuario, String password);
 
-    boolean compruebaProfesor(String usuario, String password) throws RemoteException;
+    boolean compruebaProfesor(String usuario, String password);
 
-    void darDeBajaProgesor(String usuario) throws  RemoteException;
+    void darDeBajaProgesor(String usuario);
 
-    void registraPreguntas(Pregunta pregunta, String nombreConjunto, String usuarioProf) throws RemoteException;
+    int registraPregunta(Pregunta pregunta, String nombreConjunto, String usuarioProf);
 
-    void registraRespuestas(List<Respuesta> respuestas, int idPregunta) throws RemoteException;
+    void registraRespuesta(Respuesta respuestas, int idPregunta);
 
-    List<Sesion> getSesionesProfesor(String usuario) throws RemoteException;
+    List<Sesion> getSesionesProfesor(String usuario);
 
-    Profesor getProfesor(String usuario) throws RemoteException;
+    //Profesor getProfesor(String usuario);
 
-    void editaPregunta(Pregunta pregunta, String usuarioProf, String cuestionario) throws  RemoteException;
+    void editaPregunta(Pregunta pregunta, String usuarioProf, String cuestionario);
 
-    void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException;
+    void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario);
 }

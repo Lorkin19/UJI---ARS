@@ -10,6 +10,7 @@ import modelo.Pregunta;
 import modelo.Respuesta;
 import vista.Main;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +78,8 @@ public class CreaPreguntaController implements IController {
         pregunta.setRespuestas(respuestas);
         prevController.anyadePregunta(pregunta);
         myStage.close();
+
+
     }
 
 

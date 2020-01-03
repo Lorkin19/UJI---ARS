@@ -1,8 +1,8 @@
 package rmi;
 
 import common.*;
-import javafx.beans.property.StringProperty;
-import modelo.Profesor;
+import modelo.Pregunta;
+import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
@@ -10,7 +10,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class ServidorInicio extends UnicastRemoteObject implements IServidorInicio {
 
@@ -41,12 +40,12 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public boolean profesorIniciaSesion(String usuario, IProfesor profesor){
+    public boolean profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException {
         // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
         if (!profesoresConectados.containsKey(usuario)) {
             // TODO cargar en la instancia del profesor todo lo que tiene.
             List<Sesion> sesionesProfesor = conexionBBDD.getSesionesProfesor(usuario);
-            profesor.cargarSesiones(sesionesProfesor);
+            //profesor.cargarSesiones(sesionesProfesor);
             profesoresConectados.put(usuario, profesor);
             return true;
         }
@@ -63,21 +62,6 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      */
     @Override
     public boolean registraProfesor(String usuario, String password) throws RemoteException {
-//        // Si el profesor esta registrado no deja registrarse
-//        // v1.0
-//        System.out.println("Comprobando profesor " + usuario);
-//        if (profesores.containsKey(usuario)) {
-//            return false;
-//        }
-//
-//        System.out.println("El nombre de usuario esta disponible");
-//        IProfesor p = new Profesor(usuario, password);
-//        System.out.println("Profesor creado");
-//        profesores.put(usuario, p);
-//        System.out.println("Profesor anyadido");
-//        return true;
-//
-        // v2.0
         return conexionBBDD.registraProfesor(usuario, password);
     }
 
@@ -140,7 +124,26 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public void profesorCreaCuestionario(String usuario, Sesion sesion) {
+    public void profesorCreaCuestionario(String usuario, Sesion sesion) throws RemoteException {
+        System.out.println("Anyadiendo un nuevo cuestionario a la bbdd");
 
+        for (Pregunta pregunta : sesion.getListaPreguntas()){
+            //conexionBBDD.registraPreguntas(pregunta, sesion.getNombre().get(), usuario);
+        }
+    }
+
+    @Override
+    public int anyadePregunta(String usuario, String nombreCuestionario, String enunciado) throws RemoteException {
+        System.out.println("anyadiendo pregunta del profesor " + usuario);
+        Pregunta pregunta = new Pregunta();
+        pregunta.setEnunciado(enunciado);
+        return conexionBBDD.registraPregunta(pregunta, nombreCuestionario, usuario);
+    }
+
+    @Override
+    public void anyadeRespuesta(int idPregunta, String opcion, boolean correcta) throws RemoteException {
+        System.out.println("Anyadiendo respuesta a la pregunta");
+        Respuesta respuesta = new Respuesta(opcion, correcta);
+        conexionBBDD.registraRespuesta(respuesta, idPregunta);
     }
 }

@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
+public class GestionBBDD implements IGestionBBDD {
 
-    GestionBBDD() throws RemoteException {
+    GestionBBDD() {
 
     }
 
@@ -46,7 +46,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException Si hay un error en la conexion remota
      */
     @Override
-    public boolean registraProfesor(String usuario, String password) throws RemoteException {
+    public boolean registraProfesor(String usuario, String password) {
         try {
             Connection connection = conecta();
             String sentencia = "INSERT INTO profesor VALUES (?,?,?)";
@@ -74,7 +74,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException Si hay un error en la conexion remota.
      */
     @Override
-    public boolean compruebaProfesor(String usuario, String password) throws RemoteException {
+    public boolean compruebaProfesor(String usuario, String password) {
         try {
             Connection connection = conecta();
             String sentencia = "SELECT COUNT(*) as existe FROM profesor WHERE usuario=? and password=?";
@@ -97,7 +97,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException En caso de que se produzca algun error en la conexion con la base de datos.
      */
     @Override
-    public void darDeBajaProgesor(String usuario) throws RemoteException {
+    public void darDeBajaProgesor(String usuario) {
         try {
             Connection connection = conecta();
             String sentence = "UPDATE Profesor SET baja = ? WHERE usuario = ?";
@@ -120,7 +120,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
-    public void registraPreguntas(Pregunta pregunta, String nombreCuestionario, String usuarioProf) throws RemoteException {
+    public int registraPregunta(Pregunta pregunta, String nombreCuestionario, String usuarioProf) {
         try {
             Connection connection = conecta();
             String sentencia = "INSERT INTO pregunta VALUES (?, ?, ?, ?, ?, ?)";
@@ -129,7 +129,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             int idPregunta = getNextIdPregunta();
 
             st.setInt(1, idPregunta);
-            st.setString(2, pregunta.getEnunciado().toString());
+            st.setString(2, pregunta.getEnunciado().get());
             st.setDouble(3, pregunta.getTiempo());
             st.setString(4, nombreCuestionario);
             st.setInt(5, pregunta.getPuntos());
@@ -138,38 +138,38 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             st.executeUpdate();
             System.out.println("Pregunta guardada correctamente.");
 
-            registraRespuestas(pregunta.getRespuestas(), idPregunta);
+            //registraRespuesta(pregunta.getRespuestas(), idPregunta);
             connection.close();
+            return idPregunta;
         } catch (SQLException e) {
             System.out.println("A fatal error has ocurred --> registraPreguntas");
         }
+        return -1;
     }
 
     /**
      * Registra las diferentes opciones de respuesta a una pregunta
      *
-     * @param respuestas        Listado de opciones
+     * @param respuesta         Opcion de una pregunta
      * @param idPregunta        Identificador de la pregunta a la cual corresponden las opciones
      * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
-    public void registraRespuestas(List<Respuesta> respuestas, int idPregunta) throws RemoteException {
+    public void registraRespuesta(Respuesta respuesta, int idPregunta) {
         try {
             Connection connection = conecta();
             String sentencia = "INSERT INTO Respuesta VALUES (?, ?, ?,?)";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
             int idRespuesta;
-            for (Respuesta respuesta : respuestas) {
-                idRespuesta = getNextIdRespuesta()+1;
-                st.setInt(1, idRespuesta);
-                st.setInt(2, idPregunta);
-                st.setString(3, respuesta.getRespuesta());
-                st.setBoolean(4, respuesta.isCorrecta());
+            idRespuesta = getNextIdRespuesta();
+            st.setInt(1, idRespuesta);
+            st.setInt(2, idPregunta);
+            st.setString(3, respuesta.getRespuesta());
+            st.setBoolean(4, respuesta.isCorrecta());
 
-                st.executeUpdate();
-                System.out.println("Respuesta registrada correctamente.");
-            }
+            st.executeUpdate();
+            System.out.println("Respuesta registrada correctamente.");
             connection.close();
         } catch (SQLException e) {
             System.out.println("A fatal error has ocurred --> registraRespuestas");
@@ -192,19 +192,21 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             toSesion(misSesiones, result);
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener los cuestionarios del profesor");
+            e.printStackTrace();
         }
-
+        System.out.println("Devolviendo las sesiones del profesor " + usuario);
         return misSesiones;
     }
 
+    /*
     /**
      * Metodo que permite obtener un profesor a partir de un usuario
      * @param usuario el nombre de usuario dado para obtener el profesor de la base de datos
      * @return el profesor obtenido de la bbdd o null en el caso de que no se encuentre el profesor
      * @throws RemoteException En el caso de que algo falle.
-     */
+     *
     @Override
-    public Profesor getProfesor(String usuario) throws RemoteException {
+    public Profesor getProfesor(String usuario) {
         try {
             Connection connection = conecta();
             String sentence = "SELECT * from Profesor WHERE usuario = ?";
@@ -227,6 +229,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             return null;
         }
     }
+    */
 
     /**
      * Permite editar una pregunta ya registrada.
@@ -236,18 +239,18 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException En el caso de que haya algun error en la conexion.
      */
     @Override
-    public void editaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+    public void editaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) {
         try{
             Connection connection = conecta();
             String sentence = "UPDATE Pregunta SET enunciado = ?, tiempo = ?, puntos = ? WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
             PreparedStatement st = connection.prepareStatement(sentence);
 
-            st.setString(1, pregunta.getEnunciado().toString());
+            st.setString(1, pregunta.getEnunciado().get());
             st.setDouble(2, pregunta.getTiempo());
             st.setInt(3, pregunta.getPuntos());
             st.setString(4, usuarioProf);
             st.setString(5, nombreCuestionario);
-            st.setString(6, pregunta.getEnunciado().toString());
+            st.setString(6, pregunta.getEnunciado().get());
 
             st.executeQuery();
             connection.close();
@@ -264,7 +267,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos.
      */
     @Override
-    public void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) throws RemoteException {
+    public void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) {
         try{
             Connection connection = conecta();
             String sentence = "DELETE FROM Pregunta WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
@@ -272,7 +275,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
 
             st.setString(1, usuarioProf);
             st.setString(2, nombreCuestionario);
-            st.setString(3, pregunta.getEnunciado().toString());
+            st.setString(3, pregunta.getEnunciado().get());
 
             st.executeQuery();
             connection.close();
@@ -296,6 +299,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             respuesta = rs2.getString("opcion");
             correcta = rs2.getBoolean("correcta");
 
+
             respuestas.add(new Respuesta(respuesta, correcta));
             /*
             if (correcta) {
@@ -316,7 +320,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     private int getNextIdPregunta() {
         try {
             Connection connection = conecta();
-            String sentencia = "SELECT TOP 1 idPregunta FROM Preguntas ORDER BY idPregunta DESC";
+            String sentencia = "SELECT idPregunta FROM Pregunta ORDER BY idPregunta DESC";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
             ResultSet rs = st.executeQuery();
@@ -327,7 +331,8 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             return idPregunta+1;
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
-            return -1;
+            e.printStackTrace();
+            return 0;
         }
     }
 
@@ -339,7 +344,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
     private int getNextIdRespuesta() {
         try {
             Connection connection = conecta();
-            String sentencia = "SELECT TOP 1 idRespuesta FROM Respuesta ORDER BY idRespuesta DESC";
+            String sentencia = "SELECT idRespuesta FROM Respuesta ORDER BY idRespuesta DESC";
             PreparedStatement st = connection.prepareStatement(sentencia);
 
             ResultSet rs = st.executeQuery();
@@ -349,8 +354,8 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
             connection.close();
             return idRespuesta+1;
         } catch (SQLException e) {
-            System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
-            return -1;
+            System.out.println("Ha ocurrido un error al obtener el último id de las respuestas");
+            return 0;
         }
     }
 
@@ -376,7 +381,7 @@ public class GestionBBDD extends UnicastRemoteObject implements IGestionBBDD {
      */
     private void getPreguntasProfesor(Map<String, List<Pregunta>> result, String usuario) throws SQLException {
         Connection connection = conecta();
-        String sentence = "SELECT * FROM Preguntas WHERE usuario = ? GROUP BY nombreCuestionario";
+        String sentence = "SELECT * FROM Pregunta WHERE usuario = ? GROUP BY nombreCuestionario";
         PreparedStatement st = connection.prepareStatement(sentence);
 
         st.setString(1, usuario);

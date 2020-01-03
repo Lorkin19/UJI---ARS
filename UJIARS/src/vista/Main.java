@@ -10,11 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import modelo.Pregunta;
 import modelo.Profesor;
+import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.io.IOException;
@@ -113,7 +113,8 @@ public class Main extends Application {
      */
     public Profesor iniciaSesion(String usuario, String password){
         try {
-            if (servidorInicio.iniciaProfesor(usuario, password)) {
+            boolean correcto = servidorInicio.iniciaProfesor(usuario, password);
+            if (correcto) {
                 profesor = new Profesor(usuario, password);
                 servidorInicio.profesorIniciaSesion(usuario, (IProfesor) profesor);
                 return  profesor;
@@ -121,6 +122,7 @@ public class Main extends Application {
             return null;
         } catch (RemoteException re){
             error("Fallo en la conexión con la base de datos.\nIntentalo mas tarde");
+            re.printStackTrace();
             return null;
         }
     }
@@ -202,16 +204,28 @@ public class Main extends Application {
      * @param preguntas             Lista de preguntas del cuestionario.
      */
     public void addCuestionario(String nombreCuestionario, ObservableList<Pregunta> preguntas) {
-        Sesion sesion = new Sesion(nombreCuestionario);
-        sesion.setListaPreguntas(preguntas);
-        profesor.getMisSesiones().add(sesion);
-        // TODO almacenar los datos del nuevo cuestionario (sesion) en la base de datos.
         try {
-            servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
-        } catch (RemoteException e) {
+            Sesion sesion = new Sesion(nombreCuestionario);
+            sesion.setListaPreguntas(preguntas);
+            profesor.addSesion(sesion);
+            // TODO almacenar los datos del nuevo cuestionario (sesion) en la base de datos.
+            System.out.println("Almacenando el cuestionario nuevo en la bbdd");
+            System.out.println("Nombre del cuestionario: " + sesion.getNombre().get());
+
+            int idPregunta;
+            for (Pregunta pregunta : preguntas){
+                idPregunta = servidorInicio.anyadePregunta(profesor.getUsuario(),nombreCuestionario, pregunta.getEnunciado().get());
+                for (Respuesta respuesta : pregunta.getRespuestas()){
+                    servidorInicio.anyadeRespuesta(idPregunta, respuesta.getRespuesta(), respuesta.isCorrecta());
+                }
+            }
+
+           // servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
+            ejecutaProfesor(profesor);
+        } catch (Exception e) {
             error("Ha ocurrido un error al crear el cuestionario.\nVuelve a intentarlo mas tarde.");
+            e.printStackTrace();
         }
-        ejecutaProfesor(profesor);
     }
 
     /**

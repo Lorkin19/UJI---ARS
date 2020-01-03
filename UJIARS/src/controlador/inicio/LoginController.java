@@ -1,6 +1,7 @@
 package controlador.inicio;
 
 import controlador.IController;
+import javafx.event.ActionEvent;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -34,7 +35,7 @@ public class LoginController implements IController {
      * En caso de que los datos introducidos sean incorrectos, muestra
      * una ventana de error.
      */
-    public void iniciaSesion() {
+    public void iniciaSesion(ActionEvent actionEvent) {
         Profesor profesor = main.iniciaSesion(user.getText(), password.getText());
         if (profesor == null){
             main.error("Usuario o clave incorrecta.");
@@ -43,4 +44,5 @@ public class LoginController implements IController {
             main.ejecutaProfesor(profesor);
         }
     }
+
 }
