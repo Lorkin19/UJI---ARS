@@ -16,6 +16,13 @@
     -fx-opacity: 1;
 }
 
+.label-dark {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #1c1c1c;
+    -fx-opacity: 1;
+}
+
 .label-respuestas {
     -fx-font-size: 14pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -35,6 +42,88 @@
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: black;
     -fx-opacity: 1;
+}
+
+.label-white-subtitle {
+    -fx-font-size: 24pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-dark-subtitle {
+    -fx-font-size: 24pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #1c1c1c;
+    -fx-opacity: 1;
+}
+
+.label-pregunta {
+    -fx-font-size: 24pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+    -fx-border-color: white;
+}
+
+.label-pregunta-dark {
+    -fx-font-size: 24pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #2f2f2f;
+    -fx-opacity: 1;
+    -fx-border-width: 1;
+    -fx-border-radius: 20px;
+    -fx-border-color: #2f2f2f;
+}
+
+.label-answer-1 {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: #E03A3E;
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1;
+    -fx-border-color: black;
+}
+
+.label-answer-2 {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: #963D97;
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1;
+    -fx-border-color: black;
+}
+
+.label-answer-3 {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: #009DDC;
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1;
+    -fx-border-color: black;
+}
+
+.label-answer-4 {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: #F5821F;
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1;
+    -fx-border-color: black;
 }
 
 /*

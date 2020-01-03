@@ -134,13 +134,13 @@ public class GestionBBDD implements IGestionBBDD {
             st.setString(6, usuarioProf);
 
             st.executeUpdate();
-            System.out.println("Pregunta guardada correctamente.");
+            System.out.println("\tPregunta guardada correctamente.");
 
             //registraRespuesta(pregunta.getRespuestas(), idPregunta);
             connection.close();
             return idPregunta;
         } catch (SQLException e) {
-            System.out.println("A fatal error has ocurred --> registraPreguntas");
+            System.out.println("\tA fatal error has ocurred --> registraPreguntas");
         }
         return -1;
     }
@@ -167,10 +167,10 @@ public class GestionBBDD implements IGestionBBDD {
             st.setBoolean(4, respuesta.isCorrecta());
 
             st.executeUpdate();
-            System.out.println("Respuesta registrada correctamente.");
+            System.out.println("\t\tRespuesta registrada correctamente.");
             connection.close();
         } catch (SQLException e) {
-            System.out.println("A fatal error has ocurred --> registraRespuestas");
+            System.out.println("\t\tA fatal error has ocurred --> registraRespuestas");
         }
     }
 

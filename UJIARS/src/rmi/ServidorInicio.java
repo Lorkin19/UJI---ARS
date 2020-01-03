@@ -66,7 +66,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
             for (Sesion sesion : sesionesProfesor){
                 nombreSesiones.add(sesion.getNombre().get());
             }
-            System.out.println("Cargando sesiones del profesor: " + usuario + ".\n\tCantidad de sesiones: " + sesionesProfesor.size());
+            System.out.println("Cargando sesiones del profesor: " + usuario + ".\n\tCantidad de sesiones: " + sesionesProfesor.size() + "\n");
             profesor.cargarSesiones(nombreSesiones);
             profesoresConectados.put(usuario, profesor);
         }
@@ -145,17 +145,8 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public void profesorCreaCuestionario(String usuario, Sesion sesion) throws RemoteException {
-        System.out.println("Anyadiendo un nuevo cuestionario a la bbdd");
-
-        for (Pregunta pregunta : sesion.getListaPreguntas()){
-            //conexionBBDD.registraPreguntas(pregunta, sesion.getNombre().get(), usuario);
-        }
-    }
-
-    @Override
     public int anyadePregunta(String usuario, String nombreCuestionario, String enunciado) throws RemoteException {
-        System.out.println("anyadiendo pregunta del profesor " + usuario);
+        System.out.println("Anyadiendo pregunta del profesor " + usuario);
         Pregunta pregunta = new Pregunta();
         pregunta.setEnunciado(enunciado);
         return conexionBBDD.registraPregunta(pregunta, nombreCuestionario, usuario);
@@ -163,7 +154,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     @Override
     public void anyadeRespuesta(int idPregunta, String opcion, boolean correcta) throws RemoteException {
-        System.out.println("Anyadiendo respuesta a la pregunta");
+        System.out.println("\tAnyadiendo respuesta a la pregunta");
         Respuesta respuesta = new Respuesta(opcion, correcta);
         conexionBBDD.registraRespuesta(respuesta, idPregunta);
     }
