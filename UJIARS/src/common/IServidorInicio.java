@@ -11,7 +11,7 @@ public interface IServidorInicio extends Remote {
 
     boolean iniciaProfesor(String usuario, String password) throws RemoteException;
 
-    boolean profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException;
+    void profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException;
 
     boolean registraProfesor(String usuario, String password) throws RemoteException;
 

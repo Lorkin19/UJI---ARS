@@ -27,4 +27,6 @@ public interface IGestionBBDD {
     void editaPregunta(Pregunta pregunta, String usuarioProf, String cuestionario);
 
     void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario);
+
+    int getNumSesionesProfesor(String usuario);
 }

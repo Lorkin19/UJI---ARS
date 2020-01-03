@@ -10,7 +10,6 @@ import modelo.Pregunta;
 import modelo.Respuesta;
 import vista.Main;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 

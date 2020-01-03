@@ -25,5 +25,6 @@ public interface IProfesor extends Remote {
 
     void finalizarPartida(IServidorInicio servidor) throws RemoteException;
 
-    void cargarSesiones(List<Sesion> sesionesProfesor) throws RemoteException;
+    void cargarSesiones(List<String> sesionesProfesor) throws RemoteException;
+
 }

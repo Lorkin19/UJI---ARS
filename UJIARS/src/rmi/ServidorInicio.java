@@ -7,6 +7,7 @@ import modelo.Sesion;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     private Map<String, IProfesor> profesoresConectados;
     private Map<Integer, IServidorSala> salas;
+    private Map<String, List<Sesion>> sesionesProfesores;
     private GestionBBDD conexionBBDD;
 
     ServidorInicio() throws RemoteException {
@@ -22,6 +24,8 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         profesoresConectados = new HashMap<>(); // Temporal hasta que pongamos la BBDD
 
         salas = new HashMap<>(); // Temporal, puede que no sea asi
+
+        sesionesProfesores = new HashMap<>();
 
         conexionBBDD = new GestionBBDD();
     }
@@ -39,17 +43,33 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         return conexionBBDD.compruebaProfesor(usuario, password);
     }
 
+    /**
+     * Cuando un profesor inicia sesion se comprueba que no este conectado previamente.
+     * Si no esta conectado, entonces se carga en el servidor todas las salas del profesor
+     * y se le envian al profesor los nombres de las salas para que construya objetos
+     * de tipo sala basicos.
+     * @param usuario   Nombre de usuario del profesor.
+     * @param profesor  Interfaz del profesor.
+     * @throws RemoteException  Si hay algun error.
+     */
     @Override
-    public boolean profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException {
+    public void profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException {
         // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
         if (!profesoresConectados.containsKey(usuario)) {
             // TODO cargar en la instancia del profesor todo lo que tiene.
+            //int numSesiones = conexionBBDD.getNumSesionesProfesor(usuario);
+
             List<Sesion> sesionesProfesor = conexionBBDD.getSesionesProfesor(usuario);
-            //profesor.cargarSesiones(sesionesProfesor);
+            sesionesProfesores.put(usuario, sesionesProfesor);
+
+            List<String> nombreSesiones = new ArrayList<>();
+            for (Sesion sesion : sesionesProfesor){
+                nombreSesiones.add(sesion.getNombre().get());
+            }
+            System.out.println("Cargando sesiones del profesor: " + usuario + ".\n\tCantidad de sesiones: " + sesionesProfesor.size());
+            profesor.cargarSesiones(nombreSesiones);
             profesoresConectados.put(usuario, profesor);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -115,6 +135,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     @Override
     public void cerrarSesionProfesor(String nombreProfesor) throws RemoteException {
         profesoresConectados.remove(nombreProfesor);
+        sesionesProfesores.remove(nombreProfesor);
         System.out.println("Profesor " + nombreProfesor + " ha cerrado su sesion.");
     }
 

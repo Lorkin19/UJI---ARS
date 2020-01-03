@@ -3,12 +3,10 @@ package rmi;
 import common.IGestionBBDD;
 import javafx.collections.FXCollections;
 import modelo.Pregunta;
-import modelo.Profesor;
 import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -277,10 +275,36 @@ public class GestionBBDD implements IGestionBBDD {
             st.setString(2, nombreCuestionario);
             st.setString(3, pregunta.getEnunciado().get());
 
-            st.executeQuery();
+            st.executeUpdate();
             connection.close();
         }catch (SQLException e){
             System.out.println("La pregunta no fue encontrada.");
+        }
+    }
+
+    /**
+     * Obtenemos la cantidad de sesiones que tiene un profesor para saber cuantas veces
+     * hay que llamar a la funcion getSesionProfesor a la hora de cargar todas las sesiones.
+     * @param usuario   Nombre de usuario del profesor.
+     * @return          Numero de sesiones (cuestionarios) que tiene un profesor.
+     */
+    @Override
+    public int getNumSesionesProfesor(String usuario) {
+        try {
+            Connection connection = conecta();
+            String sentence = "SELECT COUNT(DISTINCT nombreCuestionario) as numSesiones WHERE usuario = ?";
+            PreparedStatement st = connection.prepareStatement(sentence);
+
+            st.setString(1, usuario);
+            ResultSet rs = st.executeQuery();
+
+            int numSesiones = rs.getInt("numSesiones");
+            rs.close();
+            connection.close();
+            return  numSesiones;
+        } catch (SQLException e){
+            System.out.println("Error: No se ha podido obtener el dato de la BBDD.");
+            return -1;
         }
     }
 

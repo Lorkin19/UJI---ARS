@@ -55,7 +55,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      * @param numPreguntas numero de preguntas de la sesion a crear
      */
     @Override
-    public void crearSesion(int numPreguntas) {
+    public void crearSesion(int numPreguntas) throws RemoteException {
         String nombre = ""; // TODO Se sacara de JavaFX supongo
         Sesion s = factorySesion.crearSesion(nombre, numPreguntas, factoryPregunta);
         misSesiones.add(s);
@@ -133,8 +133,10 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
     @Override
-    public void cargarSesiones(List<Sesion> sesionesProfesor) {
-        misSesiones.addAll(sesionesProfesor);
+    public void cargarSesiones(List<String> sesionesProfesor) throws RemoteException {
+        for (String nombreSesion : sesionesProfesor){
+            misSesiones.add(new Sesion(nombreSesion));
+        }
     }
 
     public void addSesion(Sesion sesion) {
