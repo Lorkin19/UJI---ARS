@@ -29,6 +29,8 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         resultadosPregunta = new HashMap<>();
         resultadosAlumnos = new HashMap<>();
         this.proyector = proyector;
+        System.out.println("(Sala) Nombre de la sesion: " + miSesion.getNombre().get());
+        System.out.println("(Sala) Primera pregunta de la sesion: " + miSesion.getListaPreguntas().get(0).getEnunciado().get());
     }
 
     @Override

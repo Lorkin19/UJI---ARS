@@ -51,7 +51,7 @@ public class GestionBBDD implements IGestionBBDD {
             PreparedStatement st = connection.prepareStatement(sentencia);
             st.setString(1, usuario);
             st.setString(2, password);
-            st.setString(3,"false");
+            st.setString(3, "false");
             st.executeUpdate();
             System.out.println("Profesor creado correctamente");
             connection.close();
@@ -66,9 +66,9 @@ public class GestionBBDD implements IGestionBBDD {
     /**
      * Comprueba que exista un usuario en el sistema con usuario y password indicados.
      *
-     * @param usuario   nombre de usuario.
-     * @param password  password del usuario.
-     * @return  (true) si existe, (false) si no existe o los datos son erroneos.
+     * @param usuario  nombre de usuario.
+     * @param password password del usuario.
+     * @return (true) si existe, (false) si no existe o los datos son erroneos.
      * @throws RemoteException Si hay un error en la conexion remota.
      */
     @Override
@@ -77,20 +77,21 @@ public class GestionBBDD implements IGestionBBDD {
             Connection connection = conecta();
             String sentencia = "SELECT COUNT(*) as existe FROM profesor WHERE usuario=? and password=?";
             PreparedStatement st = connection.prepareStatement(sentencia);
-            st.setString(1,usuario);
-            st.setString(2,password);
+            st.setString(1, usuario);
+            st.setString(2, password);
             ResultSet rs = st.executeQuery();
             boolean existe = rs.getInt("existe") == 1;
             rs.close();
             connection.close();
             return (existe);
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     /**
      * Dar de baja un profesor de la base de datos.
+     *
      * @param usuario Usuario del profesor a dar de baja.
      * @throws RemoteException En caso de que se produzca algun error en la conexion con la base de datos.
      */
@@ -104,7 +105,7 @@ public class GestionBBDD implements IGestionBBDD {
             st.setBoolean(1, true);
             st.setString(2, usuario);
             st.executeQuery();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("El profesor con usuario '" + usuario + "' no existe.");
         }
     }
@@ -112,9 +113,9 @@ public class GestionBBDD implements IGestionBBDD {
     /**
      * Se registran las preguntas creadas por el profesor sobre un cuestionario de nombre x.
      *
-     * @param pregunta       La pregunta que se quiere registrar
+     * @param pregunta           La pregunta que se quiere registrar
      * @param nombreCuestionario El nombre del cuestionario al que pertenece
-     * @param usuarioProf    El usuario del profesor al que le corresponden las preguntas
+     * @param usuarioProf        El usuario del profesor al que le corresponden las preguntas
      * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
@@ -148,8 +149,8 @@ public class GestionBBDD implements IGestionBBDD {
     /**
      * Registra las diferentes opciones de respuesta a una pregunta
      *
-     * @param respuesta         Opcion de una pregunta
-     * @param idPregunta        Identificador de la pregunta a la cual corresponden las opciones
+     * @param respuesta  Opcion de una pregunta
+     * @param idPregunta Identificador de la pregunta a la cual corresponden las opciones
      */
     @Override
     public void registraRespuesta(Respuesta respuesta, int idPregunta) {
@@ -177,12 +178,14 @@ public class GestionBBDD implements IGestionBBDD {
      * Obtiene una unica sesion del profesor. Se utiliza en caso de que se quiera ejecutar una
      * sesion recien creada, ya que el servidor no tiene cargada esta sesion puesto que solo
      * se tiene en local y en la bbdd.
-     * @param usuario           Nombre de usuario del profesor.
-     * @param nombreSesion      Nombre de la sesion que se desea consultar.
-     * @return                  La sesion a ejecutar.
+     *
+     * @param usuario      Nombre de usuario del profesor.
+     * @param nombreSesion Nombre de la sesion que se desea consultar.
+     * @return La sesion a ejecutar.
      */
     public Sesion getSesionProfesor(String usuario, String nombreSesion) {
         try {
+            System.out.println("(GestionBBDD.getSesionProfesor) Llamada al metodo");
             Sesion sesion = new Sesion(nombreSesion);
             List<Pregunta> preguntas = new ArrayList<>();
             Connection connection = conecta();
@@ -197,7 +200,7 @@ public class GestionBBDD implements IGestionBBDD {
             String sentencia2 = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
             st = connection.prepareStatement(sentencia2);
             ResultSet rs2;
-            while (rs.next()){
+            while (rs.next()) {
                 pregunta = new Pregunta();
                 int idPregunta = rs.getInt("idPregunta");
                 pregunta.setEnunciado(rs.getString("enunciado"));
@@ -212,7 +215,7 @@ public class GestionBBDD implements IGestionBBDD {
             }
             connection.close();
             return sesion;
-        }catch (SQLException | NullPointerException e) {
+        } catch (SQLException | NullPointerException e) {
             System.out.println("Error al consultar la sesion");
             return null;
         }
@@ -274,14 +277,15 @@ public class GestionBBDD implements IGestionBBDD {
 
     /**
      * Permite editar una pregunta ya registrada.
-     * @param pregunta Los datos de la pregunta modificada.
-     * @param usuarioProf El usuario al que pertenece la pregunta.
+     *
+     * @param pregunta           Los datos de la pregunta modificada.
+     * @param usuarioProf        El usuario al que pertenece la pregunta.
      * @param nombreCuestionario El cuestionario al que pertenece la pregunta.
      * @throws RemoteException En el caso de que haya algun error en la conexion.
      */
     @Override
     public void editaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) {
-        try{
+        try {
             Connection connection = conecta();
             String sentence = "UPDATE Pregunta SET enunciado = ?, tiempo = ?, puntos = ? WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
             PreparedStatement st = connection.prepareStatement(sentence);
@@ -295,21 +299,22 @@ public class GestionBBDD implements IGestionBBDD {
 
             st.executeQuery();
             connection.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("La pregunta no fue encontrada.");
         }
     }
 
     /**
      * Permite eliminar una pregunta registrada.
-     * @param pregunta Pregunta que quiere eliminar.
-     * @param usuarioProf Usuario al que pertenece la pregunta.
+     *
+     * @param pregunta           Pregunta que quiere eliminar.
+     * @param usuarioProf        Usuario al que pertenece la pregunta.
      * @param nombreCuestionario Cuestionario al que pertenece la pregunta.
      * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos.
      */
     @Override
     public void eliminaPregunta(Pregunta pregunta, String usuarioProf, String nombreCuestionario) {
-        try{
+        try {
             Connection connection = conecta();
             String sentence = "DELETE FROM Pregunta WHERE usario = ? AND nombreCuestionario = ? AND enunciado = ?";
             PreparedStatement st = connection.prepareStatement(sentence);
@@ -320,7 +325,7 @@ public class GestionBBDD implements IGestionBBDD {
 
             st.executeUpdate();
             connection.close();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("La pregunta no fue encontrada.");
         }
     }
@@ -328,8 +333,9 @@ public class GestionBBDD implements IGestionBBDD {
     /**
      * Obtenemos la cantidad de sesiones que tiene un profesor para saber cuantas veces
      * hay que llamar a la funcion getSesionProfesor a la hora de cargar todas las sesiones.
-     * @param usuario   Nombre de usuario del profesor.
-     * @return          Numero de sesiones (cuestionarios) que tiene un profesor.
+     *
+     * @param usuario Nombre de usuario del profesor.
+     * @return Numero de sesiones (cuestionarios) que tiene un profesor.
      */
     @Override
     public int getNumSesionesProfesor(String usuario) {
@@ -344,8 +350,8 @@ public class GestionBBDD implements IGestionBBDD {
             int numSesiones = rs.getInt("numSesiones");
             rs.close();
             connection.close();
-            return  numSesiones;
-        } catch (SQLException e){
+            return numSesiones;
+        } catch (SQLException e) {
             System.out.println("Error: No se ha podido obtener el dato de la BBDD.");
             return -1;
         }
@@ -353,11 +359,12 @@ public class GestionBBDD implements IGestionBBDD {
 
     /**
      * Obtener las respuestas de una pregunta dada
+     *
      * @param respuestas Resto de respuestas incorrectas de la pregunta
-     * @param rs2 Resultado de la ejecucion de la sentencia SQL
+     * @param rs2        Resultado de la ejecucion de la sentencia SQL
      * @return Respuesta correcta que se asigna a la pregunta
      * @throws SQLException En el caso de que haya algun error en la obtencion de los parametros a partir del resultado
-     * de la sentencia SQL
+     *                      de la sentencia SQL
      */
     private void getRespuestas(List<Respuesta> respuestas, ResultSet rs2) throws SQLException {
         String respuesta;
@@ -395,7 +402,7 @@ public class GestionBBDD implements IGestionBBDD {
             rs.close();
 
             connection.close();
-            return idPregunta+1;
+            return idPregunta + 1;
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las preguntas");
             e.printStackTrace();
@@ -419,7 +426,7 @@ public class GestionBBDD implements IGestionBBDD {
             rs.close();
 
             connection.close();
-            return idRespuesta+1;
+            return idRespuesta + 1;
         } catch (SQLException e) {
             System.out.println("Ha ocurrido un error al obtener el último id de las respuestas");
             return 0;
@@ -428,11 +435,12 @@ public class GestionBBDD implements IGestionBBDD {
 
     /**
      * Se convierte del mapa obtenido del metodo getPreguntasProfesor a un listado de las sesiones del profesor.
+     *
      * @param misSesiones Listado al cual se quieren anyadir el resultado de obtener el mapa de sesiones y preguntas
-     * @param result Mapa que contiene el nombre de las sesiones y las preguntas correspondientes a cada sesion
+     * @param result      Mapa que contiene el nombre de las sesiones y las preguntas correspondientes a cada sesion
      */
     private void toSesion(List<Sesion> misSesiones, Map<String, List<Pregunta>> result) {
-        for (String sesion : result.keySet()){
+        for (String sesion : result.keySet()) {
             Sesion s = new Sesion(sesion);
             s.setListaPreguntas(FXCollections.observableArrayList(result.get(sesion)));
 
@@ -442,7 +450,8 @@ public class GestionBBDD implements IGestionBBDD {
 
     /**
      * Obtiene el listado de preguntas separadas por el nombre de la sesion a la que pertenecen.
-     * @param result Mapa donde se guarda el nombre  de la sesion y las preguntas correspondientes.
+     *
+     * @param result  Mapa donde se guarda el nombre  de la sesion y las preguntas correspondientes.
      * @param usuario Nombre del profesor del cual se quieren obtener las preguntas.
      * @throws SQLException En el caso de que haya algun error.
      */
@@ -454,11 +463,10 @@ public class GestionBBDD implements IGestionBBDD {
         st.setString(1, usuario);
 
         ResultSet rs = st.executeQuery();
-        Pregunta p = new Pregunta();
+        Pregunta p;
 
         String cuestionario;
         int idPregunta;
-        //String respuestaCorrecta = "";
         List<Respuesta> respuestas;
         List<Pregunta> listPreguntas;
 
@@ -474,9 +482,9 @@ public class GestionBBDD implements IGestionBBDD {
             ResultSet rs2 = st.executeQuery();
 
             respuestas = new ArrayList<>();
-            //respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
-            getRespuestas(respuestas,rs2);
+            getRespuestas(respuestas, rs2);
 
+            p = new Pregunta();
             p.setEnunciado(rs.getString("enunciado"));
             p.setRespuestas(respuestas);
             p.setTiempo(rs.getDouble("tiempo"));

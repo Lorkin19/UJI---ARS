@@ -4,10 +4,10 @@ import controlador.IController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import vista.Main;
 
 import java.io.IOException;
@@ -18,10 +18,15 @@ public class LandingPageController implements IController {
     private Stage stageSesion;
     private Stage myStage;
 
+    @FXML
+    public TextField codSala;
+
+
     @Override
     public void setMain(Main main) {
-        this.main=main;
+        this.main = main;
     }
+
     @Override
     public void setMyStage(Stage stage) {
         this.myStage = stage;
@@ -51,7 +56,7 @@ public class LandingPageController implements IController {
             controller.setPrevController(this);
 
             stageSesion.showAndWait();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -88,5 +93,49 @@ public class LandingPageController implements IController {
     /**
      * Cierra la ventana de registro o inicio de sesion (Dependiendo de cual este abierta).
      */
-    public void cierraInicio() { stageSesion.close();}
+    public void cierraInicio() {
+        stageSesion.close();
+    }
+
+
+    /**
+     * Comprueba que la sala existe.
+     * Si la sala existe, lanza la ventana para introducir el nombre del alumno.
+     * Si no existe, informa al alumno de que ha introducido mal el codigo o la sala no existe.
+     */
+    public void compruebaSala() {
+        if (main.compruebaSala(codSala.getText())) {
+            entrarSala();
+        } else {
+            main.error("Error al entrar en la sala:\n\tEl codigo es incorrecto o la sala no existe");
+        }
+    }
+
+    /**
+     * Lanza la ventana para introducir el nombre del alumno y entrar en la sala.
+     */
+    public void entrarSala() {
+        try {
+            FXMLLoader registroLoader = new FXMLLoader();
+            registroLoader.setLocation(getClass().getResource("../../vista/inicio/nombreAlumno.fxml"));
+
+            stageSesion = new Stage();
+            stageSesion.setTitle("Entrando en la sala");
+            stageSesion.initModality(Modality.WINDOW_MODAL);
+            stageSesion.initStyle(StageStyle.UTILITY);
+            stageSesion.initOwner(myStage);
+
+            Scene scene = new Scene(registroLoader.load());
+            stageSesion.setScene(scene);
+            stageSesion.setResizable(false);
+
+            NombreAlumnoController controller = registroLoader.getController();
+            controller.setMain(this.main);
+            controller.setPrevController(this);
+
+            stageSesion.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -39,12 +39,12 @@
                            <children>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="respuesta1" alignment="CENTER" contentDisplay="CENTER" layoutX="-5.0" layoutY="-6.0" minWidth="-Infinity" styleClass="label-answer-1" stylesheets="@../style/MyTheme.css" text="Respuesta 1:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Label fx:id="respuesta1" alignment="CENTER" contentDisplay="CENTER" layoutX="-5.0" layoutY="-6.0" styleClass="label-answer-1" stylesheets="@../style/MyTheme.css" text="Respuesta 1:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="respuesta3" alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="3.0" minWidth="-Infinity" styleClass="label-answer-3" stylesheets="@../style/MyTheme.css" text="Respuesta 3:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Label fx:id="respuesta3" alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="3.0" styleClass="label-answer-3" stylesheets="@../style/MyTheme.css" text="Respuesta 3:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -53,12 +53,12 @@
                            <children>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="respuesta2" alignment="CENTER" contentDisplay="CENTER" layoutX="24.0" layoutY="1.0" minWidth="-Infinity" styleClass="label-answer-2" stylesheets="@../style/MyTheme.css" text="Respuesta 2:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Label fx:id="respuesta2" alignment="CENTER" contentDisplay="CENTER" layoutX="24.0" layoutY="1.0" styleClass="label-answer-2" stylesheets="@../style/MyTheme.css" text="Respuesta 2:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="respuesta4" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="5.0" minWidth="-Infinity" styleClass="label-answer-4" stylesheets="@../style/MyTheme.css" text="Respuesta 4:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Label fx:id="respuesta4" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="5.0" styleClass="label-answer-4" stylesheets="@../style/MyTheme.css" text="Respuesta 4:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>

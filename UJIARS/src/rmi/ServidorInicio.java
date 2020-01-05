@@ -116,8 +116,10 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     @Override
     public IProfesorSala nuevaSala(String usuario, String miSesion, IProyector proyector) throws RemoteException {
         int codSala = generateCodSala();
+        System.out.println("(ServidorInicio.nuevaSala) Nombre de la sesion: " + miSesion);
         Sesion sesion = sesionesProfesores.get(usuario).get(miSesion);
         if (sesion == null) {
+            System.out.println("(ServidorInicio.nuevaSala) La sesion es nula");
             sesion = conexionBBDD.getSesionProfesor(usuario, miSesion);
         }
         IServidorSala sala = new Sala(sesion, codSala, proyector);

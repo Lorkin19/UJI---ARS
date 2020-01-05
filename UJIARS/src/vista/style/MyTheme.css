@@ -186,6 +186,11 @@ Estilos de tabla:
     -fx-font-family: "Segoe UI Semibold";
 }
 
+.text-field:hover {
+    -fx-cursor: text;
+}
+
+
 /*
 Estilos de boton
  */

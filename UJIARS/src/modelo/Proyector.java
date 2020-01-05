@@ -1,7 +1,6 @@
 package modelo;
 
 import common.IProyector;
-import controlador.proyector.CuestionarioEnProcesoController;
 import javafx.application.Platform;
 import vista.Main;
 

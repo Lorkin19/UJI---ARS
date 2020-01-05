@@ -36,13 +36,12 @@ public class Main extends Application {
     private CuestionarioEnProcesoController proyectorController;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         this.primaryStage = primaryStage;
         // Obtenemos la interfaz del servidor para poder ejecutar los metodos necesarios.
         String registryURL = "rmi://localhost:1099/UJIARS";
         getServerFromUrl(registryURL);
-
 
 
         // Creamos el loader de la pagina inicial.
@@ -77,9 +76,10 @@ public class Main extends Application {
 
     /**
      * Metodo que muestra un pop-up de error
-     * @param mensaje   Mensaje de error a mostrar
+     *
+     * @param mensaje Mensaje de error a mostrar
      */
-    public void error(String mensaje){
+    public void error(String mensaje) {
         Alert dialogoAlerta = new Alert(Alert.AlertType.WARNING);
         dialogoAlerta.setTitle("Error en el registro");
         dialogoAlerta.setHeaderText(null);
@@ -91,15 +91,15 @@ public class Main extends Application {
     /**
      * Gestiona el registro del profesor en el servidor.
      *
-     * @param usuario   nombre de usuario del profesor a registrar.
-     * @param password  contrasenya del profesor a registrar.
-     * @return  (false) si el nombre de usuario ya existe,
-     *          (true)  si el profesor se ha registrado correctamente.
+     * @param usuario  nombre de usuario del profesor a registrar.
+     * @param password contrasenya del profesor a registrar.
+     * @return (false) si el nombre de usuario ya existe,
+     * (true)  si el profesor se ha registrado correctamente.
      */
-    public boolean registraProfesor(String usuario, String password){
+    public boolean registraProfesor(String usuario, String password) {
         try {
             return servidorInicio.registraProfesor(usuario, password);
-        }catch (RemoteException re){
+        } catch (RemoteException re) {
             error("Fallo en la conexión con la base de datos.\nIntentalo mas tarde");
         }
         return true;
@@ -110,21 +110,21 @@ public class Main extends Application {
      * Inicia la sesion del profesor comprobando usuario y contrasenya. En caso de que
      * se inicie sesion correctamente, se crea un nuevo profesor con todos sus datos.
      *
-     * @param usuario   nombre de usuario del profesor que inicia sesion
-     * @param password  contrasenya del profesor que inicia sesion
-     * @return  (profesor)  en caso de que el profesor se haya logeado correctamente.
-     *          (null)      en caso de error en el inicio de sesion.
+     * @param usuario  nombre de usuario del profesor que inicia sesion
+     * @param password contrasenya del profesor que inicia sesion
+     * @return (profesor)  en caso de que el profesor se haya logeado correctamente.
+     * (null)      en caso de error en el inicio de sesion.
      */
-    public Profesor iniciaSesion(String usuario, String password){
+    public Profesor iniciaSesion(String usuario, String password) {
         try {
             boolean correcto = servidorInicio.iniciaProfesor(usuario, password);
             if (correcto) {
                 profesor = new Profesor(usuario, password);
                 servidorInicio.profesorIniciaSesion(usuario, (IProfesor) profesor);
-                return  profesor;
+                return profesor;
             }
             return null;
-        } catch (RemoteException re){
+        } catch (RemoteException re) {
             error("Fallo en la conexión con la base de datos.\nIntentalo mas tarde");
             re.printStackTrace();
             return null;
@@ -135,7 +135,7 @@ public class Main extends Application {
     /**
      * Metodo con el cual se recibe la interfaz del servidor de inicio.
      *
-     * @param registryURL   url en la que se ejecuta el servidor.
+     * @param registryURL url en la que se ejecuta el servidor.
      */
     private void getServerFromUrl(String registryURL) {
         try {
@@ -171,7 +171,7 @@ public class Main extends Application {
             controller.setProfesor(profesor);
 
 
-        } catch (IOException e){
+        } catch (IOException e) {
             String mensaje = "Error al ejecutar la ventana del profesor.";
             System.out.println(mensaje);
             error(mensaje);
@@ -182,7 +182,7 @@ public class Main extends Application {
     /**
      * Ejecuta la interfaz de creacion de nuevo cuestionario
      */
-    public void profesorCreaCuestionario(){
+    public void profesorCreaCuestionario() {
         try {
             FXMLLoader creaCuestionarioLoader = new FXMLLoader();
             creaCuestionarioLoader.setLocation(getClass().getResource("profesor/creaCuestionario.fxml"));
@@ -204,8 +204,9 @@ public class Main extends Application {
 
     /**
      * Gestiona la creacion de un nuevo cuestionario.
-     * @param nombreCuestionario    nombre del cuestionario.
-     * @param preguntas             Lista de preguntas del cuestionario.
+     *
+     * @param nombreCuestionario nombre del cuestionario.
+     * @param preguntas          Lista de preguntas del cuestionario.
      */
     public void addCuestionario(String nombreCuestionario, ObservableList<Pregunta> preguntas) {
         try {
@@ -217,14 +218,14 @@ public class Main extends Application {
             System.out.println("Almacenando el cuestionario nuevo en la bbdd");
             System.out.println("Nombre del cuestionario: " + sesion.getNombre().get());
             int idPregunta;
-            for (Pregunta pregunta : preguntas){
-                idPregunta = servidorInicio.anyadePregunta(profesor.getUsuario(),nombreCuestionario, pregunta.getEnunciado().get());
-                for (Respuesta respuesta : pregunta.getRespuestas()){
+            for (Pregunta pregunta : preguntas) {
+                idPregunta = servidorInicio.anyadePregunta(profesor.getUsuario(), nombreCuestionario, pregunta.getEnunciado().get());
+                for (Respuesta respuesta : pregunta.getRespuestas()) {
                     servidorInicio.anyadeRespuesta(idPregunta, respuesta.getRespuesta(), respuesta.isCorrecta());
                 }
             }
 
-           // servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
+            // servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
             ejecutaProfesor(profesor);
         } catch (Exception e) {
             error("Ha ocurrido un error al crear el cuestionario.\nVuelve a intentarlo mas tarde.");
@@ -234,7 +235,8 @@ public class Main extends Application {
 
     /**
      * Gestiona el borrado de un cuestionario.
-     * @param cuestionario  nombre del cuestionario a borrar.
+     *
+     * @param cuestionario nombre del cuestionario a borrar.
      */
     public void borraCuestionario(String cuestionario) {
         // TODO borrar el cuestionario tanto de la lista del profesor como de la base de datos
@@ -278,7 +280,7 @@ public class Main extends Application {
     }
 
 
-    private void ejecutaGestionaSala(Proyector proyector){
+    private void ejecutaGestionaSala(Proyector proyector) {
         try {
             FXMLLoader gestionaSalaLoader = new FXMLLoader();
             gestionaSalaLoader.setLocation(getClass().getResource("profesor/gestionaSala.fxml"));
@@ -356,4 +358,33 @@ public class Main extends Application {
     public void proyectorMuestraPregunta(String enunciado, List<String> respuestas) {
         proyectorController.setPreguntas(enunciado, respuestas);
     }
+
+    /**
+     * Busca si la sala existe o no
+     *
+     * @param codSala Codigo de la sala a la que se desea conectar.
+     * @return Si la sala existe o no
+     */
+    public boolean compruebaSala(String codSala) {
+        try {
+            System.out.println("Comprobando la existencia de la sala");
+            return servidorInicio.compruebaSala(Integer.parseInt(codSala));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @param nombreAlumno
+     * @return
+     */
+    public boolean registraAlumnoEnSala(String nombreAlumno) {
+        return false;
+    }
+
+    public void ejecutaSalaEspera() {
+
+    }
+
 }
