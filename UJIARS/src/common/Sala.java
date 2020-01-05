@@ -2,6 +2,7 @@ package common;
 
 import modelo.Pregunta;
 import modelo.Proyector;
+import modelo.Respuesta;
 import modelo.Sesion;
 
 import java.rmi.RemoteException;
@@ -20,15 +21,14 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos
 
 
-    public Sala(Sesion miSesion, int codSala) throws RemoteException {
+    public Sala(Sesion miSesion, int codSala, IProyector proyector) throws RemoteException {
         super();
         this.miSesion = miSesion;
         this.codSala = codSala;
         alumnos = new HashMap<>();
         resultadosPregunta = new HashMap<>();
         resultadosAlumnos = new HashMap<>();
-        proyector = new Proyector();
-        proyector.start();
+        this.proyector = proyector;
     }
 
     @Override
@@ -81,6 +81,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     @Override
     public void empezarPartida() throws RemoteException {
         numPreguntaActual = 0;
+        preguntaActual = miSesion.getListaPreguntas().get(numPreguntaActual);
         enviarPregunta();
     }
 
@@ -93,19 +94,26 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
      * @throws RemoteException si algo peta
      */
     private void enviarPregunta() throws RemoteException {
+        // Barajamos las preguntas.
         barajarPreguntaActual();
-
         // Resetear los resultadosPregunta
         resetResultados();
-
         // Enviar la pregunta a los alumnos y al proyector
-        notificaAlumnos();
+        //notificaAlumnos();
         notificaProyector();
 
         // TODO Falta esperar los 15 segundos (o el tiempo que sea para esa pregunta)
 
         // Visualizar los resultadosPregunta de la pregunta en el proyector
-        proyector.verResultados(resultadosPregunta);
+        //proyector.verResultados(resultadosPregunta);
+    }
+
+    /**
+     * Usado para reorganizar las respuestas de la pregunta
+     */
+    private void barajarPreguntaActual() {
+        System.out.println("Barajando las respuesstas de la pregunta: " + preguntaActual.getEnunciado().get());
+        Collections.shuffle(preguntaActual.getRespuestas());
     }
 
     private void resetResultados() {
@@ -132,13 +140,6 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     }
 
     /**
-     * Usado para reorganizar las respuestas de la pregunta
-     */
-    private void barajarPreguntaActual() {
-        Collections.shuffle(preguntaActual.getRespuestas());
-    }
-
-    /**
      * Notifica a los alumnos que hay una nueva pregunta y se la envia
      *
      * @throws RemoteException si algo peta
@@ -155,7 +156,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
      * @throws RemoteException si algo peta
      */
     private void notificaProyector() throws RemoteException{
-        proyector.verPregunta(preguntaActual);
+        String enunciado = preguntaActual.getEnunciado().get();
+        System.out.println("(sala.notificaProyector)Enunciado: " + enunciado);
+        List<String> respuestas = new ArrayList<>();
+        for (Respuesta respuesta : preguntaActual.getRespuestas()){
+            respuestas.add(respuesta.getRespuesta());
+        }
+        proyector.verPregunta(enunciado, respuestas);
     }
 
     @Override

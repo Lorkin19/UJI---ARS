@@ -3,8 +3,16 @@ package controlador.proyector;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.util.List;
+
 public class CuestionarioEnProcesoController {
 
+    @FXML
+    public Label numRespuestas;
+    @FXML
+    public Label tiempo;
+    @FXML
+    public Label pregunta;
     @FXML
     public Label respuesta1;
     @FXML
@@ -16,5 +24,11 @@ public class CuestionarioEnProcesoController {
 
 
 
-
+    public void setPreguntas(String enunciado, List<String> respuestas) {
+        pregunta.setText(enunciado);
+        respuesta1.setText(respuestas.get(0));
+        respuesta2.setText(respuestas.get(1));
+        respuesta3.setText(respuestas.get(2));
+        respuesta4.setText(respuestas.get(3));
+    }
 }

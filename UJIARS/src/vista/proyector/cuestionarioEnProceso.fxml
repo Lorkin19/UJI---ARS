@@ -8,7 +8,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #efefef;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.proyector.CuestionarioEnProcesoController">
    <children>
       <HBox alignment="CENTER" layoutX="13.600000381469727" layoutY="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
@@ -27,7 +26,7 @@
       </HBox>
       <VBox alignment="CENTER" layoutY="130.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
          <children>
-            <Label fx:id="pregunta" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" styleClass="label-pregunta-dark" stylesheets="@../style/MyTheme.css" text="Pregunta:" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+            <Label fx:id="pregunta" alignment="CENTER" contentDisplay="CENTER" styleClass="label-pregunta-dark" stylesheets="@../style/MyTheme.css" text="Pregunta:" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>

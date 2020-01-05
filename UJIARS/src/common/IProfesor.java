@@ -2,6 +2,7 @@ package common;
 
 import javafx.collections.ObservableList;
 import modelo.Pregunta;
+import modelo.Proyector;
 import modelo.Sesion;
 
 import java.rmi.Remote;
@@ -13,7 +14,7 @@ public interface IProfesor extends Remote {
 
     Pregunta crearPregunta() throws RemoteException;
 
-    void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException;
+    Proyector crearPartida(String sesion, IServidorInicio servidor) throws RemoteException;
 
     void empezarPartida() throws RemoteException;
 

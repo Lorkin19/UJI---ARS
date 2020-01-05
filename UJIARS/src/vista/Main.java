@@ -4,7 +4,10 @@ import common.IProfesor;
 import common.IServidorInicio;
 import controlador.inicio.LandingPageController;
 import controlador.profesor.CreaCuestionarioContoller;
+import controlador.profesor.GestionaSalaController;
 import controlador.profesor.HomeProfesorController;
+import controlador.proyector.CuestionarioEnProcesoController;
+import controlador.proyector.HomeProyectorController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -12,24 +15,25 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import modelo.Pregunta;
-import modelo.Profesor;
-import modelo.Respuesta;
-import modelo.Sesion;
+import modelo.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public class Main extends Application {
 
     private IServidorInicio servidorInicio = null;
     private Profesor profesor = null;
+    private Proyector proyector = null;
     private Stage primaryStage;
+    private Stage stageProyector;
     private Scene landingScene;
     private Scene profesorScene;
+    private CuestionarioEnProcesoController proyectorController;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -208,10 +212,10 @@ public class Main extends Application {
             Sesion sesion = new Sesion(nombreCuestionario);
             sesion.setListaPreguntas(preguntas);
             profesor.addSesion(sesion);
-            // TODO almacenar los datos del nuevo cuestionario (sesion) en la base de datos.
+
+            // Almacenamos en la bbdd el nuevo cuestionario.
             System.out.println("Almacenando el cuestionario nuevo en la bbdd");
             System.out.println("Nombre del cuestionario: " + sesion.getNombre().get());
-
             int idPregunta;
             for (Pregunta pregunta : preguntas){
                 idPregunta = servidorInicio.anyadePregunta(profesor.getUsuario(),nombreCuestionario, pregunta.getEnunciado().get());
@@ -259,4 +263,97 @@ public class Main extends Application {
         ejecutaProfesor(profesor);
     }
 
+    public void crearSala(String nombreSesion) {
+        try {
+            proyector = profesor.crearPartida(nombreSesion, servidorInicio);
+            proyector.setMain(this);
+            ejecutaGestionaSala(proyector);
+            ejecutaProyector(nombreSesion);
+
+        } catch (RemoteException e) {
+            System.out.println("Error al crear la sala");
+            error("Error al crear la sala.\nIntentalo mas tarde.");
+            e.printStackTrace();
+        }
+    }
+
+
+    private void ejecutaGestionaSala(Proyector proyector){
+        try {
+            FXMLLoader gestionaSalaLoader = new FXMLLoader();
+            gestionaSalaLoader.setLocation(getClass().getResource("profesor/gestionaSala.fxml"));
+
+            primaryStage.setTitle("UJI ARS - Profesor - Gestion de sala");
+            primaryStage.setResizable(true);
+
+            Scene scene = new Scene(gestionaSalaLoader.load());
+            primaryStage.setScene(scene);
+
+            GestionaSalaController controller = gestionaSalaLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(primaryStage);
+            controller.setProyector(proyector);
+
+        } catch (IOException e) {
+            error("No se ha podido ejecutar el gestor de la sala.");
+            e.printStackTrace();
+        }
+    }
+
+    private void ejecutaProyector(String tituloCuestionario) throws RemoteException {
+        try {
+            stageProyector = new Stage();
+            FXMLLoader homeProyectorLoader = new FXMLLoader();
+            homeProyectorLoader.setLocation(getClass().getResource("proyector/proyectorHome.fxml"));
+
+            stageProyector.setTitle("UJI ARS - Proyector");
+            stageProyector.setResizable(true);
+
+            Scene scene = new Scene(homeProyectorLoader.load());
+            stageProyector.setScene(scene);
+            HomeProyectorController homeController = homeProyectorLoader.getController();
+            homeController.setMain(this);
+            homeController.setMyStage(stageProyector);
+            homeController.setTituloCuestionario(tituloCuestionario);
+
+            stageProyector.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void empezarPartida() {
+        try {
+            empiezaCuestionario();
+            profesor.empezarPartida();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Ejecuta la escena del cuestionario para empezar con la primera pregunta.
+     */
+    private void empiezaCuestionario() {
+        try {
+            FXMLLoader cuestionarioLoader = new FXMLLoader();
+            cuestionarioLoader.setLocation(getClass().getResource("proyector/cuestionarioEnProceso.fxml"));
+
+            Scene scene = new Scene(cuestionarioLoader.load());
+            stageProyector.setScene(scene);
+            this.proyectorController = cuestionarioLoader.getController();
+        } catch (IOException e) {
+            System.out.println("Problema al empezar el cuestionario.");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void cierraProyector() {
+        stageProyector.close();
+    }
+
+    public void proyectorMuestraPregunta(String enunciado, List<String> respuestas) {
+        proyectorController.setPreguntas(enunciado, respuestas);
+    }
 }

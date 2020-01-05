@@ -150,7 +150,6 @@ public class GestionBBDD implements IGestionBBDD {
      *
      * @param respuesta         Opcion de una pregunta
      * @param idPregunta        Identificador de la pregunta a la cual corresponden las opciones
-     * @throws RemoteException Si hay algun error en la conexion
      */
     @Override
     public void registraRespuesta(Respuesta respuesta, int idPregunta) {
@@ -175,11 +174,55 @@ public class GestionBBDD implements IGestionBBDD {
     }
 
     /**
+     * Obtiene una unica sesion del profesor. Se utiliza en caso de que se quiera ejecutar una
+     * sesion recien creada, ya que el servidor no tiene cargada esta sesion puesto que solo
+     * se tiene en local y en la bbdd.
+     * @param usuario           Nombre de usuario del profesor.
+     * @param nombreSesion      Nombre de la sesion que se desea consultar.
+     * @return                  La sesion a ejecutar.
+     */
+    public Sesion getSesionProfesor(String usuario, String nombreSesion) {
+        try {
+            Sesion sesion = new Sesion(nombreSesion);
+            List<Pregunta> preguntas = new ArrayList<>();
+            Connection connection = conecta();
+            String sentencia = "SELECT * FROM Pregunta WHERE usuario = ? AND nombreCuestionario = ?";
+            PreparedStatement st = connection.prepareStatement(sentencia);
+            st.setString(1, usuario);
+            st.setString(2, nombreSesion);
+            ResultSet rs = st.executeQuery();
+
+            Pregunta pregunta;
+            List<Respuesta> respuestas;
+            String sentencia2 = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
+            st = connection.prepareStatement(sentencia2);
+            ResultSet rs2;
+            while (rs.next()){
+                pregunta = new Pregunta();
+                int idPregunta = rs.getInt("idPregunta");
+                pregunta.setEnunciado(rs.getString("enunciado"));
+                st.setInt(1, idPregunta);
+                rs2 = st.executeQuery();
+                respuestas = new ArrayList<>();
+                getRespuestas(respuestas, rs2);
+                pregunta.setRespuestas(respuestas);
+                pregunta.setPuntos(rs.getInt("puntos"));
+                pregunta.setTiempo(rs.getDouble("tiempo"));
+                preguntas.add(pregunta);
+            }
+            connection.close();
+            return sesion;
+        }catch (SQLException | NullPointerException e) {
+            System.out.println("Error al consultar la sesion");
+            return null;
+        }
+    }
+
+    /**
      * Se obtienen los cuestionarios creador por un profesor dado.
      *
      * @param usuario El nombre de usuario del pro fesor del cual se quieren obtener sus cuestionarios
      * @return Un mapa en el que se encuentran el nombre del cuestionario y el listado de preguntas asociadas al mismo.
-     * @throws RemoteException En el caso de que haya algun error en la conexion con la base de datos
      */
     @Override
     public List<Sesion> getSesionesProfesor(String usuario) {
@@ -416,7 +459,7 @@ public class GestionBBDD implements IGestionBBDD {
         String cuestionario;
         int idPregunta;
         //String respuestaCorrecta = "";
-        List<Respuesta> respuestas = new ArrayList<>();
+        List<Respuesta> respuestas;
         List<Pregunta> listPreguntas;
 
         sentence = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
@@ -430,6 +473,7 @@ public class GestionBBDD implements IGestionBBDD {
             st.setInt(1, idPregunta);
             ResultSet rs2 = st.executeQuery();
 
+            respuestas = new ArrayList<>();
             //respuestaCorrecta = getRespuestas(respuestaCorrecta, respuestas, rs2);
             getRespuestas(respuestas,rs2);
 

@@ -1,34 +1,35 @@
 package modelo;
 
 import common.IProyector;
+import controlador.proyector.CuestionarioEnProcesoController;
+import javafx.application.Platform;
+import vista.Main;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.Map;
 
 public class Proyector extends UnicastRemoteObject implements IProyector {
 
+    private Main main;
+
     public Proyector() throws RemoteException {
-        super();
     }
 
+
     @Override
-    public void verPregunta(Pregunta pregunta) throws RemoteException {
-        // TODO El orden en el que salen las respuestas tiene que ser aleatorio
+    public void verPregunta(String enunciado, List<String> respuestas) throws RemoteException{
         // TODO Falta mirar el tiempo disponible para contestar
-        System.out.println("Enunciado de la pregunta: " + pregunta.getEnunciado());
-        for (int i = 0; i < pregunta.getRespuestas().size(); i++) {
-            System.out.println("Respuesta " + i + ": " + pregunta.getRespuestas().get(i));
-        }
+        System.out.println("Enunciado: " + enunciado);
+        Platform.runLater(() -> main.proyectorMuestraPregunta(enunciado, respuestas));
+        //main.proyectorMuestraPregunta(enunciado, respuestas);
+
     }
 
     @Override
-    public void start() throws RemoteException {
-
-    }
-    
-    @Override
-    public void verResultados(Map<String, Integer> resultados) throws RemoteException { // TODO Cambiarlo para pasarle tambien los resultados de la pregunta
+    public void verResultados(Map<String, Integer> resultados) throws RemoteException {
+        // TODO Cambiarlo para pasarle tambien los resultados de la pregunta
         for (String respuesta : resultados.keySet()) {
             System.out.print(respuesta);
             System.out.print("-->");
@@ -36,5 +37,7 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
         }
     }
 
-
+    public void setMain(Main main) {
+        this.main = main;
+    }
 }

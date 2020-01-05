@@ -1,11 +1,7 @@
 package common;
 
-import modelo.Respuesta;
-import modelo.Sesion;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 
 public interface IServidorInicio extends Remote {
 
@@ -19,7 +15,7 @@ public interface IServidorInicio extends Remote {
 
     IAlumnoSala entrarSala(int codigoSala) throws RemoteException;
 
-    IProfesorSala nuevaSala(Sesion miSesion) throws RemoteException;
+    IProfesorSala nuevaSala(String usuario, String miSesion, IProyector proyector) throws RemoteException;
 
     void cerrarSesionProfesor(String nombreProfesor) throws RemoteException;
 

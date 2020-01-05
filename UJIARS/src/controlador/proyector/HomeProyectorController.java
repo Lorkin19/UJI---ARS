@@ -1,10 +1,16 @@
 package controlador.proyector;
 
+import controlador.IController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import vista.Main;
 
-public class HomeProyectorController {
+public class HomeProyectorController implements IController {
+
+    private Main main;
+    private Stage myStage;
 
     @FXML
     public Label nombreCuestionario;
@@ -15,6 +21,16 @@ public class HomeProyectorController {
 
     private int cantAlumnos;
 
+
+    @Override
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
+    @Override
+    public void setMyStage(Stage myStage) {
+        this.myStage = myStage;
+    }
 
     public synchronized void setAlumno(String nombre){
         int[] posicion = getPosicion();
@@ -31,4 +47,7 @@ public class HomeProyectorController {
         return posicion;
     }
 
+    public void setTituloCuestionario(String tituloCuestionario) {
+        nombreCuestionario.setText("Cuestionario: " + tituloCuestionario);
+    }
 }

@@ -16,7 +16,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     private Map<String, IProfesor> profesoresConectados;
     private Map<Integer, IServidorSala> salas;
-    private Map<String, List<Sesion>> sesionesProfesores;
+    private Map<String, Map<String, Sesion>> sesionesProfesores;
     private GestionBBDD conexionBBDD;
 
     ServidorInicio() throws RemoteException {
@@ -60,7 +60,11 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
             //int numSesiones = conexionBBDD.getNumSesionesProfesor(usuario);
 
             List<Sesion> sesionesProfesor = conexionBBDD.getSesionesProfesor(usuario);
-            sesionesProfesores.put(usuario, sesionesProfesor);
+            Map<String, Sesion> sesiones = new HashMap<>();
+            for (Sesion miSesion : sesionesProfesor){
+                sesiones.put(miSesion.getNombre().get(), miSesion);
+            }
+            sesionesProfesores.put(usuario, sesiones);
 
             List<String> nombreSesiones = new ArrayList<>();
             for (Sesion sesion : sesionesProfesor){
@@ -110,10 +114,15 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     @Override
-    public IProfesorSala nuevaSala(Sesion miSesion) throws RemoteException {
+    public IProfesorSala nuevaSala(String usuario, String miSesion, IProyector proyector) throws RemoteException {
         int codSala = generateCodSala();
-        IServidorSala sala = new Sala(miSesion, codSala);
+        Sesion sesion = sesionesProfesores.get(usuario).get(miSesion);
+        if (sesion == null) {
+            sesion = conexionBBDD.getSesionProfesor(usuario, miSesion);
+        }
+        IServidorSala sala = new Sala(sesion, codSala, proyector);
         salas.put(codSala, sala);
+
         return sala;
     }
 
@@ -144,6 +153,14 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         salas.remove(codSala);
     }
 
+    /**
+     * Registra una nueva pregunta de un cuestionario
+     * @param usuario               Nombre de usuario del profesor.
+     * @param nombreCuestionario    Nombre del cuestionario.
+     * @param enunciado             Enunciado de la pregunta.
+     * @return  Id de la pregunta.
+     * @throws RemoteException  Si algo peta.
+     */
     @Override
     public int anyadePregunta(String usuario, String nombreCuestionario, String enunciado) throws RemoteException {
         System.out.println("Anyadiendo pregunta del profesor " + usuario);
@@ -152,6 +169,13 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
         return conexionBBDD.registraPregunta(pregunta, nombreCuestionario, usuario);
     }
 
+    /**
+     * Registra una respuesta de una pregunta.
+     * @param idPregunta    Id de la pregunta a la que corresponde la respuesta.
+     * @param opcion        Respuesta a la pregunta.
+     * @param correcta      Si la pregunta es correcta o no.
+     * @throws RemoteException si algo peta.
+     */
     @Override
     public void anyadeRespuesta(int idPregunta, String opcion, boolean correcta) throws RemoteException {
         System.out.println("\tAnyadiendo respuesta a la pregunta");

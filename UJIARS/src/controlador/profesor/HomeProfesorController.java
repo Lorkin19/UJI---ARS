@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import modelo.Profesor;
+import modelo.Proyector;
 import modelo.Sesion;
 import vista.Main;
 
@@ -115,6 +116,7 @@ public class HomeProfesorController implements IController {
      */
     public void ejecutaCuestionario() {
         // TODO gestionar la ejecucion de cuestionarios.
-
+        main.crearSala(sesionSeleccionada.getNombre().get());
     }
+
 }

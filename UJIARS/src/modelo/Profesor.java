@@ -1,6 +1,7 @@
 package modelo;
 
 import common.IProfesor;
+import common.IProyector;
 import common.IServidorInicio;
 import common.IProfesorSala;
 import javafx.collections.FXCollections;
@@ -17,6 +18,7 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     private ObservableList<Sesion> misSesiones;
     private FactorySesion factorySesion;
     private FactoryPregunta factoryPregunta;
+    private Proyector proyector;
 
     public Profesor(String usuario, String password) throws RemoteException {
         this.usuario = usuario;
@@ -49,8 +51,6 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
 
     /**
      * Usado para crear una sesion
-     * Las preguntas solo se pueden crear cuando creas una sesion (Provisional)
-     * Las sesiones tienen inicialmente un numero fijo de preguntas (Provisional)
      *
      * @param numPreguntas numero de preguntas de la sesion a crear
      */
@@ -76,18 +76,21 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     /**
      * Usado para crear la sala que alojara la partida
      *
-     * @param sesion sesion que se utilizara para la partida
+     * @param nombreSesion nombre de la sesion que se utilizara para la partida
      * @param servidor servidor que se encargara de crear la partida
      * @throws RemoteException si algo peta
      */
     @Override
-    public void crearPartida(Sesion sesion, IServidorInicio servidor) throws RemoteException {
-        sala = servidor.nuevaSala(sesion);
+    public Proyector crearPartida(String nombreSesion, IServidorInicio servidor) throws RemoteException {
+        proyector = new Proyector();
+        System.out.println("(Profesor.crearPartida)NombreSesion: " + nombreSesion);
+        sala = servidor.nuevaSala(this.usuario, nombreSesion, (IProyector) proyector);
+        return proyector;
     }
 
     /**
      * Usado por el profesor para empezar una partida
-     * Indica a la sala que tiene que avisar a los alumno
+     * Indica a la sala que tiene que avisar a los alumnos
      *
      * @throws RemoteException si algo peta
      */
