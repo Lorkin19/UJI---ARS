@@ -102,15 +102,17 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     }
 
     /**
-     * Entrar a la sala
-     *
-     * @param codigoSala codigo de la sala de la partida
-     * @return la sala, null si no existe
-     * @throws RemoteException si algo peta
+     * Comprueba que no haya un alumno con el nombre
+     * @param codigoSala
+     * @param alumno
+     * @return
+     * @throws RemoteException
      */
     @Override
-    public IAlumnoSala entrarSala(int codigoSala) throws RemoteException {
-        return salas.get(codigoSala);
+    public IAlumnoSala entrarSala(int codigoSala, IAlumno alumno) throws RemoteException {
+        if (salas.get(codigoSala).addAlumno(alumno))
+            return (IAlumnoSala) salas.get(codigoSala);
+        return null;
     }
 
     @Override

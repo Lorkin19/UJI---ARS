@@ -13,7 +13,7 @@
       <HBox alignment="CENTER" layoutX="13.600000381469727" layoutY="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
             <Line endX="230.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />
-            <Label fx:id="tiempo" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" style="-fx-border-color: #2f2f2f; -fx-border-radius: 20;" text="Tiempo: 15" textAlignment="CENTER" textFill="#2f2f2f">
+            <Label fx:id="tiempo" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" style="-fx-border-color: #2f2f2f; -fx-border-radius: 20;" styleClass="label-topper-dark" stylesheets="@../style/MyTheme.css" text="Tiempo: 15" textAlignment="CENTER" textFill="#2f2f2f">
                <font>
                   <Font name="Lobster" size="64.0" />
                </font>

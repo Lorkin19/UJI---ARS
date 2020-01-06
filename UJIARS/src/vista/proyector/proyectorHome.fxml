@@ -1,30 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #efefef;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.proyector.HomeProyectorController">
    <children>
-      <Label alignment="CENTER" layoutX="7.0" layoutY="14.0" prefHeight="68.0" prefWidth="800.0" text="Prepárate" textAlignment="CENTER" textFill="#2f2f2f" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
-         <font>
-            <Font name="Lobster" size="64.0" />
-         </font>
-      </Label>
-      <Line endX="260.0" fill="WHITE" layoutY="60.0" stroke="#2f2f2f" strokeWidth="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0" />
-      <Line endX="260.0" fill="#1c1c1c" layoutX="10.0" layoutY="70.0" stroke="#2f2f2f" strokeWidth="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
-      <Label fx:id="nombreCuestionario" alignment="CENTER" contentDisplay="CENTER" layoutX="249.0" layoutY="145.0" prefHeight="100.0" prefWidth="520.0" styleClass="label-dark-subtitle" stylesheets="@../style/MyTheme.css" text="Cuestionario: Nombre cuestionario" wrapText="true" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="130.0" />
-      <Label alignment="CENTER" layoutY="242.0" prefHeight="68.0" prefWidth="800.0" text="Alumnos" textAlignment="CENTER" textFill="#2f2f2f" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="242.0">
-         <font>
-            <Font name="Lobster" size="64.0" />
-         </font>
-      </Label>
-      <Line endX="270.0" fill="WHITE" layoutX="538.0" layoutY="283.0" stroke="#2f2f2f" strokeWidth="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="280.0" />
-      <Line endX="270.0" fill="WHITE" layoutX="1.0" layoutY="281.0" stroke="#2f2f2f" strokeWidth="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="280.0" />
+      <HBox alignment="CENTER" layoutY="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Line endX="250.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />
+            <Label alignment="CENTER" minWidth="-Infinity" styleClass="label-topper-dark" stylesheets="@../style/MyTheme.css" text="Prepárate" textAlignment="CENTER" textFill="#2f2f2f">
+               <font>
+                  <Font name="Lobster" size="64.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Label>
+            <Line endX="250.0" fill="#1c1c1c" stroke="#2f2f2f" strokeWidth="3.0" />
+         </children>
+      </HBox>
+      <TextFlow layoutX="60.0" layoutY="150.0" textAlignment="CENTER" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="140.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="label-dark-subtitle" stylesheets="@../style/MyTheme.css" text="Codigo de sala: " wrapText="true" />
+            <Label fx:id="codigoSala" alignment="CENTER" contentDisplay="CENTER" styleClass="label-pregunta-dark" stylesheets="@../style/MyTheme.css" text="XXXXXX" wrapText="true">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </TextFlow>
+      <HBox alignment="CENTER" layoutY="242.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Line endX="250.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />
+            <Label alignment="CENTER" minWidth="-Infinity" styleClass="label-topper-dark" stylesheets="@../style/MyTheme.css" text="Alumnos" textAlignment="CENTER" textFill="#2f2f2f">
+               <font>
+                  <Font name="Lobster" size="64.0" />
+               </font>
+            </Label>
+            <Line endX="250.0" fill="BLACK" stroke="#2f2f2f" strokeWidth="3.0" />
+         </children>
+      </HBox>
       <Label layoutX="386.0" layoutY="569.0" styleClass="label-dark" stylesheets="@../style/MyTheme.css" text="Nº de alumnos:" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" />
       <Label fx:id="numAlumnos" layoutX="132.0" layoutY="571.0" styleClass="label-dark" stylesheets="@../style/MyTheme.css" text="0/20" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="130.0" />
       <AnchorPane layoutX="40.0" layoutY="339.5" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="340.0">

@@ -13,7 +13,7 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
     private IServidorInicio servidor;
     private IAlumnoSala sala;
 
-    protected Alumno(String nombre, IServidorInicio servidor) throws RemoteException {
+    public Alumno(String nombre, IServidorInicio servidor) throws RemoteException {
         super();
         this.nombre = nombre;
         this.servidor = servidor;
@@ -25,9 +25,14 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
     }
 
     @Override
-    public void unirseASala(int codSala) throws RemoteException {
-        sala = servidor.entrarSala(codSala);
+    public boolean unirseASala(int codSala) throws RemoteException {
+        sala = servidor.entrarSala(codSala, (IAlumno) this);
+        if (sala == null) {
+            System.out.println("(Alumno.unirseASala) No has podido unirte a la sala");
+            return false;
+        }
         System.out.println("Has entrado en la sala. Esperando a que empiece la partida");
+        return true;
     }
 
     @Override
@@ -52,5 +57,9 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
         }
     }
 
+    @Override
+    public void muestraPregunta() throws RemoteException{
+
+    }
 
 }

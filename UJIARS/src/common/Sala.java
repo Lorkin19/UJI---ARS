@@ -1,7 +1,6 @@
 package common;
 
 import modelo.Pregunta;
-import modelo.Proyector;
 import modelo.Respuesta;
 import modelo.Sesion;
 
@@ -30,11 +29,10 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         resultadosAlumnos = new HashMap<>();
         this.proyector = proyector;
         System.out.println("(Sala) Nombre de la sesion: " + miSesion.getNombre().get());
-        System.out.println("(Sala) Primera pregunta de la sesion: " + miSesion.getListaPreguntas().get(0).getEnunciado().get());
     }
 
     @Override
-    public int getCodSala() throws RemoteException{
+    public int getCodSala() throws RemoteException {
         return codSala;
     }
 
@@ -53,6 +51,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         }
         alumnos.put(alumno.getNombre(), alumno);
         resultadosAlumnos.put(alumno.getNombre(), 0);
+        proyector.anyadeAlumno(alumno.getNombre());
         return true;
     }
 
@@ -60,7 +59,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
      * La sala analiza la respuesta del alumno y le indica si ha acertado o no
      *
      * @param nombreAlumno nombre del alumno que realiza la respuesta
-     * @param respuesta respuesta seleccionada por el alumno
+     * @param respuesta    respuesta seleccionada por el alumno
      * @throws RemoteException si algo peta
      */
     @Override
@@ -157,11 +156,11 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
      *
      * @throws RemoteException si algo peta
      */
-    private void notificaProyector() throws RemoteException{
+    private void notificaProyector() throws RemoteException {
         String enunciado = preguntaActual.getEnunciado().get();
         System.out.println("(sala.notificaProyector)Enunciado: " + enunciado);
         List<String> respuestas = new ArrayList<>();
-        for (Respuesta respuesta : preguntaActual.getRespuestas()){
+        for (Respuesta respuesta : preguntaActual.getRespuestas()) {
             respuestas.add(respuesta.getRespuesta());
         }
         proyector.verPregunta(enunciado, respuestas);

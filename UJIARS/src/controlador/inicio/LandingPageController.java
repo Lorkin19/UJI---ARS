@@ -104,32 +104,40 @@ public class LandingPageController implements IController {
      * Si no existe, informa al alumno de que ha introducido mal el codigo o la sala no existe.
      */
     public void compruebaSala() {
-        if (main.compruebaSala(codSala.getText())) {
-            entrarSala();
+        int codigoSala = -1;
+        try {
+            codigoSala = Integer.parseInt(codSala.getText());
+        } catch (Exception e){
+            System.out.println("Codigo invalido");
+            main.error("Codigo de sala invalido");
+            return;
+        }
+        if (main.compruebaSala(codigoSala)) {
+            introduceNombreAlumno();
         } else {
-            main.error("Error al entrar en la sala:\n\tEl codigo es incorrecto o la sala no existe");
+            main.error("Error al entrar en la sala:\nEl codigo es incorrecto o la sala no existe");
         }
     }
 
     /**
      * Lanza la ventana para introducir el nombre del alumno y entrar en la sala.
      */
-    public void entrarSala() {
+    public void introduceNombreAlumno() {
         try {
-            FXMLLoader registroLoader = new FXMLLoader();
-            registroLoader.setLocation(getClass().getResource("../../vista/inicio/nombreAlumno.fxml"));
+            FXMLLoader nombreLoader = new FXMLLoader();
+            nombreLoader.setLocation(getClass().getResource("../../vista/inicio/nombreAlumno.fxml"));
 
             stageSesion = new Stage();
-            stageSesion.setTitle("Entrando en la sala");
+            stageSesion.setTitle("Nombre del alumno");
             stageSesion.initModality(Modality.WINDOW_MODAL);
             stageSesion.initStyle(StageStyle.UTILITY);
             stageSesion.initOwner(myStage);
 
-            Scene scene = new Scene(registroLoader.load());
+            Scene scene = new Scene(nombreLoader.load());
             stageSesion.setScene(scene);
             stageSesion.setResizable(false);
 
-            NombreAlumnoController controller = registroLoader.getController();
+            NombreAlumnoController controller = nombreLoader.getController();
             controller.setMain(this.main);
             controller.setPrevController(this);
 
@@ -137,5 +145,9 @@ public class LandingPageController implements IController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean entraEnSala(String nombreAlumno){
+        return main.registraAlumnoEnSala(nombreAlumno, Integer.parseInt(codSala.getText()));
     }
 }

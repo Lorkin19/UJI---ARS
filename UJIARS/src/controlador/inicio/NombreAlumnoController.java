@@ -36,8 +36,8 @@ public class NombreAlumnoController implements IController {
             main.error("El nombre debe tener menos de 15 caracteres");
             return;
         }
-        if (main.registraAlumnoEnSala(nombreAlumno.getText())) {
-            System.out.println("Nombre de alumno disponible");
+        if (prevController.entraEnSala(nombreAlumno.getText())) {
+            System.out.println("(NombreAlumnoController) Nombre de alumno disponible");
             prevController.cierraInicio();
             main.ejecutaSalaEspera();
         } else {

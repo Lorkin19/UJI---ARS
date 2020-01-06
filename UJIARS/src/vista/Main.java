@@ -2,6 +2,7 @@ package vista;
 
 import common.IProfesor;
 import common.IServidorInicio;
+import controlador.alumno.ZonaDeEsperaController;
 import controlador.inicio.LandingPageController;
 import controlador.profesor.CreaCuestionarioContoller;
 import controlador.profesor.GestionaSalaController;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import modelo.*;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -29,11 +31,11 @@ public class Main extends Application {
     private IServidorInicio servidorInicio = null;
     private Profesor profesor = null;
     private Proyector proyector = null;
+    private Alumno alumno = null;
     private Stage primaryStage;
     private Stage stageProyector;
     private Scene landingScene;
     private Scene profesorScene;
-    private CuestionarioEnProcesoController proyectorController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -268,9 +270,14 @@ public class Main extends Application {
     public void crearSala(String nombreSesion) {
         try {
             proyector = profesor.crearPartida(nombreSesion, servidorInicio);
-            proyector.setMain(this);
-            ejecutaGestionaSala(proyector);
-            ejecutaProyector(nombreSesion);
+            int codSala = profesor.getCodSala();
+            if (codSala == -1) {
+                error("Error al crear la sala.");
+            } else {
+                proyector.setMain(this);
+                ejecutaGestionaSala(proyector);
+                ejecutaProyector(codSala);
+            }
 
         } catch (RemoteException e) {
             System.out.println("Error al crear la sala");
@@ -280,6 +287,10 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Ejecuta la ventana del profesor con la que este gestiona la sala pasando de pregunta.
+     * @param proyector
+     */
     private void ejecutaGestionaSala(Proyector proyector) {
         try {
             FXMLLoader gestionaSalaLoader = new FXMLLoader();
@@ -302,7 +313,15 @@ public class Main extends Application {
         }
     }
 
-    private void ejecutaProyector(String tituloCuestionario) throws RemoteException {
+    /**
+     * Ejecuta la ventana del proyector donde se muestran preguntas, respuestas
+     * y resultados de los cuestionarios.
+     * Inicialmente muestra la pantalla con el codigo de la sala y los nombres
+     * de los alumnos que se conectan a esta.
+     * @param codSala               Codigo de la sala.
+     * @throws RemoteException      Si hay algun problema de conexion.
+     */
+    private void ejecutaProyector(int codSala) throws RemoteException {
         try {
             stageProyector = new Stage();
             FXMLLoader homeProyectorLoader = new FXMLLoader();
@@ -316,7 +335,8 @@ public class Main extends Application {
             HomeProyectorController homeController = homeProyectorLoader.getController();
             homeController.setMain(this);
             homeController.setMyStage(stageProyector);
-            homeController.setTituloCuestionario(tituloCuestionario);
+            homeController.setCodSala(codSala);
+            proyector.setHomeProyectorController(homeController);
 
             stageProyector.showAndWait();
         } catch (IOException e) {
@@ -343,7 +363,9 @@ public class Main extends Application {
 
             Scene scene = new Scene(cuestionarioLoader.load());
             stageProyector.setScene(scene);
-            this.proyectorController = cuestionarioLoader.getController();
+            proyector.setCuestionarioEnProcesoController(cuestionarioLoader.getController());
+            //this.proyectorController = cuestionarioLoader.getController();
+
         } catch (IOException e) {
             System.out.println("Problema al empezar el cuestionario.");
             e.printStackTrace();
@@ -355,20 +377,16 @@ public class Main extends Application {
         stageProyector.close();
     }
 
-    public void proyectorMuestraPregunta(String enunciado, List<String> respuestas) {
-        proyectorController.setPreguntas(enunciado, respuestas);
-    }
-
     /**
      * Busca si la sala existe o no
      *
      * @param codSala Codigo de la sala a la que se desea conectar.
      * @return Si la sala existe o no
      */
-    public boolean compruebaSala(String codSala) {
+    public boolean compruebaSala(int codSala) {
         try {
             System.out.println("Comprobando la existencia de la sala");
-            return servidorInicio.compruebaSala(Integer.parseInt(codSala));
+            return servidorInicio.compruebaSala(codSala);
         } catch (RemoteException e) {
             e.printStackTrace();
             return false;
@@ -379,12 +397,38 @@ public class Main extends Application {
      * @param nombreAlumno
      * @return
      */
-    public boolean registraAlumnoEnSala(String nombreAlumno) {
+    public boolean registraAlumnoEnSala(String nombreAlumno, int codSala) {
+        try {
+            alumno = new Alumno(nombreAlumno, servidorInicio);
+            return alumno.unirseASala(codSala);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
+    /**
+     * Ejecutamos la sala de espera del alumno hasta que el profesor empiece el cuestionario.
+     */
     public void ejecutaSalaEspera() {
+        System.out.println("(Main.ejecutaSalaEspera)");
+        try {
+            FXMLLoader alumnoLoader = new FXMLLoader();
+            alumnoLoader.setLocation(getClass().getResource("alumno/zonaDeEspera.fxml"));
 
+            primaryStage.setTitle("UJI ARS - " + alumno.getNombre() + " - Sala de espera");
+            primaryStage.setResizable(true);
+
+            profesorScene = new Scene(alumnoLoader.load());
+            primaryStage.setScene(profesorScene);
+
+            ZonaDeEsperaController controller = alumnoLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(primaryStage);
+            controller.setAlumno(alumno);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

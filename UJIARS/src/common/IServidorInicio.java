@@ -13,7 +13,7 @@ public interface IServidorInicio extends Remote {
 
     boolean compruebaSala(int codigoSala) throws RemoteException;
 
-    IAlumnoSala entrarSala(int codigoSala) throws RemoteException;
+    IAlumnoSala entrarSala(int codigoSala, IAlumno alumno) throws RemoteException;
 
     IProfesorSala nuevaSala(String usuario, String miSesion, IProyector proyector) throws RemoteException;
 

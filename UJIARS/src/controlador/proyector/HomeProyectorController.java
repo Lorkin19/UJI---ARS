@@ -13,7 +13,7 @@ public class HomeProyectorController implements IController {
     private Stage myStage;
 
     @FXML
-    public Label nombreCuestionario;
+    public Label codigoSala;
     @FXML
     public Label numAlumnos;
     @FXML
@@ -36,8 +36,16 @@ public class HomeProyectorController implements IController {
         int[] posicion = getPosicion();
         cantAlumnos++;
         Label alumno = new Label(nombre);
-        gridPane.add(alumno, posicion[0], posicion[1]);
+        setLabelStyle(alumno);
+        gridPane.add(alumno, posicion[1], posicion[0]);
         numAlumnos.setText(cantAlumnos + "/20");
+    }
+
+    private void setLabelStyle(Label alumno) {
+        String style = "-fx-font-size: 16pt;" +
+                "    -fx-font-family: \"Segoe UI Semibold\";" +
+                "    -fx-text-fill: #1c1c1c;";
+        alumno.setStyle(style);
     }
 
     private int[] getPosicion(){
@@ -47,7 +55,7 @@ public class HomeProyectorController implements IController {
         return posicion;
     }
 
-    public void setTituloCuestionario(String tituloCuestionario) {
-        nombreCuestionario.setText("Cuestionario: " + tituloCuestionario);
+    public void setCodSala(int codSala) {
+        codigoSala.setText("" + codSala);
     }
 }

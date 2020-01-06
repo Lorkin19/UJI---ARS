@@ -1,6 +1,8 @@
 package modelo;
 
 import common.IProyector;
+import controlador.proyector.CuestionarioEnProcesoController;
+import controlador.proyector.HomeProyectorController;
 import javafx.application.Platform;
 import vista.Main;
 
@@ -12,18 +14,31 @@ import java.util.Map;
 public class Proyector extends UnicastRemoteObject implements IProyector {
 
     private Main main;
+    private HomeProyectorController homeProyectorController;
+    private CuestionarioEnProcesoController cuestionarioEnProcesoController;
 
     public Proyector() throws RemoteException {
     }
 
+    public void setHomeProyectorController(HomeProyectorController homeProyectorController) {
+        this.homeProyectorController = homeProyectorController;
+    }
+
+    public void setCuestionarioEnProcesoController(CuestionarioEnProcesoController cuestionarioEnProcesoController) {
+        this.cuestionarioEnProcesoController = cuestionarioEnProcesoController;
+    }
+
+
+    @Override
+    public void anyadeAlumno(String nombreAlumno) throws RemoteException {
+        Platform.runLater(() -> homeProyectorController.setAlumno(nombreAlumno));
+    }
 
     @Override
     public void verPregunta(String enunciado, List<String> respuestas) throws RemoteException{
         // TODO Falta mirar el tiempo disponible para contestar
         System.out.println("Enunciado: " + enunciado);
-        Platform.runLater(() -> main.proyectorMuestraPregunta(enunciado, respuestas));
-        //main.proyectorMuestraPregunta(enunciado, respuestas);
-
+        Platform.runLater(() -> cuestionarioEnProcesoController.setPreguntas(enunciado, respuestas));
     }
 
     @Override

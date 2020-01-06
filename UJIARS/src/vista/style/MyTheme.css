@@ -58,6 +58,18 @@
     -fx-opacity: 1;
 }
 
+.label-topper-dark {
+    -fx-font-size: 64;
+    -fx-font-family: "Lobster";
+    -fx-text-fill: #2f2f2f;
+    -fx-opacity: 1;
+    -fx-border-color: #2f2f2f;
+    -fx-border-radius: 20;
+    -fx-alignment: center;
+    -fx-content-display: center;
+    -fx-padding: 5 20 5 20;
+}
+
 .label-pregunta {
     -fx-font-size: 24pt;
     -fx-font-family: "Segoe UI Semibold";

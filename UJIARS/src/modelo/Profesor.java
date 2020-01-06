@@ -145,4 +145,16 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     public void addSesion(Sesion sesion) {
         misSesiones.add(sesion);
     }
+
+    /**
+     * Obtiene el codigo de la sala que ha ejecutado para mostrarlo en el proyector.
+     */
+    public int getCodSala(){
+        try {
+            return sala.getCodSala();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
