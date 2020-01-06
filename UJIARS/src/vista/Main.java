@@ -394,8 +394,12 @@ public class Main extends Application {
     }
 
     /**
-     * @param nombreAlumno
-     * @return
+     * Se crea un nuevo alumno y se une a la sala en caso de que no haya
+     * otro alumno con el mismo nombre.
+     * @param nombreAlumno  Nombre del alumno que entra en la sala.
+     * @return  (true)  si el alumno ha entrado correctamente en la sala.
+     *          (false) si ha habido algun problema o ya existe otro alumno
+     *                  con el mismo nombre.
      */
     public boolean registraAlumnoEnSala(String nombreAlumno, int codSala) {
         try {
@@ -426,6 +430,7 @@ public class Main extends Application {
             controller.setMain(this);
             controller.setMyStage(primaryStage);
             controller.setAlumno(alumno);
+            controller.setNombreAlumno(alumno.getNombre());
         }catch (IOException e) {
             e.printStackTrace();
         }
