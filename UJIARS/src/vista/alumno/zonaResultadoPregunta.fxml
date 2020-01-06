@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane fx:id="background" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E03A3E;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.alumno.ZonaResultadoPreguntaController">
+   <children>
+      <HBox alignment="CENTER" layoutY="192.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <ImageView fx:id="gif" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="textoResultado" styleClass="label-white-subtitle" stylesheets="@../style/MyTheme.css" text="Incorrecto" />
+                  <Label fx:id="textoExtra" styleClass="label-white-subtitle" stylesheets="@../style/MyTheme.css" text="Haber estudiao" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

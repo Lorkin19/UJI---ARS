@@ -51,6 +51,11 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
         }
     }
 
+    @Override
+    public void setTimer(String tiempo) throws RemoteException {
+        Platform.runLater(() -> cuestionarioEnProcesoController.setTimer(tiempo));
+    }
+
     public void setMain(Main main) {
         this.main = main;
     }

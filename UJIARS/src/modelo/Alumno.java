@@ -3,20 +3,27 @@ package modelo;
 import common.IAlumno;
 import common.IAlumnoSala;
 import common.IServidorInicio;
+import controlador.alumno.ZonaRespondeController;
+import javafx.application.Platform;
+import vista.Main;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 public class Alumno extends UnicastRemoteObject implements IAlumno {
 
     private String nombre;
     private IServidorInicio servidor;
     private IAlumnoSala sala;
+    private Main main;
+    private ZonaRespondeController zonaRespondeController;
 
-    public Alumno(String nombre, IServidorInicio servidor) throws RemoteException {
+    public Alumno(String nombre, Main main, IServidorInicio servidor) throws RemoteException {
         super();
         this.nombre = nombre;
         this.servidor = servidor;
+        this.main = main;
     }
 
     @Override
@@ -36,20 +43,19 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
     }
 
     @Override
-    public void responderPregunta(Pregunta pregunta) throws RemoteException {
+    public void muestraPregunta(List<String> respuestas) throws RemoteException {
         // TODO El orden en el que salen las respuestas tiene que ser aleatorio
         // TODO Falta mirar el tiempo disponible para contestar
-        System.out.println("Enunciado de la pregunta: " + pregunta.getEnunciado());
-        for (int i = 0; i < pregunta.getRespuestas().size(); i++) {
-            System.out.println("Respuesta " + i + ": " + pregunta.getRespuestas().get(i));
-        }
-        // TODO ¿Como hacer que el alumno seleccione una pregunta? Supongo que con JavaFX se hara facilmente
-        // De momento, pongo que automaticamente contesta la respuesta correcta (Provisional)
-        //sala.alumnoResponde(nombre, pregunta.getRespuestaCorrecta());
+        Platform.runLater(() -> main.alumnoMuestraPregunta());
+        Platform.runLater(() -> zonaRespondeController.respuesta1.setText(respuestas.get(0)));
+        Platform.runLater(() -> zonaRespondeController.respuesta2.setText(respuestas.get(1)));
+        Platform.runLater(() -> zonaRespondeController.respuesta3.setText(respuestas.get(2)));
+        Platform.runLater(() -> zonaRespondeController.respuesta4.setText(respuestas.get(3)));
     }
 
     @Override
     public void verResultadoPregunta(boolean acierto) throws RemoteException {
+        Platform.runLater(() -> main.alumnoMuestraResultadoPregunta(acierto));
         if (acierto) {
             System.out.println("Respuesta acertada");
         } else {
@@ -58,8 +64,16 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
     }
 
     @Override
-    public void muestraPregunta() throws RemoteException{
-
+    public void setTimer(String timer) throws RemoteException {
+        Platform.runLater(() -> zonaRespondeController.setTimer(timer));
     }
 
+    @Override
+    public void respondePregunta(String respuestaSeleccionada) throws RemoteException {
+        sala.alumnoResponde(nombre, respuestaSeleccionada);
+    }
+
+    public void setRespondeController(ZonaRespondeController controller) {
+        this.zonaRespondeController = controller;
+    }
 }

@@ -39,7 +39,7 @@ public class NombreAlumnoController implements IController {
         if (prevController.entraEnSala(nombreAlumno.getText())) {
             System.out.println("(NombreAlumnoController) Nombre de alumno disponible");
             prevController.cierraInicio();
-            main.ejecutaSalaEspera();
+            main.ejecutaSalaEspera("Espera a que empiece el cuestionario :)");
         } else {
             main.error("Ya existe un alumno en la sala con ese nombre.\nIntroduce otro nombre distinto.");
         }

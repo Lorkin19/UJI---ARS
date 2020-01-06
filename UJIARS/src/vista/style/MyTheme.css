@@ -211,6 +211,17 @@ Estilos de tabla:
     -fx-cursor: text;
 }
 
+/*
+Estilo del split pane
+ */
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane *.split-pane-divider {
+    -fx-background-color: transparent;
+}
+
 
 /*
 Estilos de boton

@@ -31,4 +31,11 @@ public class CuestionarioEnProcesoController {
         respuesta3.setText(respuestas.get(2));
         respuesta4.setText(respuestas.get(3));
     }
+
+    public void setTimer(String tiempo) {
+        if (Integer.parseInt(tiempo) <= 3){
+            this.tiempo.setStyle("-fx-text-fill: white;-fx-background-color: red;-fx-background-radius: 20;");
+        }
+        this.tiempo.setText("Tiempo: " + tiempo);
+    }
 }

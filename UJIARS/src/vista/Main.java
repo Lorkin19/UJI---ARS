@@ -3,11 +3,12 @@ package vista;
 import common.IProfesor;
 import common.IServidorInicio;
 import controlador.alumno.ZonaDeEsperaController;
+import controlador.alumno.ZonaRespondeController;
+import controlador.alumno.ZonaResultadoPreguntaController;
 import controlador.inicio.LandingPageController;
 import controlador.profesor.CreaCuestionarioContoller;
 import controlador.profesor.GestionaSalaController;
 import controlador.profesor.HomeProfesorController;
-import controlador.proyector.CuestionarioEnProcesoController;
 import controlador.proyector.HomeProyectorController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -18,13 +19,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import modelo.*;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -35,7 +34,6 @@ public class Main extends Application {
     private Stage primaryStage;
     private Stage stageProyector;
     private Scene landingScene;
-    private Scene profesorScene;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -164,7 +162,7 @@ public class Main extends Application {
             primaryStage.setResizable(true);
             //primaryStage.initStyle(StageStyle.DECORATED);
 
-            profesorScene = new Scene(profesorLoader.load());
+            Scene profesorScene = new Scene(profesorLoader.load());
             primaryStage.setScene(profesorScene);
 
             HomeProfesorController controller = profesorLoader.getController();
@@ -289,6 +287,7 @@ public class Main extends Application {
 
     /**
      * Ejecuta la ventana del profesor con la que este gestiona la sala pasando de pregunta.
+     *
      * @param proyector
      */
     private void ejecutaGestionaSala(Proyector proyector) {
@@ -318,8 +317,9 @@ public class Main extends Application {
      * y resultados de los cuestionarios.
      * Inicialmente muestra la pantalla con el codigo de la sala y los nombres
      * de los alumnos que se conectan a esta.
-     * @param codSala               Codigo de la sala.
-     * @throws RemoteException      Si hay algun problema de conexion.
+     *
+     * @param codSala Codigo de la sala.
+     * @throws RemoteException Si hay algun problema de conexion.
      */
     private void ejecutaProyector(int codSala) throws RemoteException {
         try {
@@ -396,14 +396,15 @@ public class Main extends Application {
     /**
      * Se crea un nuevo alumno y se une a la sala en caso de que no haya
      * otro alumno con el mismo nombre.
-     * @param nombreAlumno  Nombre del alumno que entra en la sala.
-     * @return  (true)  si el alumno ha entrado correctamente en la sala.
-     *          (false) si ha habido algun problema o ya existe otro alumno
-     *                  con el mismo nombre.
+     *
+     * @param nombreAlumno Nombre del alumno que entra en la sala.
+     * @return (true)  si el alumno ha entrado correctamente en la sala.
+     * (false) si ha habido algun problema o ya existe otro alumno
+     * con el mismo nombre.
      */
     public boolean registraAlumnoEnSala(String nombreAlumno, int codSala) {
         try {
-            alumno = new Alumno(nombreAlumno, servidorInicio);
+            alumno = new Alumno(nombreAlumno, this, servidorInicio);
             return alumno.unirseASala(codSala);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -414,26 +415,68 @@ public class Main extends Application {
     /**
      * Ejecutamos la sala de espera del alumno hasta que el profesor empiece el cuestionario.
      */
-    public void ejecutaSalaEspera() {
+    public void ejecutaSalaEspera(String textoDeEspera) {
         System.out.println("(Main.ejecutaSalaEspera)");
         try {
             FXMLLoader alumnoLoader = new FXMLLoader();
             alumnoLoader.setLocation(getClass().getResource("alumno/zonaDeEspera.fxml"));
 
             primaryStage.setTitle("UJI ARS - " + alumno.getNombre() + " - Sala de espera");
-            primaryStage.setResizable(true);
+            primaryStage.setResizable(false);
 
-            profesorScene = new Scene(alumnoLoader.load());
-            primaryStage.setScene(profesorScene);
+            Scene alumnoScene = new Scene(alumnoLoader.load());
+            primaryStage.setScene(alumnoScene);
 
             ZonaDeEsperaController controller = alumnoLoader.getController();
             controller.setMain(this);
             controller.setMyStage(primaryStage);
-            controller.setAlumno(alumno);
-            controller.setNombreAlumno(alumno.getNombre());
-        }catch (IOException e) {
+            controller.nombreAlumno.setText(alumno.getNombre());
+            controller.textoDeEspera.setText(textoDeEspera);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void alumnoMuestraPregunta() {
+        System.out.println("(Main.alumnoMuestraPregunta)");
+        try {
+            FXMLLoader alumnoLoader = new FXMLLoader();
+            alumnoLoader.setLocation(getClass().getResource("alumno/zonaResponde.fxml"));
+
+            primaryStage.setTitle("UJI ARS - " + alumno.getNombre() + " - Responde");
+            primaryStage.setResizable(true);
+
+            Scene alumnoScene = new Scene(alumnoLoader.load());
+            primaryStage.setScene(alumnoScene);
+
+            ZonaRespondeController controller = alumnoLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(primaryStage);
+            controller.setAlumno(alumno);
+            alumno.setRespondeController(controller);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void alumnoMuestraResultadoPregunta(boolean resultado) {
+        System.out.println("(Main.alumnoMuestraResultadoPregunta)");
+        try {
+            FXMLLoader alumnoLoader = new FXMLLoader();
+            alumnoLoader.setLocation(getClass().getResource("alumno/zonaResultadoPregunta.fxml"));
+
+            primaryStage.setTitle("UJI ARS - " + alumno.getNombre() + " - respuesta");
+            primaryStage.setResizable(true);
+
+            Scene alumnoScene = new Scene(alumnoLoader.load());
+            primaryStage.setScene(alumnoScene);
+
+            ZonaResultadoPreguntaController controller = alumnoLoader.getController();
+            controller.setMain(this);
+            controller.setMyStage(primaryStage);
+            controller.setResultado(resultado);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

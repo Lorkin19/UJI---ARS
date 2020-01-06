@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.alumno.ZonaRespondeController">
+   <children>
+      <HBox alignment="CENTER" layoutX="23.600000381469727" layoutY="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Line endX="100.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />
+            <Label fx:id="tiempo" alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" style="-fx-border-color: #2f2f2f; -fx-border-radius: 20;" styleClass="label-topper-dark" stylesheets="@../style/MyTheme.css" text="Tiempo: 15" textAlignment="CENTER" textFill="#2f2f2f">
+               <font>
+                  <Font name="Lobster" size="64.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Label>
+            <Line endX="100.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />
+         </children>
+      </HBox>
+      <AnchorPane layoutX="10.0" layoutY="140.0" prefWidth="800.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="120.0">
+         <children>
+            <SplitPane dividerPositions="0.5" layoutX="20.0" stylesheets="@../style/MyTheme.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <items>
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" stylesheets="@../style/MyTheme.css">
+                     <items>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="respuesta1" alignment="CENTER" contentDisplay="CENTER" layoutX="-5.0" layoutY="-6.0" onMouseClicked="#responde1" styleClass="label-answer-1" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <cursor>
+                                    <Cursor fx:constant="OPEN_HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="respuesta3" alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="3.0" onMouseClicked="#responde3" styleClass="label-answer-3" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <cursor>
+                                    <Cursor fx:constant="OPEN_HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" stylesheets="@../style/MyTheme.css">
+                     <items>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="respuesta2" alignment="CENTER" contentDisplay="CENTER" layoutX="24.0" layoutY="1.0" onMouseClicked="#responde2" styleClass="label-answer-2" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <cursor>
+                                    <Cursor fx:constant="OPEN_HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="respuesta4" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="5.0" onMouseClicked="#responde4" styleClass="label-answer-4" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <cursor>
+                                    <Cursor fx:constant="OPEN_HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

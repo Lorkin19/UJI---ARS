@@ -477,7 +477,6 @@ public class GestionBBDD implements IGestionBBDD {
             idPregunta = rs.getInt("idPregunta");
             cuestionario = rs.getString("nombreCuestionario");
 
-
             st.setInt(1, idPregunta);
             ResultSet rs2 = st.executeQuery();
 
