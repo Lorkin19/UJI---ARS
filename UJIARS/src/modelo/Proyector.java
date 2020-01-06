@@ -36,19 +36,13 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
 
     @Override
     public void verPregunta(String enunciado, List<String> respuestas) throws RemoteException{
-        // TODO Falta mirar el tiempo disponible para contestar
         System.out.println("Enunciado: " + enunciado);
         Platform.runLater(() -> cuestionarioEnProcesoController.setPreguntas(enunciado, respuestas));
     }
 
     @Override
     public void verResultados(Map<String, Integer> resultados) throws RemoteException {
-        // TODO Cambiarlo para pasarle tambien los resultados de la pregunta
-        for (String respuesta : resultados.keySet()) {
-            System.out.print(respuesta);
-            System.out.print("-->");
-            System.out.println(resultados.get(respuesta));
-        }
+        // TODO Mostrar los resultados de una pregunta
     }
 
     @Override

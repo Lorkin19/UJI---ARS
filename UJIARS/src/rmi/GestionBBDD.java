@@ -457,7 +457,7 @@ public class GestionBBDD implements IGestionBBDD {
      */
     private void getPreguntasProfesor(Map<String, List<Pregunta>> result, String usuario) throws SQLException {
         Connection connection = conecta();
-        String sentence = "SELECT * FROM Pregunta WHERE usuario = ? GROUP BY nombreCuestionario";
+        String sentence = "SELECT * FROM Pregunta WHERE usuario = ?";
         PreparedStatement st = connection.prepareStatement(sentence);
 
         st.setString(1, usuario);
@@ -470,15 +470,16 @@ public class GestionBBDD implements IGestionBBDD {
         List<Respuesta> respuestas;
         List<Pregunta> listPreguntas;
 
-        sentence = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
-        st = connection.prepareStatement(sentence);
+        String sentence2 = "SELECT opcion, correcta FROM Respuesta WHERE idPregunta = ?";
+        PreparedStatement st2 = connection.prepareStatement(sentence2);
 
         while (rs.next()) {
             idPregunta = rs.getInt("idPregunta");
             cuestionario = rs.getString("nombreCuestionario");
+            System.out.println("(GestionBBDD.getPreguntasProfesor) Cargando pregunta con id " + idPregunta + " del cuestionario: " + cuestionario);
 
-            st.setInt(1, idPregunta);
-            ResultSet rs2 = st.executeQuery();
+            st2.setInt(1, idPregunta);
+            ResultSet rs2 = st2.executeQuery();
 
             respuestas = new ArrayList<>();
             getRespuestas(respuestas, rs2);

@@ -273,7 +273,7 @@ public class Main extends Application {
                 error("Error al crear la sala.");
             } else {
                 proyector.setMain(this);
-                ejecutaGestionaSala(proyector);
+                ejecutaGestionaSala();
                 ejecutaProyector(codSala);
             }
 
@@ -288,9 +288,8 @@ public class Main extends Application {
     /**
      * Ejecuta la ventana del profesor con la que este gestiona la sala pasando de pregunta.
      *
-     * @param proyector
      */
-    private void ejecutaGestionaSala(Proyector proyector) {
+    private void ejecutaGestionaSala() {
         try {
             FXMLLoader gestionaSalaLoader = new FXMLLoader();
             gestionaSalaLoader.setLocation(getClass().getResource("profesor/gestionaSala.fxml"));
@@ -304,7 +303,8 @@ public class Main extends Application {
             GestionaSalaController controller = gestionaSalaLoader.getController();
             controller.setMain(this);
             controller.setMyStage(primaryStage);
-            controller.setProyector(proyector);
+            controller.setProfesor(profesor);
+            profesor.setGestionaSalaController(controller);
 
         } catch (IOException e) {
             error("No se ha podido ejecutar el gestor de la sala.");

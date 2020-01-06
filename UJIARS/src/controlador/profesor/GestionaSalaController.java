@@ -1,7 +1,10 @@
 package controlador.profesor;
 
 import controlador.IController;
-import javafx.scene.input.MouseEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import modelo.Profesor;
 import modelo.Proyector;
@@ -9,12 +12,20 @@ import vista.Main;
 
 import java.rmi.RemoteException;
 
+
 public class GestionaSalaController implements IController {
 
     private Main main;
     private Stage myStage;
     private Profesor profesor;
-    private Proyector proyector;
+
+    @FXML
+    public HBox zonaEmpiezaPartida;
+    @FXML
+    public Label pregunta;
+    @FXML
+    public Button botonSiguiente;
+
 
     @Override
     public void setMain(Main main) {
@@ -25,19 +36,26 @@ public class GestionaSalaController implements IController {
         this.myStage = myStage;
     }
 
-    public void setProyector(Proyector proyector){
-        this.proyector = proyector;
+    public void setProfesor(Profesor profesor){
+        this.profesor = profesor;
     }
-
 
     /**
      * Avisa al proyector para que muestre la primera pregunta.
      */
     public void empezarPartida() {
+        zonaEmpiezaPartida.setDisable(true);
+        botonSiguiente.setDisable(false);
         main.empezarPartida();
     }
 
-
+    public void pasaPregunta() {
+        try {
+            profesor.pasarDePregunta();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -52,6 +70,11 @@ public class GestionaSalaController implements IController {
      */
     public void cancelar() {
         main.cierraProyector();
+        try {
+            profesor.finalizarPartida();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         main.ejecutaProfesorActual();
     }
 

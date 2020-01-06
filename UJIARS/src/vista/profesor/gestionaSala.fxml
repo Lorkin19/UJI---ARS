@@ -9,7 +9,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5821F;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.profesor.GestionaSalaController">
    <children>
       <Label alignment="CENTER" layoutX="96.0" layoutY="24.0" text="Profesor - Gestión del cuestionario" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="0.0">
@@ -19,10 +18,10 @@
       </Label>
       <Button layoutX="743.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#cerrarSesion" stylesheets="@../style/MyTheme.css" text="Cerrar sesión" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="10.0" />
       <Line endX="900.0" layoutX="155.0" layoutY="60.0" stroke="WHITE" strokeWidth="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
-      <HBox alignment="CENTER" layoutX="40.0" prefHeight="120.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+      <HBox fx:id="zonaEmpiezaPartida" alignment="CENTER" layoutX="40.0" prefHeight="120.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
          <children>
             <Label styleClass="label-respuestas" stylesheets="@../style/MyTheme.css" text="¿Han entrado todos los alumnos?" />
-            <Button contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#empezarPartida" stylesheets="@../style/MyTheme.css" text="Empezar partida" />
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#empezarPartida" styleClass="buttonInicio" stylesheets="@../style/MyTheme.css" text="Empezar partida" />
          </children>
       </HBox>
       <Line endX="900.0" layoutX="165.0" layoutY="70.0" stroke="WHITE" strokeWidth="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.39999999999997726" AnchorPane.topAnchor="200.0" />
@@ -30,7 +29,7 @@
          <children>
             <HBox spacing="15.0">
                <children>
-                  <AnchorPane HBox.hgrow="ALWAYS">
+                  <AnchorPane>
                      <children>
                         <Label styleClass="label-white-subtitle" stylesheets="@../style/MyTheme.css" text="Pregunta actual:" AnchorPane.leftAnchor="0.0">
                            <padding>
@@ -39,7 +38,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="pregunta" alignment="CENTER" contentDisplay="CENTER" styleClass="label-pregunta" stylesheets="@../style/MyTheme.css" text="Aqui se introduce la pregunta que esta acutalmente en el cuestionario." wrapText="true" HBox.hgrow="ALWAYS">
+                  <Label fx:id="pregunta" alignment="CENTER" contentDisplay="CENTER" styleClass="label-pregunta" stylesheets="@../style/MyTheme.css" wrapText="true" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -48,13 +47,11 @@
             </HBox>
             <VBox alignment="CENTER" spacing="30.0">
                <children>
-                  <Button mnemonicParsing="false" stylesheets="@../style/MyTheme.css" text="Siguiente Pregunta" />
-                  <Button mnemonicParsing="false" stylesheets="@../style/MyTheme.css" text="Mostrar Resultados" />
-                  <Button mnemonicParsing="false" stylesheets="@../style/MyTheme.css" text="Finalizar" />
+                  <Button fx:id="botonSiguiente" disable="true" mnemonicParsing="false" onAction="#pasaPregunta" styleClass="buttonInicio" stylesheets="@../style/MyTheme.css" text="Siguiente" />
+                  <Button mnemonicParsing="false" onMouseClicked="#cancelar" styleClass="buttonInicio-pequenyo" stylesheets="@../style/MyTheme.css" text="Finalizar" />
                </children>
             </VBox>
          </children>
       </VBox>
-      <Button layoutX="827.0" layoutY="374.0" mnemonicParsing="false" onMouseClicked="#cancelar" stylesheets="@../style/MyTheme.css" text="Volver" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="40.0" />
    </children>
 </AnchorPane>

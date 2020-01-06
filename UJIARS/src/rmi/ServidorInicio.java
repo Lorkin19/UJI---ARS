@@ -56,9 +56,6 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
     public void profesorIniciaSesion(String usuario, IProfesor profesor) throws RemoteException {
         // Si el profesor ya esta conectado, no dejarle volver a iniciar sesion
         if (!profesoresConectados.containsKey(usuario)) {
-            // TODO cargar en la instancia del profesor todo lo que tiene.
-            //int numSesiones = conexionBBDD.getNumSesionesProfesor(usuario);
-
             List<Sesion> sesionesProfesor = conexionBBDD.getSesionesProfesor(usuario);
             Map<String, Sesion> sesiones = new HashMap<>();
             for (Sesion miSesion : sesionesProfesor){
@@ -124,7 +121,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
             System.out.println("(ServidorInicio.nuevaSala) La sesion es nula");
             sesion = conexionBBDD.getSesionProfesor(usuario, miSesion);
         }
-        IServidorSala sala = new Sala(sesion, codSala, proyector);
+        IServidorSala sala = new Sala(sesion, codSala, proyector, profesoresConectados.get(usuario));
         salas.put(codSala, sala);
 
         return sala;

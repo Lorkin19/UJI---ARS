@@ -4,6 +4,8 @@ import common.IProfesor;
 import common.IProyector;
 import common.IServidorInicio;
 import common.IProfesorSala;
+import controlador.profesor.GestionaSalaController;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,10 +17,12 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     private String usuario;
     private String password;
     private IProfesorSala sala;
+    private IServidorInicio servidor;
     private ObservableList<Sesion> misSesiones;
     private FactorySesion factorySesion;
     private FactoryPregunta factoryPregunta;
     private Proyector proyector;
+    private GestionaSalaController gestionaSalaController;
 
     public Profesor(String usuario, String password) throws RemoteException {
         this.usuario = usuario;
@@ -49,6 +53,14 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
     }
 
 
+    public void setServidor(IServidorInicio servidor){
+        this.servidor = servidor;
+    }
+
+    public void setGestionaSalaController(GestionaSalaController controller) {
+        this.gestionaSalaController = controller;
+    }
+
     /**
      * Usado para crear una sesion
      *
@@ -56,10 +68,9 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      */
     @Override
     public void crearSesion(int numPreguntas) throws RemoteException {
-        String nombre = ""; // TODO Se sacara de JavaFX supongo
+        String nombre = "";
         Sesion s = factorySesion.crearSesion(nombre, numPreguntas, factoryPregunta);
         misSesiones.add(s);
-        // TODO añadir la sesion a la BBDD tambien
     }
 
     /**
@@ -126,11 +137,10 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
      * Usado por el profesor para indicar al servidor que la partida ha finalizado
      * Una vez llamado a este metodo, la sala y la partida se borran
      *
-     * @param servidor servidor encargado de finalizar la partida
      * @throws RemoteException si algo peta
      */
     @Override
-    public void finalizarPartida(IServidorInicio servidor) throws RemoteException {
+    public void finalizarPartida() throws RemoteException {
         servidor.finalizarPartida(sala.getCodSala());
         sala = null;
     }
@@ -140,6 +150,11 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         for (String nombreSesion : sesionesProfesor){
             misSesiones.add(new Sesion(nombreSesion));
         }
+    }
+
+    @Override
+    public void muestraEnunciado(String enunciado) throws RemoteException {
+        Platform.runLater(() -> gestionaSalaController.pregunta.setText(enunciado));
     }
 
     public void addSesion(Sesion sesion) {

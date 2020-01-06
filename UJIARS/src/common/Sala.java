@@ -16,13 +16,14 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     private int numPreguntaActual;
     private Pregunta preguntaActual;
     private IProyector proyector;
+    private IProfesor profesor;
     private Map<String, Integer> resultadosPregunta;  // Guardar los datos de las respuestas de la pregunta actual
-    private Map<String, Boolean> alumnoAciertoActual;
+    private Map<String, Boolean> alumnoAciertoActual; // Guarda la lista de alumnos y si han acertado o no la pregunta
     // TODO Cambiar resultadosPregunta a List para guardar todos los datos de la preguntas y sus respuestas y mostrarlo al final (estadisticas, pregunta mas acertada, pregunta mas fallada...)
     private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos
 
 
-    public Sala(Sesion miSesion, int codSala, IProyector proyector) throws RemoteException {
+    public Sala(Sesion miSesion, int codSala, IProyector proyector, IProfesor profesor) throws RemoteException {
         super();
         this.miSesion = miSesion;
         this.codSala = codSala;
@@ -31,6 +32,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         resultadosAlumnos = new HashMap<>();
         alumnoAciertoActual = new HashMap<>();
         this.proyector = proyector;
+        this.profesor = profesor;
         System.out.println("(Sala) Nombre de la sesion: " + miSesion.getNombre().get());
     }
 
@@ -112,7 +114,6 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         notificaPreguntaAlumnos();
         notificaPreguntaProyector();
 
-        // TODO Falta esperar los 15 segundos (o el tiempo que sea para esa pregunta)
         startTimer((int)preguntaActual.getTiempo());
         // Visualizar los resultadosPregunta de la pregunta en el proyector
         //proyector.verResultados(resultadosPregunta);
@@ -133,18 +134,19 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
                     e.printStackTrace();
                 }
                 if (timeCount == 0) {
-                    stopTimer();
+                    finDeTiempo();
                 }
             }
         };
         timer.schedule(timerTask, 0, 1500);
     }
 
-    private void stopTimer() {
+    private void finDeTiempo() {
         timer.cancel();
         for (IAlumno alumno : alumnos.values()) {
             try {
                 alumno.verResultadoPregunta(alumnoAciertoActual.get(alumno.getNombre()));
+                // TODO mostrar los resultados de la pregunta en el proyector
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -180,7 +182,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     @Override
     public void pasarDePregunta() throws RemoteException {
         // Para guardarse una referencia a la pregunta actual de la sesion
+
+        timer.cancel();
         numPreguntaActual++;
+        if (miSesion.getListaPreguntas().size() <= numPreguntaActual) {
+            verResultadosPartida();
+            return;
+        }
         preguntaActual = miSesion.getListaPreguntas().get(numPreguntaActual);
 
         enviarPregunta();
@@ -214,11 +222,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
             respuestas.add(respuesta.getRespuesta());
         }
         proyector.verPregunta(enunciado, respuestas);
+        profesor.muestraEnunciado(enunciado);
     }
 
     @Override
     public void verResultadosPartida() throws RemoteException {
         // TODO Enviar al proyector los datos de los alumnos con mas respuestas acertadas
+        System.out.println("Mostrando resultados finales");
     }
 
 

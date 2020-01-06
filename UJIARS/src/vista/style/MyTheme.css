@@ -246,6 +246,13 @@ Estilos de boton
     -fx-border-radius: 5;
 }
 
+.buttonInicio-pequenyo {
+    -fx-font-family: "Lobster";
+    -fx-font-size: 18pt;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
 .button:hover {
     -fx-background-color: #e9e9e9;
     -fx-cursor: hand;

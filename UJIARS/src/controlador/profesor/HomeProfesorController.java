@@ -115,7 +115,6 @@ public class HomeProfesorController implements IController {
      * Ejecuta el cuestionario seleccionado.
      */
     public void ejecutaCuestionario() {
-        // TODO gestionar la ejecucion de cuestionarios.
         main.crearSala(sesionSeleccionada.getNombre().get());
     }
 

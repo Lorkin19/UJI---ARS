@@ -24,8 +24,9 @@ public interface IProfesor extends Remote {
 
     void verResultadosPartida() throws RemoteException;
 
-    void finalizarPartida(IServidorInicio servidor) throws RemoteException;
+    void finalizarPartida() throws RemoteException;
 
     void cargarSesiones(List<String> sesionesProfesor) throws RemoteException;
 
+    void muestraEnunciado(String enunciado) throws RemoteException;
 }

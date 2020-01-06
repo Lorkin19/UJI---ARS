@@ -44,8 +44,6 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
 
     @Override
     public void muestraPregunta(List<String> respuestas) throws RemoteException {
-        // TODO El orden en el que salen las respuestas tiene que ser aleatorio
-        // TODO Falta mirar el tiempo disponible para contestar
         Platform.runLater(() -> main.alumnoMuestraPregunta());
         Platform.runLater(() -> zonaRespondeController.respuesta1.setText(respuestas.get(0)));
         Platform.runLater(() -> zonaRespondeController.respuesta2.setText(respuestas.get(1)));
