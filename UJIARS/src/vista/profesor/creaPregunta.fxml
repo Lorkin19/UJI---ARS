@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #F5821F;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.profesor.CreaPreguntaController">
    <children>
-      <TextArea fx:id="enunciado" layoutX="29.0" layoutY="77.0" prefHeight="200.0" prefWidth="471.0" promptText="Introduce el enunciado de la pregunta" wrapText="true" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
+      <TextArea fx:id="enunciado" layoutX="29.0" layoutY="77.0" prefHeight="200.0" prefWidth="471.0" promptText="Introduce el enunciado de la pregunta" wrapText="true" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="90.0">
          <cursor>
             <Cursor fx:constant="TEXT" />
          </cursor>
@@ -101,5 +101,15 @@
          </cursor>
       </RadioButton>
       <Button layoutX="229.0" layoutY="455.0" mnemonicParsing="false" onAction="#crearPregunta" stylesheets="@../style/MyTheme.css" text="Crear Pregunta" AnchorPane.bottomAnchor="12.0" />
+      <RadioButton fx:id="doblePuntuacion" layoutX="422.0" layoutY="90.0" mnemonicParsing="false" styleClass="label-white" stylesheets="@../style/MyTheme.css" text="Doble puntuación" AnchorPane.leftAnchor="420.0" AnchorPane.topAnchor="90.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="dobleTiempo" layoutX="424.0" layoutY="125.0" mnemonicParsing="false" styleClass="label-white" stylesheets="@../style/MyTheme.css" text="Doble tiempo" AnchorPane.leftAnchor="420.0" AnchorPane.topAnchor="130.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </RadioButton>
    </children>
 </AnchorPane>

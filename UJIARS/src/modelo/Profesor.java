@@ -174,4 +174,13 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         }
         return -1;
     }
+
+
+    public void muestraRanking() {
+        try {
+            sala.muestraRanking();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 }

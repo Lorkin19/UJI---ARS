@@ -1,20 +1,14 @@
 package controlador.profesor;
 
 import controlador.IController;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import modelo.Profesor;
-import modelo.Proyector;
 import modelo.Sesion;
 import vista.Main;
-
-import java.rmi.RemoteException;
 
 
 public class HomeProfesorController implements IController {
@@ -37,15 +31,16 @@ public class HomeProfesorController implements IController {
     public void setMain(Main main) {
         this.main = main;
     }
+
     @Override
     public void setMyStage(Stage myStage) {
-        this.myStage=myStage;
+        this.myStage = myStage;
     }
 
 
     public void setProfesor(Profesor profesor) {
-        this.profesor=profesor;
-        if (!profesor.getMisSesiones().isEmpty()){
+        this.profesor = profesor;
+        if (!profesor.getMisSesiones().isEmpty()) {
             tablaCuestionarios.setItems(profesor.getMisSesiones());
         }
     }
@@ -72,7 +67,7 @@ public class HomeProfesorController implements IController {
      *
      * @param sesion Sesion seleccionada en la tabla de cuestionarios del profesor.
      */
-    private void seleccion(Sesion sesion){
+    private void seleccion(Sesion sesion) {
         this.sesionSeleccionada = sesion;
         editar.setDisable(false);
         borrar.setDisable(false);
@@ -82,7 +77,7 @@ public class HomeProfesorController implements IController {
      * Lanza una nueva ventana en la que crea un nuevo cuestionario.
      */
     @FXML
-    private void creaCuestionario(){
+    private void creaCuestionario() {
         main.profesorCreaCuestionario();
         editar.setDisable(true);
         borrar.setDisable(true);

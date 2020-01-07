@@ -35,6 +35,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#nuevaPregunta" stylesheets="@../style/MyTheme.css" text="Nueva pregunta" />
             <Button fx:id="edita" mnemonicParsing="false" onAction="#editaPregunta" stylesheets="@../style/MyTheme.css" text="Editar Pregunta" />
+            <Button fx:id="borra" mnemonicParsing="false" onAction="#borra" stylesheets="@../style/MyTheme.css" text="Borrar Pregunta" />
          </children>
       </HBox>
       <Label alignment="CENTER" layoutX="32.0" layoutY="559.0" text="UJI-ARS" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="20.0">

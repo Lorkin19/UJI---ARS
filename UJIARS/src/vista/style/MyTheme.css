@@ -16,6 +16,20 @@
     -fx-opacity: 1;
 }
 
+.label-ranking-top {
+    -fx-font-size: 48pt;
+    -fx-font-family: "Lobster";
+    -fx-text-fill: #1c1c1c;
+    -fx-opacity: 1;
+}
+
+.label-ranking {
+    -fx-font-size: 36pt;
+    -fx-font-family: "Lobster";
+    -fx-text-fill: #1c1c1c;
+    -fx-opacity: 1;
+}
+
 .label-dark {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";

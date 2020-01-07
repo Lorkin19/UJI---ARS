@@ -12,4 +12,6 @@ public interface IProfesorSala extends Remote {
     void verResultadosPartida() throws RemoteException;
 
     int getCodSala() throws RemoteException;
+
+    void muestraRanking() throws RemoteException;
 }

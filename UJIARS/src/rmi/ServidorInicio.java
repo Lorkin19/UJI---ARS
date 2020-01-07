@@ -164,10 +164,12 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
      * @throws RemoteException  Si algo peta.
      */
     @Override
-    public int anyadePregunta(String usuario, String nombreCuestionario, String enunciado) throws RemoteException {
+    public int anyadePregunta(String usuario, String nombreCuestionario, String enunciado, int puntos, double tiempo) throws RemoteException {
         System.out.println("Anyadiendo pregunta del profesor " + usuario);
         Pregunta pregunta = new Pregunta();
         pregunta.setEnunciado(enunciado);
+        pregunta.setTiempo(tiempo);
+        pregunta.setPuntos(puntos);
         return conexionBBDD.registraPregunta(pregunta, nombreCuestionario, usuario);
     }
 

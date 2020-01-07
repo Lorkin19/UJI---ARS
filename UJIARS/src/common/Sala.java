@@ -1,6 +1,7 @@
 package common;
 
 import modelo.Pregunta;
+import modelo.Proyector;
 import modelo.Respuesta;
 import modelo.Sesion;
 
@@ -39,6 +40,11 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     @Override
     public int getCodSala() throws RemoteException {
         return codSala;
+    }
+
+    @Override
+    public void muestraRanking() throws RemoteException {
+        proyector.verRanking(resultadosAlumnos, false);
     }
 
 
@@ -91,7 +97,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         resultadosPregunta.put(respuesta, resultadosPregunta.get(respuesta) +1 );
         if (acierto)
             // Actualizamos la cantidad de aciertos del alumno
-            resultadosAlumnos.put(nombreAlumno, resultadosAlumnos.get(nombreAlumno) + 1);
+            resultadosAlumnos.put(nombreAlumno, resultadosAlumnos.get(nombreAlumno) + preguntaActual.getPuntos());
         if (alumnoAciertoActual.size() == alumnos.size()) {
             finDeTiempo();
         }
@@ -164,9 +170,6 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
                 }
                 List<Integer> numRespuestas = new ArrayList<>(resultadosPregunta.values());
                 proyector.muestraResultadoPregunta(correctas, numRespuestas);
-                for (String nombreAlumno : resultadosAlumnos.keySet()){
-                    System.out.println("Resultado de " + nombreAlumno + ": " + resultadosAlumnos.get(nombreAlumno));
-                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -246,6 +249,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     public void verResultadosPartida() throws RemoteException {
         // TODO Enviar al proyector los datos de los alumnos con mas respuestas acertadas
         System.out.println("Mostrando resultados finales");
+        proyector.verRanking(resultadosAlumnos, true);
     }
 
 

@@ -21,7 +21,7 @@ public interface IServidorInicio extends Remote {
 
     void finalizarPartida(int codSala) throws RemoteException;
 
-    int anyadePregunta(String usuario, String nombreCuestionario, String enunciado) throws RemoteException;
+    int anyadePregunta(String usuario, String nombreCuestionario, String enunciado, int puntos, double tiempo) throws RemoteException;
 
     void anyadeRespuesta(int idPregunta, String respuesta, boolean correcta) throws RemoteException;
 }

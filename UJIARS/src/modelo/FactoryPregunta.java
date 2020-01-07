@@ -21,15 +21,11 @@ public class FactoryPregunta {
      * @return la pregunta ya creada
      */
     public Pregunta crearPregunta() {
-        Pregunta p = new Pregunta();
-        p.setEnunciado("");
-        String respuestaCorrecta = "";
-        //p.setRespuestaCorrecta(respuestaCorrecta);
-        //p.setRespuestas(Arrays.asList("", "", "", respuestaCorrecta));
-        // TODO Mirar lo de los distintos tipos de preguntas
-        p = new ExtraPoints(p, 0);  // Provisional
-        p = new ExtraTime(p, 0);  // Provisional
-        return p;
+        return new Pregunta();
+    }
+
+    public Pregunta crearPreguntaDecorada(int extraPoints, int extraTime){
+        return new ExtraPoints(new ExtraTime(new Pregunta(), extraTime), extraPoints);
     }
 
 

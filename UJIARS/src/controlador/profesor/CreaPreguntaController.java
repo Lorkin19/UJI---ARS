@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import modelo.FactoryPregunta;
 import modelo.Pregunta;
 import modelo.Respuesta;
 import vista.Main;
@@ -15,9 +16,16 @@ import java.util.List;
 
 public class CreaPreguntaController implements IController {
 
+
     private Main main;
     private Stage myStage;
+    private int tiempoDoble=15;
+    private int puntosDobles=1;
 
+    @FXML
+    public RadioButton doblePuntuacion;
+    @FXML
+    public RadioButton dobleTiempo;
     @FXML
     public TextArea enunciado;
     @FXML
@@ -53,6 +61,7 @@ public class CreaPreguntaController implements IController {
     }
 
     private CreaCuestionarioContoller prevController;
+    private FactoryPregunta factoryPregunta = FactoryPregunta.getInstance();
 
 
     /**
@@ -63,7 +72,21 @@ public class CreaPreguntaController implements IController {
      * Se aceptan tanto varias como ninguna respuesta correcta.
      */
     public void crearPregunta() {
-        Pregunta pregunta = new Pregunta();
+        Pregunta pregunta;
+        if (doblePuntuacion.isSelected() && dobleTiempo.isSelected()) {
+            pregunta = factoryPregunta.crearPreguntaDecorada(puntosDobles, tiempoDoble);
+        } else {
+            if (dobleTiempo.isSelected()) {
+                pregunta = factoryPregunta.crearPreguntaDecorada(0, tiempoDoble);
+            } else {
+                if (doblePuntuacion.isSelected()) {
+                    pregunta = factoryPregunta.crearPreguntaDecorada(puntosDobles, 0);
+                } else {
+                    pregunta = factoryPregunta.crearPregunta();
+                }
+            }
+        }
+
         pregunta.setEnunciado(enunciado.getText());
         Respuesta aRespuesta = new Respuesta(respuesta1.getText(),correcta1.isSelected());
         Respuesta bRespuesta = new Respuesta(respuesta2.getText(),correcta2.isSelected());

@@ -24,6 +24,7 @@ public class CreaCuestionarioContoller implements IController {
     public TableColumn<Pregunta, String> columnaPreguntas;
     public Button edita;
     public Button crear;
+    public Button borra;
     private Main main;
     private Stage myStage;
     private Pregunta preguntaSeleccionada;
@@ -52,6 +53,7 @@ public class CreaCuestionarioContoller implements IController {
     @FXML
     public void initialize() {
         edita.setDisable(true);
+        borra.setDisable(true);
         //crear.setDisable(true);
         preguntas = FXCollections.observableArrayList();
         // Inicializa las tablas.
@@ -69,6 +71,7 @@ public class CreaCuestionarioContoller implements IController {
     private void seleccion(Pregunta pregunta) {
         this.preguntaSeleccionada = pregunta;
         edita.setDisable(false);
+        borra.setDisable(false);
     }
 
 
@@ -143,5 +146,9 @@ public class CreaCuestionarioContoller implements IController {
      */
     public void anyadePregunta(Pregunta pregunta) {
         preguntas.add(pregunta);
+    }
+
+    public void borra() {
+        preguntas.remove(preguntaSeleccionada);
     }
 }

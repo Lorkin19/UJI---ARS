@@ -10,6 +10,7 @@ import controlador.profesor.CreaCuestionarioContoller;
 import controlador.profesor.GestionaSalaController;
 import controlador.profesor.HomeProfesorController;
 import controlador.proyector.HomeProyectorController;
+import controlador.proyector.RankingController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -218,15 +219,21 @@ public class Main extends Application {
             // Almacenamos en la bbdd el nuevo cuestionario.
             System.out.println("Almacenando el cuestionario nuevo en la bbdd");
             System.out.println("Nombre del cuestionario: " + sesion.getNombre().get());
+            String usuario = profesor.getUsuario();
             int idPregunta;
+            String enunciado;
+            int puntos;
+            double tiempo;
             for (Pregunta pregunta : preguntas) {
-                idPregunta = servidorInicio.anyadePregunta(profesor.getUsuario(), nombreCuestionario, pregunta.getEnunciado().get());
+                enunciado = pregunta.getEnunciado().get();
+                puntos = pregunta.getPuntos();
+                tiempo = pregunta.getTiempo();
+                idPregunta = servidorInicio.anyadePregunta(usuario, nombreCuestionario, enunciado, puntos, tiempo);
                 for (Respuesta respuesta : pregunta.getRespuestas()) {
                     servidorInicio.anyadeRespuesta(idPregunta, respuesta.getRespuesta(), respuesta.isCorrecta());
                 }
             }
 
-            // servidorInicio.profesorCreaCuestionario(profesor.getUsuario(), sesion);
             ejecutaProfesor(profesor);
         } catch (Exception e) {
             error("Ha ocurrido un error al crear el cuestionario.\nVuelve a intentarlo mas tarde.");
@@ -268,6 +275,7 @@ public class Main extends Application {
     public void crearSala(String nombreSesion) {
         try {
             proyector = profesor.crearPartida(nombreSesion, servidorInicio);
+            proyector.setStage(stageProyector);
             int codSala = profesor.getCodSala();
             if (codSala == -1) {
                 error("Error al crear la sala.");
@@ -358,13 +366,20 @@ public class Main extends Application {
      */
     private void empiezaCuestionario() {
         try {
+            // Creamos la escena del cuestionario
             FXMLLoader cuestionarioLoader = new FXMLLoader();
             cuestionarioLoader.setLocation(getClass().getResource("proyector/cuestionarioEnProceso.fxml"));
-
-            Scene scene = new Scene(cuestionarioLoader.load());
-            stageProyector.setScene(scene);
+            Scene cuestionarioScene = new Scene(cuestionarioLoader.load());
+            stageProyector.setScene(cuestionarioScene);
+            proyector.setCuestionarioScene(cuestionarioScene);
             proyector.setCuestionarioEnProcesoController(cuestionarioLoader.getController());
-            //this.proyectorController = cuestionarioLoader.getController();
+
+            // Creamos la escena del ranking
+            FXMLLoader rankingLoader = new FXMLLoader();
+            rankingLoader.setLocation(getClass().getResource("proyector/ranking.fxml"));
+            Scene rankingScene = new Scene(rankingLoader.load());
+            proyector.setRankingScene(rankingScene);
+            proyector.setRankingController(rankingLoader.getController());
 
         } catch (IOException e) {
             System.out.println("Problema al empezar el cuestionario.");
@@ -483,5 +498,23 @@ public class Main extends Application {
     public void reiniciaLanding(){
         primaryStage.setScene(landingScene);
         primaryStage.setResizable(false);
+    }
+
+    public void setScenaProyector(Scene scene) {
+        stageProyector.setScene(scene);
+    }
+
+    public void muestraResultadosFinales() {
+        try {
+            FXMLLoader resultadoFinalLoader = new FXMLLoader();
+            resultadoFinalLoader.setLocation(getClass().getResource("proyector/resultadoFinal.fxml"));
+            Scene resultadoFinalScene = new Scene(resultadoFinalLoader.load());
+            setScenaProyector(resultadoFinalScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al mostrar los resultados finales.");
+            error("Error al mostrar los resultados finales.");
+        }
+
     }
 }

@@ -24,6 +24,8 @@ public class GestionaSalaController implements IController {
     @FXML
     public Label pregunta;
     @FXML
+    public Button botonRanking;
+    @FXML
     public Button botonSiguiente;
 
 
@@ -45,6 +47,7 @@ public class GestionaSalaController implements IController {
      */
     public void empezarPartida() {
         zonaEmpiezaPartida.setDisable(true);
+        botonRanking.setDisable(false);
         botonSiguiente.setDisable(false);
         main.empezarPartida();
     }
@@ -55,6 +58,10 @@ public class GestionaSalaController implements IController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void mostrarRanking() {
+        profesor.muestraRanking();
     }
 
 
