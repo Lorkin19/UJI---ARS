@@ -11,7 +11,7 @@
 
 <AnchorPane minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #efefef;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.proyector.CuestionarioEnProcesoController">
    <children>
-      <Label fx:id="numRespuestas" layoutX="752.0" layoutY="6.0" styleClass="label-dark" stylesheets="@../style/MyTheme.css" text="0/X" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0" />
+      <Label fx:id="numRespuestas" layoutX="752.0" layoutY="6.0" styleClass="label-dark-subtitle" stylesheets="@../style/MyTheme.css" text="0/X" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
       <HBox alignment="CENTER" layoutX="13.600000381469727" layoutY="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
             <Line endX="230.0" fill="WHITE" stroke="#2f2f2f" strokeWidth="3.0" />

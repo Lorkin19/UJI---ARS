@@ -6,11 +6,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #009DDC;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.inicio.NombreAlumnoController">
    <children>
       <Label layoutX="29.0" layoutY="48.0" styleClass="label-white" stylesheets="@../style/MyTheme.css" text="Nombre:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0" />
-      <TextField fx:id="nombreAlumno" layoutX="137.0" layoutY="46.0" promptText="Nombre de alumno" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="45.0">
+      <TextField fx:id="nombreAlumno" layoutX="137.0" layoutY="46.0" onAction="#entrarEnSala" promptText="Nombre de alumno" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="45.0">
          <cursor>
             <Cursor fx:constant="TEXT" />
          </cursor>

@@ -120,6 +120,7 @@ public class Main extends Application {
             boolean correcto = servidorInicio.iniciaProfesor(usuario, password);
             if (correcto) {
                 profesor = new Profesor(usuario, password);
+                profesor.setServidor(servidorInicio);
                 servidorInicio.profesorIniciaSesion(usuario, (IProfesor) profesor);
                 return profesor;
             }

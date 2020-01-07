@@ -16,6 +16,8 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
     private Main main;
     private HomeProyectorController homeProyectorController;
     private CuestionarioEnProcesoController cuestionarioEnProcesoController;
+    private int numRespuestas;
+    private int numAlumnos = 0;
 
     public Proyector() throws RemoteException {
     }
@@ -31,12 +33,15 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
 
     @Override
     public void anyadeAlumno(String nombreAlumno) throws RemoteException {
+        numAlumnos++;
         Platform.runLater(() -> homeProyectorController.setAlumno(nombreAlumno));
     }
 
     @Override
     public void verPregunta(String enunciado, List<String> respuestas) throws RemoteException{
         System.out.println("Enunciado: " + enunciado);
+        numRespuestas = 0;
+        Platform.runLater(() -> cuestionarioEnProcesoController.setNumRespuestas(0, numAlumnos));
         Platform.runLater(() -> cuestionarioEnProcesoController.setPreguntas(enunciado, respuestas));
     }
 
@@ -48,6 +53,12 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
     @Override
     public void setTimer(String tiempo) throws RemoteException {
         Platform.runLater(() -> cuestionarioEnProcesoController.setTimer(tiempo));
+    }
+
+    @Override
+    public void alumnoResponde() throws RemoteException {
+        numRespuestas++;
+        Platform.runLater(() -> cuestionarioEnProcesoController.setNumRespuestas(numRespuestas, numAlumnos));
     }
 
     public void setMain(Main main) {

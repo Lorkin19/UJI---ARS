@@ -74,6 +74,7 @@ public class GestionaSalaController implements IController {
             profesor.finalizarPartida();
         } catch (RemoteException e) {
             e.printStackTrace();
+            System.out.println("pues na");
         }
         main.ejecutaProfesorActual();
     }

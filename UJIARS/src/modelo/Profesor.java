@@ -96,6 +96,8 @@ public class Profesor extends UnicastRemoteObject implements IProfesor {
         proyector = new Proyector();
         System.out.println("(Profesor.crearPartida)NombreSesion: " + nombreSesion);
         sala = servidor.nuevaSala(this.usuario, nombreSesion, (IProyector) proyector);
+        System.out.println("(Profesor.crearPartida) codigo de sala:");
+        System.out.println(sala.getCodSala());
         return proyector;
     }
 

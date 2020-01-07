@@ -77,8 +77,12 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
             }
         }
         alumnoAciertoActual.put(nombreAlumno,acierto);
+        proyector.alumnoResponde();
         if (acierto)
             actualizaResultados(respuesta);
+        if (alumnoAciertoActual.size() == alumnos.size()) {
+            finDeTiempo();
+        }
     }
 
     private void actualizaResultados(String respuesta) {
@@ -138,7 +142,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
                 }
             }
         };
-        timer.schedule(timerTask, 0, 1500);
+        timer.schedule(timerTask, 0, 1000);
     }
 
     private void finDeTiempo() {
@@ -147,6 +151,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
             try {
                 alumno.verResultadoPregunta(alumnoAciertoActual.get(alumno.getNombre()));
                 // TODO mostrar los resultados de la pregunta en el proyector
+                //proyector.muestraResultadoPregunta();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -165,10 +170,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         for (Respuesta respuesta : preguntaActual.getRespuestas()) {
             resultadosPregunta.put(respuesta.getRespuesta(), 0);
         }
-        /*
-        for (String alumno : alumnoAciertoActual.keySet()) {
-            alumnoAciertoActual.put(alumno, false);
-        }*/
+        alumnoAciertoActual = new HashMap<>();
     }
 
     /**

@@ -38,4 +38,8 @@ public class CuestionarioEnProcesoController {
         }
         this.tiempo.setText("Tiempo: " + tiempo);
     }
+
+    public void setNumRespuestas(int numRespuestas, int alumnosTotales) {
+        this.numRespuestas.setText(numRespuestas + "/" + alumnosTotales);
+    }
 }
