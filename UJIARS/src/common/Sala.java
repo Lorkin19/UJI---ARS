@@ -20,7 +20,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     private Map<String, Integer> resultadosPregunta;  // Guardar los datos de las respuestas de la pregunta actual
     private Map<String, Boolean> alumnoAciertoActual; // Guarda la lista de alumnos y si han acertado o no la pregunta
     // TODO Cambiar resultadosPregunta a List para guardar todos los datos de la preguntas y sus respuestas y mostrarlo al final (estadisticas, pregunta mas acertada, pregunta mas fallada...)
-    private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos
+    private Map<String, Integer> resultadosAlumnos;   // Guardar los datos de los aciertos de los alumnos (nombreAlumno, numAciertos)
 
 
     public Sala(Sesion miSesion, int codSala, IProyector proyector, IProfesor profesor) throws RemoteException {
@@ -60,6 +60,13 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         return true;
     }
 
+    @Override
+    public void terminaPartida() throws RemoteException {
+        for (IAlumno alumno : alumnos.values()){
+            alumno.finalizaPartida();
+        }
+    }
+
     /**
      * La sala analiza la respuesta del alumno y le indica si ha acertado o no
      *
@@ -70,6 +77,7 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
     @Override
     public void alumnoResponde(String nombreAlumno, String respuesta) throws RemoteException {
         boolean acierto = false;
+        System.out.println("(Sala.alumnoResponde) El alumno " + nombreAlumno + " responde: " + respuesta);
         for (Respuesta respuestas : preguntaActual.getRespuestas()) {
             if (respuestas.getRespuesta().equals(respuesta) && respuestas.isCorrecta()) {
                 acierto = true;
@@ -78,16 +86,15 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
         }
         alumnoAciertoActual.put(nombreAlumno,acierto);
         proyector.alumnoResponde();
+
+        // Actualizamos la cantidad de veces que se ha respondido a la pregunta
+        resultadosPregunta.put(respuesta, resultadosPregunta.get(respuesta) +1 );
         if (acierto)
-            actualizaResultados(respuesta);
+            // Actualizamos la cantidad de aciertos del alumno
+            resultadosAlumnos.put(nombreAlumno, resultadosAlumnos.get(nombreAlumno) + 1);
         if (alumnoAciertoActual.size() == alumnos.size()) {
             finDeTiempo();
         }
-    }
-
-    private void actualizaResultados(String respuesta) {
-        System.out.println("guardando cantidad de veces respondido");
-        resultadosPregunta.put(respuesta, resultadosPregunta.get(respuesta) + 1);
     }
 
     /**
@@ -151,7 +158,15 @@ public class Sala extends UnicastRemoteObject implements IServidorSala {
             try {
                 alumno.verResultadoPregunta(alumnoAciertoActual.get(alumno.getNombre()));
                 // TODO mostrar los resultados de la pregunta en el proyector
-                //proyector.muestraResultadoPregunta();
+                List<Boolean> correctas = new ArrayList<>();
+                for (Respuesta respuesta : preguntaActual.getRespuestas()){
+                    correctas.add(respuesta.isCorrecta());
+                }
+                List<Integer> numRespuestas = new ArrayList<>(resultadosPregunta.values());
+                proyector.muestraResultadoPregunta(correctas, numRespuestas);
+                for (String nombreAlumno : resultadosAlumnos.keySet()){
+                    System.out.println("Resultado de " + nombreAlumno + ": " + resultadosAlumnos.get(nombreAlumno));
+                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

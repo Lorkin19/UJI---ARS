@@ -16,4 +16,6 @@ public interface IProyector extends Remote {
     void setTimer(String tiempo) throws RemoteException;
 
     void alumnoResponde() throws RemoteException;
+
+    void muestraResultadoPregunta(List<Boolean> correctas, List<Integer> cantRespuestas) throws RemoteException;
 }

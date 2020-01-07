@@ -151,6 +151,7 @@ public class ServidorInicio extends UnicastRemoteObject implements IServidorInic
 
     @Override
     public void finalizarPartida(int codSala) throws RemoteException {
+        salas.get(codSala).terminaPartida();
         salas.remove(codSala);
     }
 

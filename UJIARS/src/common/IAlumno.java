@@ -17,4 +17,6 @@ public interface IAlumno extends Remote {
     void verResultadoPregunta(boolean acierto) throws RemoteException;
 
     void setTimer(String toString) throws RemoteException;
+
+    void finalizaPartida() throws RemoteException;
 }

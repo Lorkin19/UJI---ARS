@@ -35,13 +35,26 @@
             </Label>
             <AnchorPane prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <SplitPane disable="true" dividerPositions="0.5" layoutX="20.0" stylesheets="@../style/TablaPreguntas.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane disable="true" dividerPositions="0.5" layoutX="20.0" stylesheets="@../style/MyTheme.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <SplitPane disable="true" dividerPositions="0.5" orientation="VERTICAL" stylesheets="@../style/TablaPreguntas.css">
+                        <SplitPane disable="true" dividerPositions="0.5" orientation="VERTICAL">
                            <items>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="respuesta1" alignment="CENTER" contentDisplay="CENTER" layoutX="-5.0" layoutY="-6.0" styleClass="label-answer-1" stylesheets="@../style/MyTheme.css" text="Respuesta 1:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label fx:id="numR1" alignment="CENTER" contentDisplay="CENTER" minHeight="0.0" styleClass="label-white" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label fx:id="respuesta1" alignment="CENTER" contentDisplay="CENTER" styleClass="label-answer-1" stylesheets="@../style/MyTheme.css" text="Respuesta 1:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -49,7 +62,20 @@
                               </AnchorPane>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="respuesta3" alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="3.0" styleClass="label-answer-3" stylesheets="@../style/MyTheme.css" text="Respuesta 3:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label fx:id="numR3" alignment="CENTER" contentDisplay="CENTER" minHeight="0.0" styleClass="label-white" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label fx:id="respuesta3" alignment="CENTER" contentDisplay="CENTER" styleClass="label-answer-3" stylesheets="@../style/MyTheme.css" text="Respuesta 3:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -57,11 +83,24 @@
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <SplitPane disable="true" dividerPositions="0.5" orientation="VERTICAL" stylesheets="@../style/TablaPreguntas.css">
+                        <SplitPane disable="true" dividerPositions="0.5" orientation="VERTICAL">
                            <items>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="respuesta2" alignment="CENTER" contentDisplay="CENTER" layoutX="24.0" layoutY="1.0" styleClass="label-answer-2" stylesheets="@../style/MyTheme.css" text="Respuesta 2: asdf asd fasd fasd fasdf asdf asdf sadf sadf asdf asdf asdf asdf asd f" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label fx:id="numR2" alignment="CENTER" contentDisplay="CENTER" styleClass="label-white" stylesheets="@../style/MyTheme.css" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label fx:id="respuesta2" alignment="CENTER" contentDisplay="CENTER" styleClass="label-answer-2" stylesheets="@../style/MyTheme.css" text="Respuesta 2: asdf asd fasd fasd fasdf asdf asdf sadf sadf asdf asdf asdf asdf asd f" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -69,7 +108,20 @@
                               </AnchorPane>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="respuesta4" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="5.0" styleClass="label-answer-4" stylesheets="@../style/MyTheme.css" text="Respuesta 4:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label fx:id="numR4" alignment="CENTER" contentDisplay="CENTER" styleClass="label-white" stylesheets="@../style/MyTheme.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <Label fx:id="respuesta4" alignment="CENTER" contentDisplay="CENTER" styleClass="label-answer-4" stylesheets="@../style/MyTheme.css" text="Respuesta 4:" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

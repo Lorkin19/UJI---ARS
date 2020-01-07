@@ -6,4 +6,5 @@ public interface IServidorSala extends IAlumnoSala, IProfesorSala {
 
     boolean addAlumno(IAlumno alumno) throws RemoteException;
 
+    void terminaPartida() throws RemoteException;
 }

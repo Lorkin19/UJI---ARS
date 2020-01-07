@@ -67,6 +67,19 @@ public class Alumno extends UnicastRemoteObject implements IAlumno {
     }
 
     @Override
+    public void finalizaPartida() throws RemoteException {
+        this.sala = null;
+        //Platform.runLater(() -> main.error("Se ha cerrado la sala.\nVolveras a la pagina inicial."));
+        //Platform.runLater(() -> main.reiniciaLanding());
+        Platform.runLater(this::vuelveAInicial);
+    }
+
+    private void vuelveAInicial(){
+        main.error("Se ha cerrado la sala.\nVolveras a la pagina inicial.");
+        main.reiniciaLanding();
+    }
+
+    @Override
     public void respondePregunta(String respuestaSeleccionada) throws RemoteException {
         sala.alumnoResponde(nombre, respuestaSeleccionada);
     }

@@ -249,8 +249,7 @@ public class Main extends Application {
     public void cierraSesion() {
         try {
             servidorInicio.cerrarSesionProfesor(profesor.getUsuario());
-            primaryStage.setScene(landingScene);
-            primaryStage.setResizable(false);
+            reiniciaLanding();
         } catch (RemoteException e) {
             error("Error al cerrar sesion");
         }
@@ -479,5 +478,10 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void reiniciaLanding(){
+        primaryStage.setScene(landingScene);
+        primaryStage.setResizable(false);
     }
 }

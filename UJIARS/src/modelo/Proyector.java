@@ -61,6 +61,11 @@ public class Proyector extends UnicastRemoteObject implements IProyector {
         Platform.runLater(() -> cuestionarioEnProcesoController.setNumRespuestas(numRespuestas, numAlumnos));
     }
 
+    @Override
+    public void muestraResultadoPregunta(List<Boolean> correctas, List<Integer> cantRespuestas) throws RemoteException {
+        Platform.runLater(() -> cuestionarioEnProcesoController.setRespuestasCorrectas(correctas, cantRespuestas));
+    }
+
     public void setMain(Main main) {
         this.main = main;
     }
