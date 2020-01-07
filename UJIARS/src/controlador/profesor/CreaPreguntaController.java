@@ -3,6 +3,7 @@ package controlador.profesor;
 import controlador.IController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -19,7 +20,7 @@ public class CreaPreguntaController implements IController {
 
     private Main main;
     private Stage myStage;
-    private int tiempoDoble=15;
+    private double tiempoDoble=15;
     private int puntosDobles=1;
 
     @FXML
@@ -44,6 +45,8 @@ public class CreaPreguntaController implements IController {
     public RadioButton correcta3;
     @FXML
     public RadioButton correcta4;
+    @FXML
+    public Button botonAdd;
 
 
     @Override
@@ -99,10 +102,34 @@ public class CreaPreguntaController implements IController {
         respuestas.add(dRespuesta);
         pregunta.setRespuestas(respuestas);
         prevController.anyadePregunta(pregunta);
+        prevController.borra.setDisable(true);
+        prevController.edita.setDisable(true);
         myStage.close();
-
-
     }
 
 
+    public void setPregunta(Pregunta preguntaSeleccionada) {
+        enunciado.setText(preguntaSeleccionada.getEnunciado().get());
+        List<Respuesta> respuestas = preguntaSeleccionada.getRespuestas();
+        respuesta1.setText(respuestas.get(0).getRespuesta());
+        respuesta2.setText(respuestas.get(1).getRespuesta());
+        respuesta3.setText(respuestas.get(2).getRespuesta());
+        respuesta4.setText(respuestas.get(3).getRespuesta());
+
+        correcta1.selectedProperty().setValue(respuestas.get(0).isCorrecta());
+        correcta2.selectedProperty().setValue(respuestas.get(1).isCorrecta());
+        correcta3.selectedProperty().setValue(respuestas.get(2).isCorrecta());
+        correcta4.selectedProperty().setValue(respuestas.get(3).isCorrecta());
+
+        if (preguntaSeleccionada.getPuntos()==2){
+            doblePuntuacion.selectedProperty().setValue(true);
+        }
+        double num = 30;
+        if (preguntaSeleccionada.getTiempo() == num){
+            dobleTiempo.selectedProperty().setValue(true);
+        }
+
+        botonAdd.setText("Edita");
+
+    }
 }

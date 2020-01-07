@@ -100,7 +100,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </RadioButton>
-      <Button layoutX="229.0" layoutY="455.0" mnemonicParsing="false" onAction="#crearPregunta" stylesheets="@../style/MyTheme.css" text="Crear Pregunta" AnchorPane.bottomAnchor="12.0" />
+      <Button fx:id="botonAdd" layoutX="229.0" layoutY="455.0" mnemonicParsing="false" onAction="#crearPregunta" stylesheets="@../style/MyTheme.css" text="Crear Pregunta" AnchorPane.bottomAnchor="12.0" />
       <RadioButton fx:id="doblePuntuacion" layoutX="422.0" layoutY="90.0" mnemonicParsing="false" styleClass="label-white" stylesheets="@../style/MyTheme.css" text="Doble puntuación" AnchorPane.leftAnchor="420.0" AnchorPane.topAnchor="90.0">
          <font>
             <Font size="18.0" />

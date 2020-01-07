@@ -248,6 +248,7 @@ public class Main extends Application {
      */
     public void borraCuestionario(String cuestionario) {
         // TODO borrar el cuestionario tanto de la lista del profesor como de la base de datos
+        error("Borrado de cuestionario no implementado.\nDisculpe las molestias.\nSugerencia: ignorelo.");
     }
 
     /**

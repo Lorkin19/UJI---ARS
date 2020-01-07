@@ -27,6 +27,7 @@ public class CreaCuestionarioContoller implements IController {
     public Button borra;
     private Main main;
     private Stage myStage;
+    private Stage modalPregunta;
     private Pregunta preguntaSeleccionada;
     private ObservableList<Pregunta> preguntas;
 
@@ -99,28 +100,35 @@ public class CreaCuestionarioContoller implements IController {
      * Lanza la ventana de gestion de una pregunta.
      */
     public void nuevaPregunta() {
+        ventanaEdicionPregunta();
+        modalPregunta.showAndWait();
+        modalPregunta.close();
+    }
+
+    private CreaPreguntaController ventanaEdicionPregunta() {
         try {
             FXMLLoader registroLoader = new FXMLLoader();
             registroLoader.setLocation(getClass().getResource("../../vista/profesor/creaPregunta.fxml"));
 
-            Stage modalCrearPregunta = new Stage();
-            modalCrearPregunta.setTitle("Crear Pregunta");
-            modalCrearPregunta.initModality(Modality.WINDOW_MODAL);
-            modalCrearPregunta.initStyle(StageStyle.UTILITY);
-            modalCrearPregunta.initOwner(myStage);
+            modalPregunta = new Stage();
+            modalPregunta.setTitle("Crear Pregunta");
+            modalPregunta.initModality(Modality.WINDOW_MODAL);
+            modalPregunta.initStyle(StageStyle.UTILITY);
+            modalPregunta.initOwner(myStage);
 
             Scene scene = new Scene(registroLoader.load());
-            modalCrearPregunta.setScene(scene);
-            modalCrearPregunta.setResizable(false);
+            modalPregunta.setScene(scene);
+            modalPregunta.setResizable(false);
 
             CreaPreguntaController controller = registroLoader.getController();
             controller.setMain(this.main);
-            controller.setMyStage(modalCrearPregunta);
+            controller.setMyStage(modalPregunta);
             controller.setPrevController(this);
 
-            modalCrearPregunta.showAndWait();
+            return controller;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -129,6 +137,10 @@ public class CreaCuestionarioContoller implements IController {
      * Lanza la ventana de edicion de una pregunta
      */
     public void editaPregunta() {
+        CreaPreguntaController preguntaController = ventanaEdicionPregunta();
+        preguntaController.setPregunta(preguntaSeleccionada);
+        modalPregunta.showAndWait();
+        modalPregunta.close();
     }
 
     /**
@@ -145,10 +157,18 @@ public class CreaCuestionarioContoller implements IController {
      * @param pregunta  Pregunta que se anyade.
      */
     public void anyadePregunta(Pregunta pregunta) {
+        for (Pregunta preg : preguntas) {
+            if (preg.getEnunciado().get().equals(pregunta.getEnunciado().get())){
+                preguntas.remove(preg);
+                break;
+            }
+        }
         preguntas.add(pregunta);
     }
 
     public void borra() {
         preguntas.remove(preguntaSeleccionada);
+        borra.setDisable(true);
+        edita.setDisable(true);
     }
 }

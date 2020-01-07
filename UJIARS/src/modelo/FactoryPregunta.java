@@ -24,7 +24,7 @@ public class FactoryPregunta {
         return new Pregunta();
     }
 
-    public Pregunta crearPreguntaDecorada(int extraPoints, int extraTime){
+    public Pregunta crearPreguntaDecorada(int extraPoints, double extraTime){
         return new ExtraPoints(new ExtraTime(new Pregunta(), extraTime), extraPoints);
     }
 

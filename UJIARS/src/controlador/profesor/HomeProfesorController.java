@@ -104,6 +104,7 @@ public class HomeProfesorController implements IController {
      */
     public void editaCuestionario() {
         // TODO gestionar la edicion de cuestionarios.
+        main.error("Edicion de cuestionario no implementado.\nDisculpe las molestias.\nSugerencia: Cree otro.");
     }
 
     /**
